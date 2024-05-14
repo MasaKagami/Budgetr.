@@ -29,9 +29,15 @@ print(transactions_df[:5])
 
 # ------------------------------------------------------------------------------
 # App layout
+
+font_link = html.Link(
+    href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
+    rel='stylesheet'
+)
+
 app.layout = html.Div([
     html.Div([
-        html.H1("My Financial Dashboard", className = 'header'),
+        html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.H4("Select Month", className= 'subheader'),
         dcc.Dropdown(id="slct_month",
                  options=[
