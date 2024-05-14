@@ -1,3 +1,4 @@
+from email import header
 from sqlalchemy import create_engine
 import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
@@ -29,11 +30,10 @@ print(transactions_df[:5])
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
-
-    html.H1("My Financial Dashboard", style={'text-align': 'center'}),
-    html.H4("Select Month", style = {'text-align': 'left'}),
-
-    dcc.Dropdown(id="slct_month",
+    html.Div([
+        html.H1("My Financial Dashboard", className = 'header'),
+        html.H4("Select Month", className= 'subheader'),
+        dcc.Dropdown(id="slct_month",
                  options=[
                      {"label": "January", "value": 1},
                      {"label": "Febuary", "value": 2},
@@ -50,15 +50,15 @@ app.layout = html.Div([
                      
                  multi=False,
                  value=1, #THE VALUE
-                 style={'width': "40%"}
+                 className='dropdown'
                  ),
 
     html.Div(id='output_container', children=[]),
     html.Br(),
 
     dcc.Graph(id='my_spending_map', figure={})
-
-])
+    ], className= 'dashboard')
+], className= 'background')
 
 # ------------------------------------------------------------------------------
 # Connect the Plotly graphs with Dash Components

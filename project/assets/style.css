@@ -1,0 +1,41 @@
+.background {
+    background-color: #212121;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: auto;
+    font-family: 'Arial', sans-serif;
+}
+
+.dashboard{
+    width: 100%;
+    max-width: 65rem;
+    flex-direction: column;
+    background-color: #212121;
+    /* color: white;
+    margin: 0;
+    padding: 20px;
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    box-sizing: border-box; */
+}
+
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.header{
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.dropdown {
+    width: 50%;
+}
