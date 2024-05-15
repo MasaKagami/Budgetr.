@@ -30,41 +30,68 @@ print(transactions_df[:5])
 # ------------------------------------------------------------------------------
 # App layout
 
-font_link = html.Link(
-    href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
-    rel='stylesheet'
-)
-
 app.layout = html.Div([
+    html.Link(
+        href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
+        rel='stylesheet'
+    ),
     html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
-        html.H4("Select Month", className= 'subheader'),
-        dcc.Dropdown(id="slct_month",
-                 options=[
-                     {"label": "January", "value": 1},
-                     {"label": "Febuary", "value": 2},
-                     {"label": "March", "value": 3},
-                     {"label": "April", "value": 4},
-                     {"label": "May", "value": 5},
-                     {"label": "June", "value": 6},
-                     {"label": "July", "value": 7},
-                     {"label": "August", "value": 8},
-                     {"label": "September", "value": 9},
-                     {"label": "October", "value": 10},
-                     {"label": "November", "value": 11},
-                     {"label": "December", "value": 12}],
-                     
-                 multi=False,
-                 value=1, #THE VALUE
-                 className='dropdown'
-                 ),
+        
+        html.Div([
+            html.Button('INPUT SPENDINGS', id='input_spendings'),
+            html.Button('VIEW DASHBOARD', id='view_dashboard')
+        ], className= 'button'),
 
-    html.Div(id='output_container', children=[]),
-    html.Br(),
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.H3("Monthly Expense Summary", className = 'dataTitle'),
+                    html.H4("Select Month", className='subheader'),
+                    dcc.Dropdown(id="slct_month",
+                            options=[
+                                {"label": "January", "value": 1},
+                                {"label": "Febuary", "value": 2},
+                                {"label": "March", "value": 3},
+                                {"label": "April", "value": 4},
+                                {"label": "May", "value": 5},
+                                {"label": "June", "value": 6},
+                                {"label": "July", "value": 7},
+                                {"label": "August", "value": 8},
+                                {"label": "September", "value": 9},
+                                {"label": "October", "value": 10},
+                                {"label": "November", "value": 11},
+                                {"label": "December", "value": 12}],
+                                
+                            multi=False,
+                            value=1, #THE VALUE
+                            className='dropdown'
+                    ),
+                    html.Div(id='output_container'),
+                    html.Br(),
+                    dcc.Graph(id='monthly_expense_graph', figure={}),
+                ], className= 'monthly-summary'),
 
-    dcc.Graph(id='my_spending_map', figure={})
+                html.Div([
+                    html.H3("Expense Cateogrization", className='dataTitle'),
+                    dcc.Graph(id='expense_categorization_graph', figure={}),
+                ], className= 'expense-categorization')
+            ], className= 'section3'),
+
+            html.Div([
+                html.Div([
+                    html.H3("Daily Spending Trend", className = 'dataTitle'),
+                    html.H3("Budget vs. Actual Spending", className = 'dataTitle')
+                ], className= 'section4'),
+                html.Div([
+                    html.H3("Recent Transactions", className = 'dataTitle')
+                ], className= 'section5'), 
+            ], className= 'dataContainer2')
+
+        ], className= 'dataContainer') #it contains all the data
     ], className= 'dashboard')
 ], className= 'background')
+
 
 # ------------------------------------------------------------------------------
 # Connect the Plotly graphs with Dash Components
