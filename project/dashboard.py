@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 from dash import dash_table, Dash, dcc, html, Input, Output  # pip install dash (version 2.0.0 or higher)
+from datetime import datetime
 
 app = Dash(__name__)
 
@@ -37,7 +38,16 @@ app.layout = html.Div([
     html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
-            html.H4("Select Month: ", className='subheader'),
+            html.H4("Select Year: "),
+            dcc.Dropdown(
+                id="slct_year",
+                options=[
+                    {'label': str(year), 'value': year} for year in range(2000, datetime.now().year + 1)
+                ],
+                multi=False,
+                value=datetime.now().year,  # Default to current year
+            className='yearDropdown'),
+            
             dcc.Dropdown(id="slct_month",
                 options=[
                 {"label": "January", "value": 1},
@@ -53,9 +63,9 @@ app.layout = html.Div([
                 {"label": "November", "value": 11},
                 {"label": "December", "value": 12}],    
                 multi=False,
-                value=1, #THE VALUE
-                className='dropdown'),
-        ], className='selectMonth'),
+                value=1,
+                className='monthDropdown'),
+        ], className='selectYearandMonth'),
         
         html.Div([
             html.Button('INPUT SPENDINGS', id='input_spendings'),
