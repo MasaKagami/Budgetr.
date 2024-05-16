@@ -144,8 +144,8 @@ app.layout = html.Div([
 def update_graph(selected_year, selected_month):
 
     # Filter the DataFrame to the selected month
-    filtered_df = transactions_df[ (transactions_df['date'].dt.year == selected_year) & 
-                                    (transactions_df['date'].dt.month == selected_month)]
+    filtered_df = transactions_df[(transactions_df['date'].dt.year == selected_year) &
+                                  (transactions_df['date'].dt.month == selected_month)]
         
     monthly_expense_fig = update_monthly_expense_graph(filtered_df)
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
@@ -155,11 +155,14 @@ def update_graph(selected_year, selected_month):
     return monthly_expense_fig, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
 
 def update_monthly_expense_graph(filtered_df):
-
+    expense_summary = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
+    fig = px.bar(expense_summary, x='categoryname', y='amount', title="Monthly Expense Summary")
+    
     return fig
 
 def update_expense_categorization_graph(filtered_df):
-
+    # Example: Pie chart of expenses by category
+    fig = px.pie(filtered_df, values='amount', names='categoryname', title="Expense Categorization")
     return fig
 
 def update_daily_spending_trend_graph(filtered_df):
@@ -171,7 +174,13 @@ def update_daily_spending_trend_graph(filtered_df):
     return fig
 
 def update_budget_vs_actual_spending_graph(filtered_df):
-
+    # Assume some processing to prepare data for budget vs. actual spending graph
+    # Example: Comparing planned budget and actual spending
+    # This is hypothetical since your data model might not have budget data directly
+    budget_data = filtered_df.groupby('categoryname')['budget'].sum().reset_index()  # Hypothetical
+    actual_spending = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
+    fig = px.bar(budget_data, x='categoryname', y='budget', title="Budget vs Actual Spending")
+    fig.add_bar(x=actual_spending['categoryname'], y=actual_spending['amount'], name="Actual Spending")
     return fig
 
 # ------------------------------------------------------------------------------
