@@ -57,7 +57,6 @@ app.layout = html.Div([
                 className='dropdown'),
         ], className='selectMonth'),
         
-
         html.Div([
             html.Button('INPUT SPENDINGS', id='input_spendings'),
             html.Button('VIEW DASHBOARD', id='view_dashboard')
