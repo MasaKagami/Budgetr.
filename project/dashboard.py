@@ -130,25 +130,47 @@ app.layout = html.Div([
 # ------------------------------------------------------------------------------
 # Connect the Plotly graphs with Dash Components
 @app.callback(
-    Output('my_spending_map', 'figure'),
-    [Input('slct_month', 'value')]
+    [
+        Output('monthly_expense_graph', 'figure'), 
+        Output('expense_categorization_graph', 'figure'), 
+        Output('daily_spending_trend_graph', 'figure'),
+        Output('budget_vs_actual_spending_graph', 'figure')
+    ],
+    [
+        Input('slct_year', 'value'),
+        Input('slct_month', 'value')
+    ]
 )
-def update_graph(selected_month):
+def update_graph(selected_year, selected_month):
 
     # Filter the DataFrame to the selected month
-    filtered_df = transactions_df[transactions_df['date'].dt.month == selected_month]
+    filtered_df = transactions_df[ (transactions_df['date'].dt.year == selected_year) & 
+                                    (transactions_df['date'].dt.month == selected_month)]
         
-    # Group by day of the month and sum the amounts
+    monthly_expense_fig = update_monthly_expense_graph(filtered_df)
+    expense_categorization_fig = update_expense_categorization_graph(filtered_df)
+    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df)
+    budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df)
+
+    return monthly_expense_fig, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
+
+def update_monthly_expense_graph(filtered_df):
+
+    return fig
+
+def update_expense_categorization_graph(filtered_df):
+
+    return fig
+
+def update_daily_spending_trend_graph(filtered_df):
     daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().reset_index()
     daily_spending.columns = ['Day', 'Total Spent']
+    fig = px.line(daily_spending, x='Day', y='Total Spent', title='Daily Spending Trend',
+                  labels={'Day': 'Day of the Month', 'Total Spent': 'Amount Spent ($)'},
+                  markers=True)
+    return fig
 
-        # Create a line chart with Plotly Express
-    fig = px.line(
-        daily_spending, x='Day', y='Total Spent',
-        title=f'Spending Trend for Month {selected_month}',
-        labels={'Day': 'Day of the Month', 'Total Spent': 'Amount Spent ($)'},
-        markers=True
-        )  # markers=True makes it easier to see individual data points
+def update_budget_vs_actual_spending_graph(filtered_df):
 
     return fig
 

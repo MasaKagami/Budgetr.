@@ -39,10 +39,6 @@ html, body{
     display:flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 20px;
-
-    /* margin-bottom: 10px; */
-    /* background-color: gray; */
     width: 100%;
 }
 
@@ -55,13 +51,13 @@ html, body{
 
 .dropdownYear{
     color: black;
-    width: 140px;
-    margin-right: 10px;
+    width: 100px;
+    margin-right: 5px;
 }
 
 .dropdownMonth {
     color: black;
-    width: 140px;
+    width: 130px;
 }
 
 .button{
