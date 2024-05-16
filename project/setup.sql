@@ -17,7 +17,10 @@ CREATE TABLE Budgets
     TotalBudget DECIMAL(10,2),
     StartDate DATE,
     EndDate DATE,
+    CategoryName VARCHAR(255) NOT NULL,
+    CategoryBudget DECIMAL(10,2),
     FOREIGN KEY (UserID) REFERENCES Users (UserID)
+    FOREIGN KEY (CateogryName) REFERENCES Categories (Name)
 );
 
 CREATE TABLE Transactions
@@ -59,7 +62,26 @@ INSERT INTO Categories (Name) VALUES
 ('Shopping');
 
 -- Insert a budget
-INSERT INTO Budgets (UserID, TotalBudget, StartDate, EndDate) VALUES (1, 1200.00, '2023-01-01', '2023-12-31');
+-- Insert budgets for each category
+INSERT INTO Budgets (UserID, TotalBudget, StartDate, EndDate, CategoryName, CategoryBudget) VALUES
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Rent', 400.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Utilities', 100.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Dining', 150.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Transportation', 80.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Groceries', 200.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Health', 70.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Clothing', 50.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Entertainment', 50.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Education', 40.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Home', 60.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Pets', 30.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Technology', 20.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Travel', 60.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Gifts', 20.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Donations', 10.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Services', 30.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Hobbies', 20.00),
+(1, 1200.00, '2023-01-01', '2023-12-31', 'Shopping', 60.00);
 
 -- Insert transactions
 INSERT INTO Transactions (UserID, BudgetID, Amount, Date, Description, CategoryName) VALUES
