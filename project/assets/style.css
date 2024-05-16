@@ -70,17 +70,6 @@ html, body{
     /* background-color: gray; */
 }
 
-.dataContainer:first-child{
-    margin-right:10px;
-}
-
-.dataContainer2{
-    display: flex;
-    flex-direction: column;
-    background-color: blue;
-    width: 70%;
-}
-
 .dataTitle{
     font-size: 16px;
     font-weight: 400;
@@ -88,15 +77,57 @@ html, body{
 
 .section3{
     background-color: #151a28;
-    padding: 30px;
+    /* padding: 30px; */
     align-items: center;
     justify-content: space-between;
     width: 30%;
+    margin-right: 10px;
+    padding-bottom: 20px;
+}
+
+.monthly-summary{
+    padding: 0 20px;
+}
+
+.expense-categorization{
+    padding: 0 20px;
+}
+
+.dataContainer2{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.section4{ /* consists of the daily spending trend and budge v actual */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.daily-spending-trend{
+    padding: 0 20px;
+    padding-bottom: 20px;
+    flex: 1;
+    margin-right: 10px;
+    background-color: #151a28;
+}
+
+.budget-vs-actual-spending{
+    padding: 0 20px;
+    padding-bottom: 20px;
+    flex: 1;
+    background-color: #151a28;
 }
 
 .section5{
     display: flex;
-    flex-direction: row;
-    background-color: red;
+    flex-direction: column;
+    background-color: #151a28;
+    padding: 0 20px;
+    padding-bottom: 20px;
 }
 

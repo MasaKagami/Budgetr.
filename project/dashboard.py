@@ -1,9 +1,8 @@
-from email import header
 from sqlalchemy import create_engine
 import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
-from dash import Dash, dcc, html, Input, Output  # pip install dash (version 2.0.0 or higher)
+from dash import dash_table, Dash, dcc, html, Input, Output  # pip install dash (version 2.0.0 or higher)
 
 app = Dash(__name__)
 
@@ -80,11 +79,35 @@ app.layout = html.Div([
 
             html.Div([
                 html.Div([
-                    html.H3("Daily Spending Trend", className = 'dataTitle'),
-                    html.H3("Budget vs. Actual Spending", className = 'dataTitle')
+                    html.Div([
+                        html.H3("Daily Spending Trend", className='dataTitle'),
+                        dcc.Graph(id='daily_spending_trend_graph', figure={}),
+                    ], className= 'daily-spending-trend'),
+
+                    html.Div([
+                        html.H3("Budget vs. Actual Spending", className='dataTitle'),
+                        dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
+                    ], className= 'budget-vs-actual-spending'),
+
                 ], className= 'section4'),
                 html.Div([
-                    html.H3("Recent Transactions", className = 'dataTitle')
+                    html.H3("Recent Transactions", className = 'dataTitle'),
+                    dash_table.DataTable(
+                        id='transactions_table',
+                        columns=[{"name": i, "id": i} for i in transactions_df.columns],
+                        data=transactions_df.to_dict('records'),
+                        style_table={'height': '300px', 'overflowY': 'auto'},
+                        style_cell={
+                            'textAlign': 'left',
+                            'color': 'white',
+                            'backgroundColor': '#151a28',
+                            'border': 'none'
+                        },
+                        style_header={
+                            'backgroundColor': '#222222',
+                            'fontWeight': 'bold'
+                        }
+                    )
                 ], className= 'section5'), 
             ], className= 'dataContainer2')
 
