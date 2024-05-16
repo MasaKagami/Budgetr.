@@ -53,10 +53,15 @@ html, body{
     flex-shrink: 0;
 }
 
-.monthDropdown {
+.dropdownYear{
     color: black;
-    width: 200px;
+    width: 140px;
+    margin-right: 10px;
+}
 
+.dropdownMonth {
+    color: black;
+    width: 140px;
 }
 
 .button{

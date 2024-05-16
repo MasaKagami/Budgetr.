@@ -38,7 +38,7 @@ app.layout = html.Div([
     html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
-            html.H4("Select Year: "),
+            html.H4("Select Year and Month: "),
             dcc.Dropdown(
                 id="slct_year",
                 options=[
@@ -46,7 +46,7 @@ app.layout = html.Div([
                 ],
                 multi=False,
                 value=datetime.now().year,  # Default to current year
-            className='yearDropdown'),
+            className='dropdownYear'),
             
             dcc.Dropdown(id="slct_month",
                 options=[
@@ -64,7 +64,7 @@ app.layout = html.Div([
                 {"label": "December", "value": 12}],    
                 multi=False,
                 value=1,
-                className='monthDropdown'),
+                className='dropdownMonth'),
         ], className='selectYearandMonth'),
         
         html.Div([
