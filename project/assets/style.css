@@ -35,6 +35,12 @@ html, body{
     /* border-bottom: 2px solid red; */
 }
 
+.selectMonth{
+    display:flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
 .button{
     display: flex;
     width: 100%;
