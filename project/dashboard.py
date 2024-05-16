@@ -66,7 +66,7 @@ app.layout = html.Div([
                             value=1, #THE VALUE
                             className='dropdown'
                     ),
-                    html.Div(id='output_container'),
+                    # html.Div(id='output_container'),
                     html.Br(),
                     dcc.Graph(id='monthly_expense_graph', figure={}),
                 ], className= 'monthly-summary'),
@@ -96,7 +96,10 @@ app.layout = html.Div([
                         id='transactions_table',
                         columns=[{"name": i, "id": i} for i in transactions_df.columns],
                         data=transactions_df.to_dict('records'),
-                        style_table={'height': '300px', 'overflowY': 'auto'},
+                        style_table={
+                            'height': '300px',
+                            'overflowY': 'auto'
+                        },
                         style_cell={
                             'textAlign': 'left',
                             'color': 'white',
