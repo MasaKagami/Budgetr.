@@ -13,19 +13,26 @@ def load_data():
     # Connection setup   
     # Database URL  
     DATABASE_URL = "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
-
     #creating an SQLAlchemy engine
     engine = create_engine(DATABASE_URL)
     
-    # Use the engine to execute a query and load into DataFrame
-    transactions_df = pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
+    #load transactions
+    transactions_query = "SELECT * FROM Transactions;"
+    transactions_df = pd.read_sql(transactions_query, engine, parse_dates=['date'])
+
+    #load budgets
+    budgets_query = "SELECT * FROM Budgets;"
+    budgets_df = pd.read_sql(budgets_query, engine)
+
     engine.dispose()  # Close the connection safely
 
-    return transactions_df
+    return transactions_df, budgets_df
 
 # Using the function
-transactions_df = load_data()
+transactions_df, budgets_df = load_data()
+
 print(transactions_df[:5])
+print(budgets_df[:5])
 
 # ------------------------------------------------------------------------------
 # App layout
