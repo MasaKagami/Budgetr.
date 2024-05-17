@@ -20,18 +20,23 @@ def load_data():
     transactions_query = "SELECT * FROM Transactions;"
     transactions_df = pd.read_sql(transactions_query, engine, parse_dates=['date'])
 
-    #load budgets
-    budgets_query = "SELECT * FROM Budgets;"
-    budgets_df = pd.read_sql(budgets_query, engine)
+    #load monthly budgets
+    monthly_budgets_query = "SELECT * FROM MonthlyBudgets;"
+    monthly_budgets_df = pd.read_sql(monthly_budgets_query, engine)
+
+    #load categorical budgets
+    categorical_budgets_query = "SELECT * FROM CategoricalBudgets;"
+    categorical_budgets_df = pd.read_sql(categorical_budgets_query, engine)
 
     engine.dispose()  # Close the connection safely
 
-    return transactions_df, budgets_df
+    return transactions_df, monthly_budgets_df, categorical_budgets_df
 
 # Using the function
-transactions_df, budgets_df = load_data()
+transactions_df, monthly_budgets_df, categorical_budgets_df = load_data()
 print(transactions_df[:5])
-print(budgets_df[:5])
+print(monthly_budgets_df[:5])
+print(monthly_budgets_df[:5])
 
 # ------------------------------------------------------------------------------
 # App layout
@@ -155,8 +160,8 @@ def update_graph(selected_year, selected_month):
         
     monthly_expense_fig = update_monthly_expense_graph(filtered_df)
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
-    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df)
-    budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, budgets_df)
+    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df)
+    budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
 
     return monthly_expense_fig, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
 
@@ -174,19 +179,51 @@ def update_expense_categorization_graph(filtered_df):
     )
     return fig
 
-def update_daily_spending_trend_graph(filtered_df):
+def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df):
     daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().reset_index()
     daily_spending.columns = ['Day', 'Total Spent']
-    fig = px.line(daily_spending, x='Day', y='Total Spent', title='Daily Spending Trend',
-                  labels={'Day': 'Day of the Month', 'Total Spent': 'Amount Spent ($)'},
-                  markers=True)
+
+    daily_spending['Cumulative Spending'] = daily_spending['Total Spent'].cumsum()
+
+    # budget_per_day = monthly_
+
+    fig = px.line(
+        daily_spending, 
+        x='Day', 
+        y=['Total Spent'], 
+        labels={
+            'Day': 'day',
+            'Total Spent': 'money spent ($)'
+            },
+        markers=True
+    )
+
+    fig.update_layout(
+        # showlegend=False
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        legend = dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            font=dict(
+                color="#eeeee4",
+                size=12
+            )
+        ),
+
+
+    )
+
     return fig
 
-def update_budget_vs_actual_spending_graph(filtered_df, budgets_df):
+def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
     
     # Merge actual spending data with budgets data
     actual_spending = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
-    budget_data = budgets_df[['categoryname', 'categorybudget']].groupby('categoryname').sum().reset_index() 
+    budget_data = categorical_budgets_df[['categoryname', 'categorybudget']].groupby('categoryname').sum().reset_index() 
     
     # Merging the actual spending with the budgets
     summary_df = pd.merge(budget_data, actual_spending, on='categoryname', how='left')
@@ -197,12 +234,13 @@ def update_budget_vs_actual_spending_graph(filtered_df, budgets_df):
         summary_df, 
         x='categoryname', 
         y=['categorybudget', 'amount'],
+        color='Type',
         labels={
             'categoryname': 'category types',
             'value': 'amount ($)' #represented with 2 different y-values, so is labeled as 'value'
         },
         barmode='group',
-        color_discrete_sequence=["#f19500", "#rgba(146,21,79,255)"]  # Blue for Budget, Red for Actual Spending
+        color_discrete_sequence=["rgba(146,21,79,255)", "#f19500"]  # Blue for Budget, Red for Actual Spending
 
     )
     fig.update_layout(
@@ -223,14 +261,12 @@ def update_budget_vs_actual_spending_graph(filtered_df, budgets_df):
             )
         ),
         xaxis=dict(
-            title="X-axis Label",  # Customize X-axis label text
             title_font=dict(color="#eeeee4"),  # Color for the X-axis title
             tickfont=dict(color="#eeeee4"),  # Color for the X-axis ticks
             showgrid=True,  # Determines whether or not grid lines are drawn
             gridcolor='rgba(0,0,0,0)'  # Color of grid lines
         ),
         yaxis=dict(
-            title="Y-axis Label",  # Customize Y-axis label text
             title_font=dict(color="#eeeee4"),  # Color for the Y-axis title
             tickfont=dict(color="#eeeee4"),  # Color for the Y-axis ticks
             showgrid=True,  # Determines whether or not grid lines are drawn

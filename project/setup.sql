@@ -96,11 +96,11 @@ INSERT INTO MonthlyBudgets (UserID, TotalBudget, BudgetMonth) VALUES
 
 -- Insert Categorical Budgets
 INSERT INTO CategoricalBudgets (UserID, CategoryName, CategoryBudget) VALUES
-                                                                          (1, 'Housing', 600.00),
-                                                                          (1, 'Transportation', 300.00),
-                                                                          (1, 'Food', 300.00),
-                                                                          (1, 'Healthcare', 200.00),
-                                                                          (1, 'Debt Payments', 200.00),
+                                                                          (1, 'Housing', 1000.00),
+                                                                          (1, 'Transportation', 100.00),
+                                                                          (1, 'Food', 100.00),
+                                                                          (1, 'Healthcare', 100.00),
+                                                                          (1, 'Debt Payments', 300.00),
                                                                           (1, 'Investments', 100.00),
                                                                           (1, 'Entertainment & Leisure', 100.00),
                                                                           (1, 'Personal Care', 60.00),
