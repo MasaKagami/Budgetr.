@@ -1,3 +1,5 @@
+drop TABLE Users
+
 CREATE TABLE Users
 (
     UserID SERIAL PRIMARY KEY,
@@ -5,10 +7,15 @@ CREATE TABLE Users
     Email VARCHAR(255)
 );
 
+drop TABLE Categories
+
 CREATE TABLE Categories
 (
     Name VARCHAR(255) PRIMARY KEY
 );
+
+
+DROP TABLE Budgets
 
 CREATE TABLE Budgets
 (
@@ -22,6 +29,8 @@ CREATE TABLE Budgets
     FOREIGN KEY (UserID) REFERENCES Users (UserID)
     FOREIGN KEY (CateogryName) REFERENCES Categories (Name)
 );
+
+DROP TABLE Transactions
 
 CREATE TABLE Transactions
 (
@@ -137,4 +146,122 @@ INSERT INTO Transactions (UserID, BudgetID, Amount, Date, Description, CategoryN
 (1, 1, 180.00, '2023-04-23', 'Crafting Materials', 'Hobbies'),
 (1, 1, 200.00, '2023-04-25', 'Art Class', 'Education'),
 (1, 1, 90.00, '2023-04-27', 'Massage Therapy', 'Health'),
-(1, 1, 50.00, '2023-04-29', 'Bicycle Repair', 'Transportation');
+(1, 1, 50.00, '2023-04-29', 'Bicycle Repair', 'Transportation'),
+(1, 2, 140.00, '2023-01-11', 'January Electricity Bill', 'Utilities'),
+(1, 3, 45.00, '2023-02-15', 'Valentine''s Dinner', 'Dining'),
+(1, 4, 70.00, '2023-03-12', 'Gas refill', 'Transportation'),
+(1, 5, 120.00, '2023-01-21', 'Weekly groceries', 'Groceries'),
+(1, 6, 200.00, '2023-01-18', 'Dental cleaning', 'Health'),
+(1, 7, 90.00, '2023-02-07', 'Winter Jacket', 'Clothing'),
+(1, 8, 60.00, '2023-03-22', 'Movie night out', 'Entertainment'),
+(1, 9, 150.00, '2023-01-29', 'Books for spring semester', 'Education'),
+(1, 10, 80.00, '2023-02-19', 'New kitchen mixer', 'Home'),
+(1, 11, 45.00, '2023-04-03', 'Pet grooming', 'Pets'),
+(1, 12, 300.00, '2023-01-26', 'New headphones', 'Technology'),
+(1, 13, 400.00, '2023-03-15', 'Flight to NYC', 'Travel'),
+(1, 14, 35.00, '2023-02-14', 'Birthday gift for a friend', 'Gifts'),
+(1, 15, 25.00, '2023-04-25', 'Charity event donation', 'Donations'),
+(1, 16, 75.00, '2023-03-09', 'Plumbing services', 'Services'),
+(1, 17, 50.00, '2023-01-31', 'Model building kit', 'Hobbies'),
+(1, 18, 85.00, '2023-02-28', 'Spring collection sale shopping', 'Shopping'),
+(1, 4, 80.00, '2023-02-08', 'Monthly parking pass', 'Transportation'),
+(1, 3, 55.00, '2023-04-18', 'Work lunch', 'Dining'),
+(1, 5, 110.00, '2023-03-03', 'Groceries for party', 'Groceries'),
+(1, 1, 1300.00, '2023-02-05', 'Monthly Rent Payment', 'Rent'),
+(1, 2, 160.00, '2023-03-12', 'March Electricity Bill', 'Utilities'),
+(1, 7, 95.00, '2023-03-27', 'New shoes for running', 'Clothing'),
+(1, 8, 70.00, '2023-04-07', 'Theater tickets', 'Entertainment'),
+(1, 10, 45.00, '2023-03-21', 'Home decor', 'Home'),
+(1, 11, 35.00, '2023-02-09', 'Pet food', 'Pets'),
+(1, 12, 250.00, '2023-01-19', 'Upgrade software', 'Technology'),
+(1, 13, 450.00, '2023-02-21', 'Weekend getaway', 'Travel'),
+(1, 14, 20.00, '2023-03-31', 'Wedding gift', 'Gifts'),
+(1, 15, 30.00, '2023-04-10', 'Fundraiser contribution', 'Donations'),
+(1, 16, 65.00, '2023-03-28', 'Car wash', 'Services'),
+(1, 17, 40.00, '2023-02-22', 'Painting supplies', 'Hobbies'),
+(1, 18, 90.00, '2023-01-12', 'Online shopping', 'Shopping'),
+(1, 3, 60.00, '2023-03-29', 'Birthday dinner', 'Dining'),
+(1, 5, 95.00, '2023-04-11', 'Organic groceries', 'Groceries'),
+(1, 1, 1250.00, '2023-03-05', 'Rent for March', 'Rent'),
+(1, 2, 130.00, '2023-04-17', 'Water bill', 'Utilities'),
+(1, 6, 220.00, '2023-02-23', 'Optometrist visit', 'Health'),
+(1, 7, 85.00, '2023-01-28', 'Winter clothes', 'Clothing'),
+(1, 8, 55.00, '2023-03-08', 'Concert tickets', 'Entertainment'),
+(1, 9, 180.00, '2023-02-24', 'College textbooks', 'Education'),
+(1, 10, 95.00, '2023-03-14', 'Garden tools', 'Home'),
+(1, 11, 25.00, '2023-04-20', 'Cat toys', 'Pets'),
+(1, 12, 320.00, '2023-01-23', 'New tablet', 'Technology'),
+(1, 13, 500.00, '2023-02-18', 'Hotel in Paris', 'Travel'),
+(1, 14, 30.00, '2023-03-24', 'Anniversary gift', 'Gifts'),
+(1, 15, 20.00, '2023-04-12', 'Local charity donation', 'Donations'),
+(1, 16, 80.00, '2023-01-30', 'Appliance repair', 'Services'),
+(1, 17, 45.00, '2023-02-26', 'Model airplane kit', 'Hobbies'),
+(1, 18, 100.00, '2023-03-17', 'Spring clothing sale', 'Shopping'),
+(1, 2, 160.00, '2023-01-12', 'Utility Bill', 'Utilities'),
+(1, 3, 50.00, '2023-01-18', 'Dinner Out', 'Dining'),
+(1, 4, 80.00, '2023-01-24', 'Uber to Airport', 'Transportation'),
+(1, 5, 110.00, '2023-01-31', 'Supermarket Visit', 'Groceries'),
+(1, 6, 220.00, '2023-01-10', 'Gym Membership Renewal', 'Health'),
+(1, 7, 89.00, '2023-01-16', 'New Jeans', 'Clothing'),
+(1, 8, 45.00, '2023-01-22', 'Movie Tickets', 'Entertainment'),
+(1, 9, 200.00, '2023-01-28', 'New Textbooks', 'Education'),
+(1, 10, 150.00, '2023-02-03', 'Furniture Assembly Service', 'Home'),
+(1, 11, 55.00, '2023-02-09', 'Pet Grooming', 'Pets'),
+(1, 12, 320.00, '2023-02-15', 'New Smartphone', 'Technology'),
+(1, 13, 450.00, '2023-02-21', 'Airline Ticket to Rome', 'Travel'),
+(1, 14, 25.00, '2023-02-27', 'Friend Birthday Gift', 'Gifts'),
+(1, 15, 30.00, '2023-03-05', 'Charity Run Participation', 'Donations'),
+(1, 16, 90.00, '2023-03-11', 'Car Wash and Detailing', 'Services'),
+(1, 17, 75.00, '2023-03-17', 'Art Supplies', 'Hobbies'),
+(1, 18, 140.00, '2023-03-23', 'Online Shopping', 'Shopping'),
+(1, 5, 98.00, '2023-01-06', 'Grocery shopping for the week', 'Groceries'),
+(1, 4, 72.00, '2023-01-13', 'Taxi to downtown', 'Transportation'),
+(1, 3, 85.00, '2023-01-20', 'Lunch at new restaurant', 'Dining'),
+(1, 7, 60.00, '2023-01-27', 'Running shoes', 'Clothing'),
+(1, 9, 130.00, '2023-02-04', 'Online course enrollment', 'Education'),
+(1, 10, 110.00, '2023-02-11', 'Home repair tools', 'Home'),
+(1, 14, 40.00, '2023-02-18', 'Anniversary present', 'Gifts'),
+(1, 8, 120.00, '2023-02-25', 'Concert night out', 'Entertainment'),
+(1, 6, 230.00, '2023-03-04', 'Dental check-up', 'Health'),
+(1, 2, 150.00, '2023-03-19', 'Gas bill', 'Utilities'),
+(1, 16, 75.00, '2023-03-26', 'Window cleaning service', 'Services'),
+(1, 12, 350.00, '2023-04-02', 'Upgrade computer components', 'Technology'),
+(1, 13, 480.00, '2023-04-09', 'Weekend trip', 'Travel'),
+(1, 17, 65.00, '2023-04-16', 'Photography accessories', 'Hobbies'),
+(1, 18, 150.00, '2023-04-23', 'Spring sale shopping', 'Shopping'),
+(1, 5, 105.00, '2023-05-01', 'Organic products', 'Groceries'),
+(1, 4, 68.00, '2023-05-08', 'Bus pass', 'Transportation'),
+(1, 3, 95.00, '2023-05-15', 'Italian cuisine', 'Dining'),
+(1, 7, 50.00, '2023-05-22', 'Casual wear', 'Clothing'),
+(1, 9, 115.00, '2023-05-29', 'Learning materials', 'Education'),
+(1, 10, 100.00, '2023-06-05', 'Gardening set', 'Home'),
+(1, 14, 30.00, '2023-06-12', 'Gift for a friend', 'Gifts'),
+(1, 8, 110.00, '2023-06-19', 'Theatre tickets', 'Entertainment'),
+(1, 6, 240.00, '2023-06-26', 'Health supplements', 'Health'),
+(1, 1, 1220.00, '2023-07-03', 'Quarterly rent advance', 'Rent'),
+(1, 2, 135.00, '2023-07-10', 'Water utility bill', 'Utilities'),
+(1, 16, 80.00, '2023-07-17', 'Electrical fixes', 'Services'),
+(1, 12, 290.00, '2023-07-24', 'New tablet purchase', 'Technology'),
+(1, 13, 500.00, '2023-07-31', 'Holiday booking', 'Travel'),
+(1, 17, 55.00, '2023-08-07', 'Crafting kits', 'Hobbies'),
+(1, 18, 135.00, '2023-08-14', 'Mid-year sales', 'Shopping'),
+(1, 5, 92.00, '2023-08-21', 'Weekly shopping', 'Groceries'),
+(1, 4, 65.00, '2023-08-28', 'Ride-share to work', 'Transportation'),
+(1, 3, 55.00, '2023-09-04', 'Friday dinner date', 'Dining'),
+(1, 7, 70.00, '2023-09-11', 'New autumn collection', 'Clothing'),
+(1, 9, 140.00, '2023-09-18', 'Professional certification', 'Education'),
+(1, 10, 85.00, '2023-09-25', 'DIY home decor', 'Home'),
+(1, 14, 35.00, '2023-10-02', 'Wedding gift for colleague', 'Gifts'),
+(1, 8, 130.00, '2023-10-09', 'Live music event', 'Entertainment'),
+(1, 6, 205.00, '2023-10-16', 'Yearly medical checkup', 'Health'),
+(1, 1, 1150.00, '2023-10-23', 'Rent payment', 'Rent'),
+(1, 2, 125.00, '2023-10-30', 'Electricity bill', 'Utilities'),
+(1, 16, 65.00, '2023-11-06', 'Home maintenance', 'Services'),
+(1, 12, 310.00, '2023-11-13', 'Smart home gadgets', 'Technology'),
+(1, 13, 460.00, '2023-11-20', 'Flight tickets for vacation', 'Travel'),
+(1, 17, 60.00, '2023-11-27', 'New hobby project', 'Hobbies'),
+(1, 18, 110.00, '2023-12-04', 'Christmas shopping', 'Shopping'),
+(1, 5, 85.00, '2023-12-11', 'Holiday meal ingredients', 'Groceries'),
+(1, 4, 75.00, '2023-12-18', 'Year-end travel pass', 'Transportation'),
+(1, 3, 45.00, '2023-12-25', 'Holiday dining out', 'Dining'),
+(1, 7, 95.00, '2023-12-30', 'New Year''s outfit', 'Clothing');

@@ -30,7 +30,6 @@ def load_data():
 
 # Using the function
 transactions_df, budgets_df = load_data()
-
 print(transactions_df[:5])
 print(budgets_df[:5])
 
@@ -52,7 +51,7 @@ app.layout = html.Div([
                     {'label': str(year), 'value': year} for year in range(2000, datetime.now().year + 1)
                 ],
                 multi=False,
-                value=datetime.now().year,  # Default to current year
+                value=datetime.now().year-1,  # Default to current year
             className='dropdownYear'),
             
             dcc.Dropdown(id="slct_month",
@@ -157,7 +156,7 @@ def update_graph(selected_year, selected_month):
     monthly_expense_fig = update_monthly_expense_graph(filtered_df)
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
     daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df)
-    budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df)
+    budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, budgets_df)
 
     return monthly_expense_fig, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
 
@@ -180,14 +179,20 @@ def update_daily_spending_trend_graph(filtered_df):
                   markers=True)
     return fig
 
-def update_budget_vs_actual_spending_graph(filtered_df):
-    # Assume some processing to prepare data for budget vs. actual spending graph
-    # Example: Comparing planned budget and actual spending
-    # This is hypothetical since your data model might not have budget data directly
-    budget_data = filtered_df.groupby('categoryname')['budget'].sum().reset_index()  # Hypothetical
+def update_budget_vs_actual_spending_graph(filtered_df, budgets_df):
+    
+    # Merge actual spending data with budgets data
     actual_spending = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
-    fig = px.bar(budget_data, x='categoryname', y='budget', title="Budget vs Actual Spending")
-    fig.add_bar(x=actual_spending['categoryname'], y=actual_spending['amount'], name="Actual Spending")
+    budget_data = budgets_df[['categoryname', 'categorybudget']].groupby('categoryname').sum().reset_index() 
+    
+    # Merging the actual spending with the budgets
+    summary_df = pd.merge(budget_data, actual_spending, on='categoryname', how='left')
+    summary_df.fillna(0, inplace=True)  # Replace NaN with 0 for categories with no spending
+
+    # Create the bar chart for Budget vs Actual Spending
+    fig = px.bar(summary_df, x='categoryname', y=['categorybudget', 'amount'],
+                 labels={'categorybudget': 'Budgeted', 'amount': 'Actual Spending'},
+                 barmode='group', title="Budget vs Actual Spending per Category")
     return fig
 
 # ------------------------------------------------------------------------------
