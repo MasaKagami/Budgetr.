@@ -99,7 +99,7 @@ app.layout = html.Div([
                     ], className= 'daily-spending-trend'),
 
                     html.Div([
-                        html.H3("Budget vs. Actual Spending", className='dataTitle'),
+                        html.H3("Budget vs. Actual Spending Per Category", className='dataTitle'),
                         dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
                     ], className= 'budget-vs-actual-spending'),
 
@@ -192,7 +192,8 @@ def update_budget_vs_actual_spending_graph(filtered_df, budgets_df):
     # Create the bar chart for Budget vs Actual Spending
     fig = px.bar(summary_df, x='categoryname', y=['categorybudget', 'amount'],
                  labels={'categorybudget': 'Budgeted', 'amount': 'Actual Spending'},
-                 barmode='group', title="Budget vs Actual Spending per Category")
+                 barmode='group')
+                 
     return fig
 
 # ------------------------------------------------------------------------------
