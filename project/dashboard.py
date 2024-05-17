@@ -167,8 +167,11 @@ def update_monthly_expense_graph(filtered_df):
     return fig
 
 def update_expense_categorization_graph(filtered_df):
-    # Example: Pie chart of expenses by category
-    fig = px.pie(filtered_df, values='amount', names='categoryname', title="Expense Categorization")
+    fig = px.pie(
+        filtered_df, 
+        values='amount', 
+        names='categoryname', 
+    )
     return fig
 
 def update_daily_spending_trend_graph(filtered_df):
@@ -190,9 +193,50 @@ def update_budget_vs_actual_spending_graph(filtered_df, budgets_df):
     summary_df.fillna(0, inplace=True)  # Replace NaN with 0 for categories with no spending
 
     # Create the bar chart for Budget vs Actual Spending
-    fig = px.bar(summary_df, x='categoryname', y=['categorybudget', 'amount'],
-                 labels={'categorybudget': 'Budgeted', 'amount': 'Actual Spending'},
-                 barmode='group')
+    fig = px.bar(
+        summary_df, 
+        x='categoryname', 
+        y=['categorybudget', 'amount'],
+        labels={
+            'categoryname': 'category types',
+            'value': 'amount ($)' #represented with 2 different y-values, so is labeled as 'value'
+        },
+        barmode='group',
+        color_discrete_sequence=["#f19500", "#rgba(146,21,79,255)"]  # Blue for Budget, Red for Actual Spending
+
+    )
+    fig.update_layout(
+        # showlegend=False,
+        xaxis_tickangle=45,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+
+        legend = dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            font=dict(
+                color="#eeeee4",
+                size=12
+            )
+        ),
+        xaxis=dict(
+            title="X-axis Label",  # Customize X-axis label text
+            title_font=dict(color="#eeeee4"),  # Color for the X-axis title
+            tickfont=dict(color="#eeeee4"),  # Color for the X-axis ticks
+            showgrid=True,  # Determines whether or not grid lines are drawn
+            gridcolor='rgba(0,0,0,0)'  # Color of grid lines
+        ),
+        yaxis=dict(
+            title="Y-axis Label",  # Customize Y-axis label text
+            title_font=dict(color="#eeeee4"),  # Color for the Y-axis title
+            tickfont=dict(color="#eeeee4"),  # Color for the Y-axis ticks
+            showgrid=True,  # Determines whether or not grid lines are drawn
+            gridcolor='lightblue'  # Color of grid lines
+        )
+    )
                  
     return fig
 
