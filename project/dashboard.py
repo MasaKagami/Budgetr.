@@ -234,7 +234,6 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
         summary_df, 
         x='categoryname', 
         y=['categorybudget', 'amount'],
-        color='Type',
         labels={
             'categoryname': 'category types',
             'value': 'amount ($)' #represented with 2 different y-values, so is labeled as 'value'
