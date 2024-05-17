@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
-from dash import Dash, dcc, html, Input, Output  # pip install dash (version 2.0.0 or higher)
+from dash import Dash, dcc, html, Input, Output, State  # pip install dash (version 2.0.0 or higher)
 
 app = Dash(__name__)
 app.title = 'myfinanceplanner'
@@ -25,8 +25,18 @@ def load_data():
 
     return transactions_df, categories_df, users_df, budgets_df
 
+def load_local_database():
+    # Load data from CSV files
+    transactions_df = pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
+    categories_df = pd.read_csv('../localdb/categories.csv')
+    users_df = pd.read_csv('../localdb/users.csv')
+    budgets_df = pd.read_csv('../localdb/budgets.csv', parse_dates=['startdate', 'enddate'])
+
+    return transactions_df, categories_df, users_df, budgets_df
+
 # Loading data
-transactions_df, categories_df, users_df, budgets_df = load_data()
+transactions_df, categories_df, users_df, budgets_df = load_local_database()
+# transactions_df, categories_df, users_df, budgets_df = load_data()
 print('\nTRANSACTIONS DB\n', transactions_df[:5])
 print('CATEGORIES DB\n', categories_df[:5])
 print('USERS DB\n', users_df[:5])
@@ -81,8 +91,30 @@ app.layout = html.Div([
     html.Div(id='output_container', children=[]),
     html.Br(),
 
-    dcc.Graph(id='my_spending_map', figure={})
+    dcc.Graph(id='my_spending_map', figure={}),
 
+    html.H2("Add a New Transaction", style={'text-align': 'center'}),
+        dcc.DatePickerSingle(
+            id='input_date',
+            date=pd.Timestamp.now().strftime('%Y-%m-%d'),
+            display_format='YYYY-MM-DD',
+            style={'width': '10%', 'margin': '10px auto', 'display': 'block'}
+        ),
+        dcc.Input(
+            id='input_amount',
+            type='number',
+            min=0,
+            placeholder='Amount',
+            style={'width': '10%', 'margin': '10px auto', 'display': 'block'}
+        ),
+        dcc.Dropdown(
+            id='input_category',
+            options=[{'label': category, 'value': category} for category in categories_df['name']],
+            placeholder='Select Category',
+            style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
+        ),
+        html.Button('Add Transaction', id='submit_transaction', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
+    html.Div(id='transaction_status', style={'text-align': 'center'}) # Display the status of the transaction   
 ])
 
 # ------------------------------------------------------------------------------
@@ -160,5 +192,45 @@ def update_graph(chart_type, selected_month):
     return [fig]
 
 # ------------------------------------------------------------------------------
+@app.callback(
+    Output('transaction_status', 'children'),
+    [Input('submit_transaction', 'n_clicks')],
+    [State('input_date', 'date'), State('input_amount', 'value'), State('input_category', 'value')]
+)
+
+def add_transaction(n_clicks, date, amount, category):
+    # If button has been clicked and all fields have been filled out
+    if n_clicks > 0 and date and amount and category:
+        # Load the latest transactions DB
+        transactions_df = pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
+
+        # Add the new transaction to the DataFrame
+        new_transaction = {
+            'transactionid': transactions_df['transactionid'].max() + 1, # Increment the transaction ID
+            'userid': 1, # Hardcoded for now
+            'budgetid': 1, # Hardcoded for now
+            'categoryname': category,
+            'amount': amount, 
+            'date': date + ' 00:00:00', # Concatenate the date with a time to make it a datetime object
+            'description': 'TEST TRANSACTION'
+            }
+        
+        # Append the new transaction to the end of the DataFrame
+        transactions_df.loc[len(transactions_df)] = new_transaction
+        
+        # Save the updated DataFrame to the CSV file
+        transactions_df.to_csv('../localdb/transactions.csv', index=False)
+
+        return f"Transaction added: {date}, {amount}, {category}"
+    elif n_clicks > 0:
+        if not date:
+            return "Please select a date"
+        elif not amount:
+            return "Please enter an amount"
+        elif not category:
+            return "Please select a category"
+    return "" # If the button has not been clicked
+
+# # ------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run_server(debug=True)
