@@ -185,7 +185,7 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df):
 
     daily_spending['Cumulative Spending'] = daily_spending['Total Spent'].cumsum()
 
-    # budget_per_day = monthly_
+    budget = monthly_budgets_df
 
     fig = px.line(
         daily_spending, 
@@ -239,7 +239,7 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
             'value': 'amount ($)' #represented with 2 different y-values, so is labeled as 'value'
         },
         barmode='group',
-        color_discrete_sequence=["rgba(146,21,79,255)", "#f19500"]  # Blue for Budget, Red for Actual Spending
+        color_discrete_sequence=["#92154f", "#f19500"]  # Blue for Budget, Red for Actual Spending
 
     )
     fig.update_layout(
