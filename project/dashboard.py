@@ -119,6 +119,12 @@ app.layout = html.Div([
             placeholder='Select Category',
             style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
         ),
+        dcc.Input(
+            id='input_description',
+            type='text',
+            placeholder='Description',
+            style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
+        ),
         html.Button('Add Transaction', id='submit_transaction', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
     html.Div(id='transaction_status', style={'text-align': 'center'}), # Display the status of the transaction   
 
@@ -226,10 +232,10 @@ def update_graph(chart_type, selected_month):
 @app.callback(
     Output('transaction_status', 'children'),
     [Input('submit_transaction', 'n_clicks')],
-    [State('input_date', 'date'), State('input_amount', 'value'), State('input_category', 'value')]
+    [State('input_date', 'date'), State('input_amount', 'value'), State('input_category', 'value'), State('input_description', 'value')]
 )
 
-def add_transaction(n_clicks, date, amount, category):
+def add_transaction(n_clicks, date, amount, category, description):
     # If button has been clicked and all fields have been filled out
     if n_clicks > 0 and date and amount and category:
         # Load the latest transactions DB
@@ -242,7 +248,7 @@ def add_transaction(n_clicks, date, amount, category):
             'date': date,
             'categoryname': category,
             'amount': amount, 
-            'description': 'TEST TRANSACTION'
+            'description': description
             }
         
         # Append the new transaction to the end of the DataFrame
