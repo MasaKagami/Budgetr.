@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 import pandas as pd
-import plotly.express as px  # (version 4.7.0 or higher)
-import plotly.graph_objects as go
-from dash import Dash, dcc, html, Input, Output, State  # pip install dash (version 2.0.0 or higher)
+import plotly.express as px
+from datetime import datetime
+from dash import Dash, dcc, html, Input, Output, State, ALL
 
 app = Dash(__name__)
 app.title = 'myfinanceplanner'
@@ -20,27 +20,30 @@ def load_data():
     transactions_df = pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
     categories_df = pd.read_sql("SELECT * FROM Categories;", engine)
     users_df = pd.read_sql("SELECT * FROM Users;", engine)
-    budgets_df = pd.read_sql("SELECT * FROM Budgets;", engine, parse_dates=['start_date', 'end_date'])
+    monthly_budgets_df = pd.read_sql("SELECT * FROM MonthlyBudgets;", engine, parse_dates=['budgetmonth'])
+    categorical_budgets_df = pd.read_sql("SELECT * FROM CategoricalBudgets;", engine)
     engine.dispose()  # Close the connection safely
 
-    return transactions_df, categories_df, users_df, budgets_df
+    return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 def load_local_database():
     # Load data from CSV files
     transactions_df = pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
     categories_df = pd.read_csv('../localdb/categories.csv')
     users_df = pd.read_csv('../localdb/users.csv')
-    budgets_df = pd.read_csv('../localdb/budgets.csv', parse_dates=['startdate', 'enddate'])
+    monthly_budgets_df = pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
+    categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
 
-    return transactions_df, categories_df, users_df, budgets_df
+    return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 # Loading data
-transactions_df, categories_df, users_df, budgets_df = load_local_database()
+transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
 # transactions_df, categories_df, users_df, budgets_df = load_data()
 print('\nTRANSACTIONS DB\n', transactions_df[:5])
 print('CATEGORIES DB\n', categories_df[:5])
 print('USERS DB\n', users_df[:5])
-print('BUDGETS DB\n', budgets_df[:5])
+print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
+print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
 # Dictionary to convert month names to integer values
 monthsToInt = {
@@ -60,6 +63,9 @@ monthsToInt = {
 
 # Reverse the dictionary to convert the integers to month names
 IntToMonths = {v: k for k, v in monthsToInt.items()} 
+
+current_month = datetime.now().month
+current_year = datetime.now().year
 
 # ------------------------------------------------------------------------------
 # App layout
@@ -114,7 +120,38 @@ app.layout = html.Div([
             style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
         ),
         html.Button('Add Transaction', id='submit_transaction', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
-    html.Div(id='transaction_status', style={'text-align': 'center'}) # Display the status of the transaction   
+    html.Div(id='transaction_status', style={'text-align': 'center'}), # Display the status of the transaction   
+
+    html.H2("Manage Budget", style={'text-align': 'center'}),
+    html.Div(id='budget_month_selector', children=[
+    html.H4("Select Month and Year for Budget", style = {'text-align': 'left'}),
+        dcc.Dropdown(id="slct_budget_month",
+                    options= [{'label': key, 'value': value} for key, value in monthsToInt.items()],
+                    multi=False,
+                    value=current_month, # Initial value
+                    style={'width': "40%", 'display': 'inline-block'}
+                    ),
+        dcc.Dropdown(id="slct_budget_year",
+                    options= [{'label': year, 'value': year} for year in range(2020, 2026)], # Temporary range of years
+                    multi=False,
+                    value=current_year, # Initial value
+                    style={'width': "30%", 'display': 'inline-block', 'margin-left': '10px'}
+                    ),
+    ], style={'text-align': 'center'}),
+    html.Div([
+        html.Label("Total Budget:"),
+        dcc.Input(
+            id='input_total_budget',
+            type='number',
+            min=0,
+            style={'margin-left': '10px', 'margin-bottom': '20px'}
+        )
+    ], style={'text-align': 'center'}),
+    html.Div(id='budget_overview', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the total budget
+    html.Div(id='budget_inputs'), # Display the allocated budget for each category
+    html.Div(id='unallocated_budget', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the unallocated budget
+    html.Button('Update Budget', id='submit_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
+    html.Div(id='budget_status', style={'text-align': 'center'}) # Display the status of the budget update
 ])
 
 # ------------------------------------------------------------------------------
@@ -126,12 +163,6 @@ app.layout = html.Div([
 )
 
 def update_graph(chart_type, selected_month):
-    # Hide the month selector
-    #month_selector_style = {'display': 'none'}
-
-    # Initially show the month selector
-    month_selector_style = {'display': 'block'}
-
     # Filter the DataFrame to the selected month
     filtered_df = transactions_df[transactions_df['date'].dt.month == selected_month]
 
@@ -173,7 +204,7 @@ def update_graph(chart_type, selected_month):
         # Group by category and sum the amounts
         daily_category_spending = filtered_df.groupby([filtered_df['date'].dt.day, 'categoryname'])['amount'].sum().reset_index()
         daily_category_spending.columns = ['Day', 'Category', 'Total Spent']
-        print("\nSTACKED BAR CHART\n", daily_category_spending)
+        # print("\nSTACKED BAR CHART\n", daily_category_spending)
 
         # Create a stacked bar chart with Plotly Express
         fig = px.bar(
@@ -208,10 +239,9 @@ def add_transaction(n_clicks, date, amount, category):
         new_transaction = {
             'transactionid': transactions_df['transactionid'].max() + 1, # Increment the transaction ID
             'userid': 1, # Hardcoded for now
-            'budgetid': 1, # Hardcoded for now
+            'date': date,
             'categoryname': category,
             'amount': amount, 
-            'date': date + ' 00:00:00', # Concatenate the date with a time to make it a datetime object
             'description': 'TEST TRANSACTION'
             }
         
@@ -231,6 +261,108 @@ def add_transaction(n_clicks, date, amount, category):
             return "Please select a category"
     return "" # If the button has not been clicked
 
-# # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+@app.callback(
+    [Output('budget_overview', 'children'),
+     Output('input_total_budget', 'value'),
+     Output('budget_inputs', 'children'),
+     Output('unallocated_budget', 'children')],
+    [Input('slct_budget_month', 'value'), Input('slct_budget_year', 'value'),
+     Input('submit_budget', 'n_clicks')], # Updating the budget triggers this callback to update the budget overview
+    [State('slct_budget_month', 'value'), State('slct_budget_year', 'value')])
+
+def display_budget_overview(selected_month, selected_year, placeholder1, placeholder2, placeholder3):
+    # Convert the selected month and year to a datetime object
+    selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
+
+    # Load the latest budgets DB
+    monthly_budgets_df = pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
+    categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
+    
+    monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]
+    if monthly_budget_row.empty:
+        total_budget = 0
+    else:
+        total_budget = int(monthly_budget_row['totalbudget'].values[0])
+
+    budget_overview = f"Total Budget for {selected_date.strftime('%Y-%m')}: ${total_budget}"
+
+    # Display the allocated budget for each category
+    budget_inputs = [] # List to store the budgets for each category
+    allocated_budget = 0
+    for index, row in categorical_budgets_df.iterrows():
+        category_name = row['categoryname']
+        category_budget = row['categorybudget']
+        allocated_budget += category_budget # Calculate the total allocated budget
+        budget_inputs.append(
+            html.Div([
+                html.Label(f"{category_name}:"),
+                dcc.Input(
+                    id={'type': 'budget_input', 'index': index},
+                    type="number",
+                    value=category_budget,
+                    min=0,
+                    style={'margin-left': '10px'}
+                )
+            ], style={'margin-bottom': '10px'})
+        )
+
+    unallocated_budget = int(total_budget - allocated_budget)
+    if unallocated_budget < 0:
+        unallocated_budget_display = f"Exceeding Monthly Budget by ${-unallocated_budget}"
+    elif unallocated_budget > 0:
+        unallocated_budget_display = f"Remaining Monthly Budget of ${unallocated_budget}"
+    else:
+        unallocated_budget_display = f"${total_budget} Budget Fully Allocated"
+
+    return budget_overview, total_budget, budget_inputs, unallocated_budget_display
+
+# ------------------------------------------------------------------------------
+@app.callback(
+    [Output('budget_status', 'children'),
+     Output('slct_budget_month', 'value'),
+     Output('slct_budget_year', 'value')],
+    [Input('submit_budget', 'n_clicks')],
+    [State('slct_budget_month', 'value'), State('slct_budget_year', 'value'), State('input_total_budget', 'value'), State({'type': 'budget_input', 'index': ALL}, 'value')]
+)
+
+def update_budget(n_clicks, selected_month, selected_year, total_budget, budget_values):
+    if n_clicks > 0:
+        if total_budget is None or total_budget == '':
+            return "Please enter a total budget", selected_month, selected_year
+        if not all(budget_values):
+            return "Please enter a budget for each category", selected_month, selected_year
+
+        # Convert the selected month and year to a datetime object
+        selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
+        
+        # Load the latest budgets DB before updating
+        monthly_budgets_df = pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
+        categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
+        
+        # Update or insert the monthly budget
+        if selected_date in monthly_budgets_df['budgetmonth'].values:
+            monthly_budgets_df.loc[monthly_budgets_df['budgetmonth'] == selected_date, 'totalbudget'] = total_budget
+        else:
+            new_monthly_budget = {
+                'budgetid': monthly_budgets_df['budgetid'].max() + 1,
+                'userid': 1,  # Hardcoded for now
+                'totalbudget': total_budget,
+                'budgetmonth': selected_date
+            }
+            monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
+        
+        # Update the categorical budgets
+        for index, value in enumerate(budget_values):
+            categorical_budgets_df.at[index, 'categorybudget'] = value
+
+        # Save the updated DataFrames to the CSV files
+        monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
+        categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
+
+        return "Budget updated successfully!", selected_month, selected_year
+    return "", selected_month, selected_year
+
+# ------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run_server(debug=True)
