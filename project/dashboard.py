@@ -167,8 +167,14 @@ def update_graph(selected_year, selected_month):
 
 def update_monthly_expense_graph(filtered_df):
     expense_summary = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
-    fig = px.bar(expense_summary, x='categoryname', y='amount', title="Monthly Expense Summary")
-    
+    fig = px.bar(
+        expense_summary,
+        x='categoryname', 
+        y='amount', 
+        )    
+    fig.update_layout(
+        margin=dict(l=0, r=0, t=0, b=0)
+    )
     return fig
 
 def update_expense_categorization_graph(filtered_df):
@@ -176,7 +182,29 @@ def update_expense_categorization_graph(filtered_df):
         filtered_df, 
         values='amount', 
         names='categoryname', 
+        color='categoryname',
+        hole=0.3
     )
+
+    fig.update_traces(
+        # textinfo='percent',  # Show both percentage and label
+        insidetextorientation='radial',  # Better orientation for text inside
+    )
+
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=0, r=0, t=0, b=0),
+        uniformtext_minsize=12,  # Minimum text size
+        uniformtext_mode='hide',  # Hide text if too small
+        legend=dict(
+            font=dict(
+                color="#eeeee4",
+                size=10
+            )
+        )
+    )
+
     return fig
 
 def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month):
@@ -201,6 +229,11 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
         'Total Budget': [monthly_budget, monthly_budget]
     })
 
+    # Add a column to classify spending relative to budget
+    daily_spending['Status'] = daily_spending['Cumulative Spending'].apply(
+        lambda x: 'Under' if x <= monthly_budget else 'Over'
+    )
+
     fig = px.line(
         daily_spending,
         x='Day',
@@ -209,8 +242,10 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
             'Cumulative Spending': 'cumulative spending ($)',
             'Day': 'day of the month'
         },
+        color='Status',
+        color_discrete_map={'Under': 'green', 'Over': 'red'},
         markers=True,
-        color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
+        # color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
     )
 
     fig.update_traces(
@@ -226,17 +261,19 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),  # Left, Right, Top, Bottom margins in pixels
 
-        xaxis_tickangle=45,
+        xaxis_tickangle=0,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(
             tickmode='array',
             tickvals=list(range(1, max_day + 1, 1)),  # Tick every day
-            title_font=dict(color="#eeeee4"),
-            tickfont=dict(color="#eeeee4"),
+            tickfont=dict(
+                size=9,
+                color="#eeeee4"
+            ),
+            title_font=dict(
+                color="#eeeee4"),
             showgrid=False
-            # gridcolor='rgba(0,0,0,0)'
-
         ),
         yaxis=dict(
             title_font=dict(color="#eeeee4"),
@@ -306,7 +343,10 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
         ),
         xaxis=dict(
             title_font=dict(color="#eeeee4"),  # Color for the X-axis title
-            tickfont=dict(color="#eeeee4"),  # Color for the X-axis ticks
+            tickfont=dict(
+                color="#eeeee4",
+                size=10
+                ),  # Color for the X-axis ticks
             showgrid=True,  # Determines whether or not grid lines are drawn
             gridcolor='rgba(0,0,0,0)'  # Color of grid lines
         ),
