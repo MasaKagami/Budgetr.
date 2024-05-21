@@ -39,11 +39,11 @@ def load_local_database():
 # Loading data
 transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
 # transactions_df, categories_df, users_df, budgets_df = load_data()
-print('\nTRANSACTIONS DB\n', transactions_df[:5])
-print('CATEGORIES DB\n', categories_df[:5])
-print('USERS DB\n', users_df[:5])
-print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
-print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
+# print('\nTRANSACTIONS DB\n', transactions_df[:5])
+# print('CATEGORIES DB\n', categories_df[:5])
+# print('USERS DB\n', users_df[:5])
+# print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
+# print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
 # Dictionary to convert month names to integer values
 monthsToInt = {
@@ -70,7 +70,6 @@ current_year = datetime.now().year
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
-
     html.H1("My Financial Dashboard", style={'text-align': 'center'}),
 
     dcc.RadioItems(id='chart_type',
@@ -89,7 +88,7 @@ app.layout = html.Div([
         dcc.Dropdown(id="slct_month",
                     options= [{'label': key, 'value': value} for key, value in monthsToInt.items()], # Convert the python dictionary to a list of dictionaries in HTML
                     multi=False,
-                    value=1, # Initial value
+                    value=current_month, # Initial value
                     style={'width': "40%"}
                     ),
     ]),
@@ -130,18 +129,17 @@ app.layout = html.Div([
 
     html.H2("Manage Budget", style={'text-align': 'center'}),
     html.Div(id='budget_month_selector', children=[
-    # html.H4("Select Month and Year for Budget", style = {'text-align': 'center'}),
         dcc.Dropdown(id="slct_budget_month",
                     options= [{'label': key, 'value': value} for key, value in monthsToInt.items()],
                     multi=False,
                     value=current_month, # Initial value
-                    style={'width': "40%", 'display': 'inline-block'}
+                    style={'width': "40%", 'margin': '10px auto', 'display': 'inline-block'}
                     ),
         dcc.Dropdown(id="slct_budget_year",
-                    options= [{'label': year, 'value': year} for year in range(2020, 2026)], # Temporary range of years
+                    options= [{'label': year, 'value': year} for year in range(2023, current_year+2)],
                     multi=False,
                     value=current_year, # Initial value
-                    style={'width': "25%", 'display': 'inline-block', 'margin-left': '10px'}
+                    style={'width': '150px', 'margin': '10px auto 10px 10px', 'display': 'inline-block'}
                     ),
     ], style={'text-align': 'center'}),
     html.Div([
@@ -151,9 +149,11 @@ app.layout = html.Div([
             type='number',
             min=0,
             style={'margin-left': '10px', 'margin-bottom': '20px'}
-        )
+        ),
+        html.Div(id='budget_overview', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the total budget
+        html.Button('Update Total Budget', id='submit_total_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
+        html.Div(id='total_budget_status', style={'text-align': 'center'})
     ], style={'text-align': 'center'}),
-    html.Div(id='budget_overview', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the total budget
     html.Div([
         dash_table.DataTable(
             id='budget_table',
@@ -166,6 +166,7 @@ app.layout = html.Div([
             style_cell={'textAlign': 'left'}
         )
     ], style={'text-align': 'center', 'margin-bottom': '20px'}),
+    html.Div(id='unallocated_budget', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the unallocated budget
     html.Div([
         dcc.Dropdown(
             id='budget_category_dropdown',
@@ -180,10 +181,12 @@ app.layout = html.Div([
             placeholder='Enter Budget',
             style={'width': '40%', 'margin': '10px auto', 'display': 'inline-block', 'margin-left': '10px'}
         ),
+        html.Button('Update Category Budget', id='submit_category_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
+        html.Div(id='category_budget_status', style={'text-align': 'center'})
     ], style={'text-align': 'center', 'margin-bottom': '20px'}),
-    html.Div(id='unallocated_budget', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the unallocated budget
-    html.Button('Update Budget', id='submit_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
-    html.Div(id='budget_status', style={'text-align': 'center'}) # Display the status of the budget update
+
+    # Hidden div to store update triggers
+    html.Div(id='update_trigger', style={'display': 'none'})
 ])
 
 # ------------------------------------------------------------------------------
@@ -298,13 +301,12 @@ def add_transaction(n_clicks, date, amount, category, description):
      Output('input_total_budget', 'value'),
      Output('budget_table', 'data'),
      Output('unallocated_budget', 'children')],
-    [Input('slct_budget_month', 'value'), 
+    [Input('slct_budget_month', 'value'),
      Input('slct_budget_year', 'value'),
-     Input('submit_budget', 'n_clicks')], # Updating the budget triggers this callback to update the budget overview
-    [State('slct_budget_month', 'value'), 
-     State('slct_budget_year', 'value')])
+     Input('update_trigger', 'children')]
+)
 
-def display_budget_overview(selected_month, selected_year, placeholder1, placeholder2, placeholder3):
+def display_budget_overview(selected_month, selected_year, _):
     # Convert the selected month and year to a datetime object
     selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
@@ -339,27 +341,24 @@ def display_budget_overview(selected_month, selected_year, placeholder1, placeho
 
 # ------------------------------------------------------------------------------
 @app.callback(
-    Output('budget_status', 'children'),
-    [Input('submit_budget', 'n_clicks')],
+    Output('total_budget_status', 'children'),
+    [Input('submit_total_budget', 'n_clicks')],
     [State('slct_budget_month', 'value'), 
      State('slct_budget_year', 'value'), 
-     State('input_total_budget', 'value'), 
-     State('budget_category_dropdown', 'value'), 
-     State('budget_category_input', 'value')]
+     State('input_total_budget', 'value')]
 )
 
-def update_budget(n_clicks, selected_month, selected_year, total_budget, selected_category, new_category_budget):
+def update_total_budget(n_clicks, selected_month, selected_year, total_budget):
     if n_clicks > 0:
         if total_budget is None or total_budget == '':
-            return "Please enter a total budget", selected_month, selected_year
+            return "Please enter a total budget"
 
         # Convert the selected month and year to a datetime object
         selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
-        
+
         # Load the latest budgets DB before updating
         monthly_budgets_df = pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
-        categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
-        
+
         # Update or insert the monthly budget
         if selected_date in monthly_budgets_df['budgetmonth'].values:
             monthly_budgets_df.loc[monthly_budgets_df['budgetmonth'] == selected_date, 'totalbudget'] = total_budget
@@ -372,17 +371,47 @@ def update_budget(n_clicks, selected_month, selected_year, total_budget, selecte
             }
             monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
 
-        # Update the selected category's budget if provided
-        print(selected_category, new_category_budget)
+        # Save the updated DataFrame to the CSV file
+        monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
+
+        return "Total budget updated successfully!"
+    return ""
+
+# ------------------------------------------------------------------------------
+@app.callback(
+    Output('category_budget_status', 'children'),
+    [Input('submit_category_budget', 'n_clicks')],
+    [State('budget_category_dropdown', 'value'), 
+     State('budget_category_input', 'value')]
+)
+
+def update_category_budget(n_clicks, selected_category, new_category_budget):
+    if n_clicks > 0:
         if selected_category and new_category_budget is not None:
+            # Load the latest categorical budgets DB before updating
+            categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
+
+            # Update the selected category's budget
             categorical_budgets_df.loc[categorical_budgets_df['categoryname'] == selected_category, 'categorybudget'] = new_category_budget
 
-        # Save the updated DataFrames to the CSV files
-        monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
-        categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
+            # Save the updated DataFrame to the CSV file
+            categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
 
-        return "Budget updated successfully!"
+            return "Category budget updated successfully!"
+        elif not selected_category:
+            return "Please select a category"
+        elif new_category_budget is None:
+            return "Please enter a budget amount"
     return ""
+
+# ------------------------------------------------------------------------------
+@app.callback(
+    Output('update_trigger', 'children'),
+    [Input('submit_total_budget', 'n_clicks'),
+     Input('submit_category_budget', 'n_clicks')]
+)
+def trigger_update(total_budget_clicks, category_budget_clicks):
+    return total_budget_clicks + category_budget_clicks
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
