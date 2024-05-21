@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
-from dash import Dash, dcc, html, Input, Output, State, ALL
+from dash import Dash, dcc, html, dash_table, Input, Output, State, ALL
 
 app = Dash(__name__)
 app.title = 'myfinanceplanner'
@@ -130,7 +130,7 @@ app.layout = html.Div([
 
     html.H2("Manage Budget", style={'text-align': 'center'}),
     html.Div(id='budget_month_selector', children=[
-    html.H4("Select Month and Year for Budget", style = {'text-align': 'left'}),
+    # html.H4("Select Month and Year for Budget", style = {'text-align': 'center'}),
         dcc.Dropdown(id="slct_budget_month",
                     options= [{'label': key, 'value': value} for key, value in monthsToInt.items()],
                     multi=False,
@@ -141,7 +141,7 @@ app.layout = html.Div([
                     options= [{'label': year, 'value': year} for year in range(2020, 2026)], # Temporary range of years
                     multi=False,
                     value=current_year, # Initial value
-                    style={'width': "30%", 'display': 'inline-block', 'margin-left': '10px'}
+                    style={'width': "25%", 'display': 'inline-block', 'margin-left': '10px'}
                     ),
     ], style={'text-align': 'center'}),
     html.Div([
@@ -154,14 +154,39 @@ app.layout = html.Div([
         )
     ], style={'text-align': 'center'}),
     html.Div(id='budget_overview', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the total budget
-    html.Div(id='budget_inputs'), # Display the allocated budget for each category
+    html.Div([
+        dash_table.DataTable(
+            id='budget_table',
+            columns=[
+                {'name': 'Category', 'id': 'categoryname', 'type': 'text'},
+                {'name': 'Budget', 'id': 'categorybudget', 'type': 'numeric', 'editable': True}
+            ],
+            data=[],
+            style_table={'width': '60%', 'margin': 'auto'},
+            style_cell={'textAlign': 'left'}
+        )
+    ], style={'text-align': 'center', 'margin-bottom': '20px'}),
+    html.Div([
+        dcc.Dropdown(
+            id='budget_category_dropdown',
+            options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
+            placeholder='Select Category',
+            style={'width': '40%', 'margin': '10px auto', 'display': 'inline-block'}
+        ),
+        dcc.Input(
+            id='budget_category_input',
+            type='number',
+            min=0,
+            placeholder='Enter Budget',
+            style={'width': '40%', 'margin': '10px auto', 'display': 'inline-block', 'margin-left': '10px'}
+        ),
+    ], style={'text-align': 'center', 'margin-bottom': '20px'}),
     html.Div(id='unallocated_budget', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the unallocated budget
     html.Button('Update Budget', id='submit_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
     html.Div(id='budget_status', style={'text-align': 'center'}) # Display the status of the budget update
 ])
 
 # ------------------------------------------------------------------------------
-# Connect the Plotly graphs with Dash Components
 @app.callback(
     [Output('my_spending_map', 'figure')],
     [Input('chart_type', 'value'),
@@ -271,11 +296,13 @@ def add_transaction(n_clicks, date, amount, category, description):
 @app.callback(
     [Output('budget_overview', 'children'),
      Output('input_total_budget', 'value'),
-     Output('budget_inputs', 'children'),
+     Output('budget_table', 'data'),
      Output('unallocated_budget', 'children')],
-    [Input('slct_budget_month', 'value'), Input('slct_budget_year', 'value'),
+    [Input('slct_budget_month', 'value'), 
+     Input('slct_budget_year', 'value'),
      Input('submit_budget', 'n_clicks')], # Updating the budget triggers this callback to update the budget overview
-    [State('slct_budget_month', 'value'), State('slct_budget_year', 'value')])
+    [State('slct_budget_month', 'value'), 
+     State('slct_budget_year', 'value')])
 
 def display_budget_overview(selected_month, selected_year, placeholder1, placeholder2, placeholder3):
     # Convert the selected month and year to a datetime object
@@ -294,26 +321,13 @@ def display_budget_overview(selected_month, selected_year, placeholder1, placeho
     budget_overview = f"Total Budget for {selected_date.strftime('%Y-%m')}: ${total_budget}"
 
     # Display the allocated budget for each category
-    budget_inputs = [] # List to store the budgets for each category
-    allocated_budget = 0
-    for index, row in categorical_budgets_df.iterrows():
-        category_name = row['categoryname']
-        category_budget = row['categorybudget']
-        allocated_budget += category_budget # Calculate the total allocated budget
-        budget_inputs.append(
-            html.Div([
-                html.Label(f"{category_name}:"),
-                dcc.Input(
-                    id={'type': 'budget_input', 'index': index},
-                    type="number",
-                    value=category_budget,
-                    min=0,
-                    style={'margin-left': '10px'}
-                )
-            ], style={'margin-bottom': '10px'})
-        )
+    budget_table_data = categorical_budgets_df.to_dict('records')
 
+    # Calculate the unallocated budget
+    allocated_budget = categorical_budgets_df['categorybudget'].sum()
     unallocated_budget = int(total_budget - allocated_budget)
+
+    # Customize the display message based on the budget surplus/deficit
     if unallocated_budget < 0:
         unallocated_budget_display = f"Exceeding Monthly Budget by ${-unallocated_budget}"
     elif unallocated_budget > 0:
@@ -321,23 +335,23 @@ def display_budget_overview(selected_month, selected_year, placeholder1, placeho
     else:
         unallocated_budget_display = f"${total_budget} Budget Fully Allocated"
 
-    return budget_overview, total_budget, budget_inputs, unallocated_budget_display
+    return budget_overview, total_budget, budget_table_data, unallocated_budget_display
 
 # ------------------------------------------------------------------------------
 @app.callback(
-    [Output('budget_status', 'children'),
-     Output('slct_budget_month', 'value'),
-     Output('slct_budget_year', 'value')],
+    Output('budget_status', 'children'),
     [Input('submit_budget', 'n_clicks')],
-    [State('slct_budget_month', 'value'), State('slct_budget_year', 'value'), State('input_total_budget', 'value'), State({'type': 'budget_input', 'index': ALL}, 'value')]
+    [State('slct_budget_month', 'value'), 
+     State('slct_budget_year', 'value'), 
+     State('input_total_budget', 'value'), 
+     State('budget_category_dropdown', 'value'), 
+     State('budget_category_input', 'value')]
 )
 
-def update_budget(n_clicks, selected_month, selected_year, total_budget, budget_values):
+def update_budget(n_clicks, selected_month, selected_year, total_budget, selected_category, new_category_budget):
     if n_clicks > 0:
         if total_budget is None or total_budget == '':
             return "Please enter a total budget", selected_month, selected_year
-        if not all(budget_values):
-            return "Please enter a budget for each category", selected_month, selected_year
 
         # Convert the selected month and year to a datetime object
         selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
@@ -357,17 +371,18 @@ def update_budget(n_clicks, selected_month, selected_year, total_budget, budget_
                 'budgetmonth': selected_date
             }
             monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
-        
-        # Update the categorical budgets
-        for index, value in enumerate(budget_values):
-            categorical_budgets_df.at[index, 'categorybudget'] = value
+
+        # Update the selected category's budget if provided
+        print(selected_category, new_category_budget)
+        if selected_category and new_category_budget is not None:
+            categorical_budgets_df.loc[categorical_budgets_df['categoryname'] == selected_category, 'categorybudget'] = new_category_budget
 
         # Save the updated DataFrames to the CSV files
         monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
         categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
 
-        return "Budget updated successfully!", selected_month, selected_year
-    return "", selected_month, selected_year
+        return "Budget updated successfully!"
+    return ""
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':

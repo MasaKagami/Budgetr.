@@ -1,204 +1,204 @@
 transactionid,userid,date,categoryname,amount,description
-1,1,2023-01-01 00:00:00,Housing,1000.0,Rent for Jan
-2,1,2023-02-01 00:00:00,Housing,1000.0,Rent for Feb
-3,1,2023-03-01 00:00:00,Housing,1000.0,Rent for Mar
-4,1,2023-04-01 00:00:00,Housing,1000.0,Rent for Apr
-5,1,2023-05-01 00:00:00,Housing,1000.0,Rent for May
-6,1,2023-06-01 00:00:00,Housing,1000.0,Rent for Jun
-7,1,2023-07-01 00:00:00,Housing,1000.0,Rent for Jul
-8,1,2023-08-01 00:00:00,Housing,1000.0,Rent for Aug
-9,1,2023-09-01 00:00:00,Housing,1000.0,Rent for Sep
-10,1,2023-10-01 00:00:00,Housing,1000.0,Rent for Oct
-11,1,2023-11-01 00:00:00,Housing,1000.0,Rent for Nov
-12,1,2023-12-01 00:00:00,Housing,1000.0,Rent for Dec
-13,1,2023-01-01 00:00:00,Transportation,50.0,Pass
-14,1,2023-02-01 00:00:00,Transportation,50.0,Pass
-15,1,2023-03-01 00:00:00,Transportation,50.0,Pass
-16,1,2023-04-01 00:00:00,Transportation,50.0,Pass
-17,1,2023-05-01 00:00:00,Transportation,50.0,Pass
-18,1,2023-06-01 00:00:00,Transportation,50.0,Pass
-19,1,2023-07-01 00:00:00,Transportation,50.0,Pass
-20,1,2023-08-01 00:00:00,Transportation,50.0,Pass
-21,1,2023-09-01 00:00:00,Transportation,50.0,Pass
-22,1,2023-10-01 00:00:00,Transportation,50.0,Pass
-23,1,2023-11-01 00:00:00,Transportation,50.0,Pass
-24,1,2023-12-01 00:00:00,Transportation,50.0,Pass
-25,1,2023-01-03 00:00:00,Food,45.0,Grocery shopping
-26,1,2023-01-05 00:00:00,Healthcare,150.0,Doctor visit
-27,1,2023-01-08 00:00:00,Debt Payments,200.0,Credit card payment
-28,1,2023-01-10 00:00:00,Investments,500.0,Stock purchase
-29,1,2023-01-12 00:00:00,Entertainment & Leisure,60.0,Concert tickets
-30,1,2023-01-15 00:00:00,Personal Care,30.0,Haircut
-31,1,2023-01-18 00:00:00,Education,100.0,Textbooks
-32,1,2023-01-20 00:00:00,Miscellaneous,25.0,Gift for friend
-33,1,2023-01-22 00:00:00,Food,75.0,Dining out
-34,1,2023-01-24 00:00:00,Healthcare,20.0,Prescription medicine
-35,1,2023-01-26 00:00:00,Debt Payments,150.0,Student loan payment
-36,1,2023-01-28 00:00:00,Investments,300.0,Mutual fund contribution
-37,1,2023-01-30 00:00:00,Entertainment & Leisure,40.0,Movie tickets
-38,1,2023-02-02 00:00:00,Personal Care,50.0,New clothes
-39,1,2023-02-04 00:00:00,Education,200.0,Online course
-40,1,2023-02-06 00:00:00,Miscellaneous,15.0,Charity donation
-41,1,2023-02-08 00:00:00,Food,60.0,Grocery shopping
-42,1,2023-02-10 00:00:00,Healthcare,100.0,Dentist appointment
-43,1,2023-02-12 00:00:00,Debt Payments,175.0,Car loan payment
-44,1,2023-02-14 00:00:00,Investments,250.0,Savings account deposit
-45,1,2023-02-16 00:00:00,Entertainment & Leisure,30.0,Bowling night
-46,1,2023-02-18 00:00:00,Personal Care,40.0,Spa treatment
-47,1,2023-02-20 00:00:00,Education,150.0,Workshop fee
-48,1,2023-02-22 00:00:00,Miscellaneous,35.0,Pet supplies
-49,1,2023-02-24 00:00:00,Food,80.0,Dining out
-50,1,2023-02-26 00:00:00,Healthcare,25.0,Over-the-counter medicine
-51,1,2023-02-28 00:00:00,Debt Payments,300.0,Personal loan payment
-52,1,2023-03-02 00:00:00,Investments,400.0,ETF purchase
-53,1,2023-03-04 00:00:00,Entertainment & Leisure,20.0,Streaming service
-54,1,2023-03-06 00:00:00,Personal Care,25.0,Manicure
-55,1,2023-03-08 00:00:00,Education,75.0,Online seminar
-56,1,2023-03-10 00:00:00,Miscellaneous,10.0,Lottery tickets
-57,1,2023-03-12 00:00:00,Food,55.0,Grocery shopping
-58,1,2023-03-14 00:00:00,Healthcare,80.0,Optometrist visit
-59,1,2023-03-16 00:00:00,Debt Payments,250.0,Credit card payment
-60,1,2023-03-18 00:00:00,Investments,350.0,IRA contribution
-61,1,2023-03-20 00:00:00,Entertainment & Leisure,50.0,Theater tickets
-62,1,2023-03-22 00:00:00,Personal Care,35.0,Haircut
-63,1,2023-03-24 00:00:00,Education,100.0,Course materials
-64,1,2023-03-26 00:00:00,Miscellaneous,20.0,Parking fees
-65,1,2023-03-28 00:00:00,Food,90.0,Dining out
-66,1,2023-03-30 00:00:00,Healthcare,50.0,Chiropractor visit
-67,1,2023-04-02 00:00:00,Debt Payments,100.0,Credit card payment
-68,1,2023-04-04 00:00:00,Investments,150.0,Stock purchase
-69,1,2023-04-06 00:00:00,Entertainment & Leisure,70.0,Amusement park tickets
-70,1,2023-04-08 00:00:00,Personal Care,45.0,Gym membership
-71,1,2023-04-10 00:00:00,Education,90.0,Webinar fee
-72,1,2023-04-12 00:00:00,Miscellaneous,30.0,Pet grooming
-73,1,2023-04-14 00:00:00,Food,65.0,Grocery shopping
-74,1,2023-04-16 00:00:00,Healthcare,120.0,Specialist consultation
-75,1,2023-04-18 00:00:00,Debt Payments,200.0,Student loan payment
-76,1,2023-04-20 00:00:00,Investments,500.0,Cryptocurrency investment
-77,1,2023-04-22 00:00:00,Entertainment & Leisure,60.0,Sporting event tickets
-78,1,2023-04-24 00:00:00,Personal Care,35.0,Hair products
-79,1,2023-04-26 00:00:00,Education,110.0,Conference registration
-80,1,2023-04-28 00:00:00,Miscellaneous,25.0,Office supplies
-81,1,2023-04-30 00:00:00,Food,75.0,Dining out
-82,1,2023-05-02 00:00:00,Healthcare,130.0,Physical therapy
-83,1,2023-05-04 00:00:00,Debt Payments,150.0,Credit card payment
-84,1,2023-05-06 00:00:00,Investments,250.0,Real estate crowdfunding
-85,1,2023-05-08 00:00:00,Entertainment & Leisure,45.0,Concert tickets
-86,1,2023-05-10 00:00:00,Personal Care,40.0,Facial treatment
-87,1,2023-05-12 00:00:00,Education,120.0,Certification exam fee
-88,1,2023-05-14 00:00:00,Miscellaneous,50.0,Home improvement supplies
-89,1,2023-05-16 00:00:00,Food,60.0,Grocery shopping
-90,1,2023-05-18 00:00:00,Healthcare,70.0,Therapist session
-91,1,2023-05-20 00:00:00,Debt Payments,100.0,Credit card payment
-92,1,2023-05-22 00:00:00,Investments,400.0,Index fund purchase
-93,1,2023-05-24 00:00:00,Entertainment & Leisure,35.0,Bowling night
-94,1,2023-05-26 00:00:00,Personal Care,45.0,New clothes
-95,1,2023-05-28 00:00:00,Education,95.0,Online course materials
-96,1,2023-05-30 00:00:00,Miscellaneous,20.0,Pet toys
-97,1,2023-06-02 00:00:00,Food,55.0,Dining out
-98,1,2023-06-04 00:00:00,Healthcare,85.0,Optometrist visit
-99,1,2023-06-06 00:00:00,Debt Payments,200.0,Car loan payment
-100,1,2023-06-08 00:00:00,Investments,150.0,Savings bond purchase
-101,1,2023-06-10 00:00:00,Entertainment & Leisure,50.0,Theater tickets
-102,1,2023-06-12 00:00:00,Personal Care,30.0,Haircut
-103,1,2023-06-14 00:00:00,Education,80.0,Online seminar
-104,1,2023-06-16 00:00:00,Miscellaneous,25.0,Gift for friend
-105,1,2023-06-18 00:00:00,Food,70.0,Grocery shopping
-106,1,2023-06-20 00:00:00,Healthcare,120.0,Doctor visit
-107,1,2023-06-22 00:00:00,Debt Payments,175.0,Student loan payment
-108,1,2023-06-24 00:00:00,Investments,300.0,Mutual fund contribution
-109,1,2023-06-26 00:00:00,Entertainment & Leisure,40.0,Movie tickets
-110,1,2023-06-28 00:00:00,Personal Care,35.0,Spa treatment
-111,1,2023-06-30 00:00:00,Education,100.0,Course materials
-112,1,2023-07-02 00:00:00,Miscellaneous,20.0,Parking fees
-113,1,2023-07-04 00:00:00,Food,80.0,Dining out
-114,1,2023-07-06 00:00:00,Healthcare,50.0,Chiropractor visit
-115,1,2023-07-08 00:00:00,Debt Payments,100.0,Credit card payment
-116,1,2023-07-10 00:00:00,Investments,150.0,Stock purchase
-117,1,2023-07-12 00:00:00,Entertainment & Leisure,70.0,Amusement park tickets
-118,1,2023-07-14 00:00:00,Personal Care,45.0,Gym membership
-119,1,2023-07-16 00:00:00,Education,90.0,Webinar fee
-120,1,2023-07-18 00:00:00,Miscellaneous,30.0,Pet grooming
-121,1,2023-07-20 00:00:00,Food,65.0,Grocery shopping
-122,1,2023-07-22 00:00:00,Healthcare,120.0,Specialist consultation
-123,1,2023-07-24 00:00:00,Debt Payments,200.0,Student loan payment
-124,1,2023-07-26 00:00:00,Investments,500.0,Cryptocurrency investment
-125,1,2023-07-28 00:00:00,Entertainment & Leisure,60.0,Sporting event tickets
-126,1,2023-07-30 00:00:00,Personal Care,35.0,Hair products
-127,1,2023-08-02 00:00:00,Education,110.0,Conference registration
-128,1,2023-08-04 00:00:00,Miscellaneous,25.0,Office supplies
-129,1,2023-08-06 00:00:00,Food,75.0,Dining out
-130,1,2023-08-08 00:00:00,Healthcare,130.0,Physical therapy
-131,1,2023-08-10 00:00:00,Debt Payments,150.0,Credit card payment
-132,1,2023-08-12 00:00:00,Investments,250.0,Real estate crowdfunding
-133,1,2023-08-14 00:00:00,Entertainment & Leisure,45.0,Concert tickets
-134,1,2023-08-16 00:00:00,Personal Care,40.0,Facial treatment
-135,1,2023-08-18 00:00:00,Education,120.0,Certification exam fee
-136,1,2023-08-20 00:00:00,Miscellaneous,50.0,Home improvement supplies
-137,1,2023-08-22 00:00:00,Food,60.0,Grocery shopping
-138,1,2023-08-24 00:00:00,Healthcare,70.0,Therapist session
-139,1,2023-08-26 00:00:00,Debt Payments,100.0,Credit card payment
-140,1,2023-08-28 00:00:00,Investments,400.0,Index fund purchase
-141,1,2023-08-30 00:00:00,Entertainment & Leisure,35.0,Bowling night
-142,1,2023-09-02 00:00:00,Personal Care,45.0,New clothes
-143,1,2023-09-04 00:00:00,Education,95.0,Online course materials
-144,1,2023-09-06 00:00:00,Miscellaneous,20.0,Pet toys
-145,1,2023-09-08 00:00:00,Food,55.0,Dining out
-146,1,2023-09-10 00:00:00,Healthcare,85.0,Optometrist visit
-147,1,2023-09-12 00:00:00,Debt Payments,200.0,Car loan payment
-148,1,2023-09-14 00:00:00,Investments,150.0,Savings bond purchase
-149,1,2023-09-16 00:00:00,Entertainment & Leisure,50.0,Theater tickets
-150,1,2023-09-18 00:00:00,Personal Care,30.0,Haircut
-151,1,2023-09-20 00:00:00,Education,80.0,Online seminar
-152,1,2023-09-22 00:00:00,Miscellaneous,25.0,Gift for friend
-153,1,2023-09-24 00:00:00,Food,70.0,Grocery shopping
-154,1,2023-09-26 00:00:00,Healthcare,120.0,Doctor visit
-155,1,2023-09-28 00:00:00,Debt Payments,175.0,Student loan payment
-156,1,2023-09-30 00:00:00,Investments,300.0,Mutual fund contribution
-157,1,2023-10-02 00:00:00,Entertainment & Leisure,40.0,Movie tickets
-158,1,2023-10-04 00:00:00,Personal Care,35.0,Spa treatment
-159,1,2023-10-06 00:00:00,Education,100.0,Course materials
-160,1,2023-10-08 00:00:00,Miscellaneous,20.0,Parking fees
-161,1,2023-10-10 00:00:00,Food,80.0,Dining out
-162,1,2023-10-12 00:00:00,Healthcare,50.0,Chiropractor visit
-163,1,2023-10-14 00:00:00,Debt Payments,100.0,Credit card payment
-164,1,2023-10-16 00:00:00,Investments,150.0,Stock purchase
-165,1,2023-10-18 00:00:00,Entertainment & Leisure,70.0,Amusement park tickets
-166,1,2023-10-20 00:00:00,Personal Care,45.0,Gym membership
-167,1,2023-10-22 00:00:00,Education,90.0,Webinar fee
-168,1,2023-10-24 00:00:00,Miscellaneous,30.0,Pet grooming
-169,1,2023-10-26 00:00:00,Food,65.0,Grocery shopping
-170,1,2023-10-28 00:00:00,Healthcare,120.0,Specialist consultation
-171,1,2023-10-30 00:00:00,Debt Payments,200.0,Student loan payment
-172,1,2023-11-02 00:00:00,Investments,500.0,Cryptocurrency investment
-173,1,2023-11-04 00:00:00,Entertainment & Leisure,60.0,Sporting event tickets
-174,1,2023-11-06 00:00:00,Personal Care,35.0,Hair products
-175,1,2023-11-08 00:00:00,Education,110.0,Conference registration
-176,1,2023-11-10 00:00:00,Miscellaneous,25.0,Office supplies
-177,1,2023-11-12 00:00:00,Food,75.0,Dining out
-178,1,2023-11-14 00:00:00,Healthcare,130.0,Physical therapy
-179,1,2023-11-16 00:00:00,Debt Payments,150.0,Credit card payment
-180,1,2023-11-18 00:00:00,Investments,250.0,Real estate crowdfunding
-181,1,2023-11-20 00:00:00,Entertainment & Leisure,45.0,Concert tickets
-182,1,2023-11-22 00:00:00,Personal Care,40.0,Facial treatment
-183,1,2023-11-24 00:00:00,Education,120.0,Certification exam fee
-184,1,2023-11-26 00:00:00,Miscellaneous,50.0,Home improvement supplies
-185,1,2023-11-28 00:00:00,Food,60.0,Grocery shopping
-186,1,2023-11-30 00:00:00,Healthcare,70.0,Therapist session
-187,1,2023-12-02 00:00:00,Debt Payments,100.0,Credit card payment
-188,1,2023-12-04 00:00:00,Investments,400.0,Index fund purchase
-189,1,2023-12-06 00:00:00,Entertainment & Leisure,35.0,Bowling night
-190,1,2023-12-08 00:00:00,Personal Care,45.0,New clothes
-191,1,2023-12-10 00:00:00,Education,95.0,Online course materials
-192,1,2023-12-12 00:00:00,Miscellaneous,20.0,Pet toys
-193,1,2023-12-14 00:00:00,Food,55.0,Dining out
-194,1,2023-12-16 00:00:00,Healthcare,85.0,Optometrist visit
-195,1,2023-12-18 00:00:00,Debt Payments,200.0,Car loan payment
-196,1,2023-12-20 00:00:00,Investments,150.0,Savings bond purchase
-197,1,2023-12-22 00:00:00,Entertainment & Leisure,50.0,Theater tickets
-198,1,2023-12-24 00:00:00,Personal Care,30.0,Haircut
-199,1,2023-12-26 00:00:00,Education,80.0,Online seminar
-200,1,2023-12-28 00:00:00,Miscellaneous,25.0,Gift for friend
-201,1,2023-12-30 00:00:00,Food,70.0,Grocery shopping
-202,1,2023-12-31 00:00:00,Healthcare,120.0,Doctor visit
+1,1,2023-01-01,Housing,1000.00,Rent for Jan
+2,1,2023-02-01,Housing,1000.00,Rent for Feb
+3,1,2023-03-01,Housing,1000.00,Rent for Mar
+4,1,2023-04-01,Housing,1000.00,Rent for Apr
+5,1,2023-05-01,Housing,1000.00,Rent for May
+6,1,2023-06-01,Housing,1000.00,Rent for Jun
+7,1,2023-07-01,Housing,1000.00,Rent for Jul
+8,1,2023-08-01,Housing,1000.00,Rent for Aug
+9,1,2023-09-01,Housing,1000.00,Rent for Sep
+10,1,2023-10-01,Housing,1000.00,Rent for Oct
+11,1,2023-11-01,Housing,1000.00,Rent for Nov
+12,1,2023-12-01,Housing,1000.00,Rent for Dec
+13,1,2023-01-01,Transportation,50.00,Pass
+14,1,2023-02-01,Transportation,50.00,Pass
+15,1,2023-03-01,Transportation,50.00,Pass
+16,1,2023-04-01,Transportation,50.00,Pass
+17,1,2023-05-01,Transportation,50.00,Pass
+18,1,2023-06-01,Transportation,50.00,Pass
+19,1,2023-07-01,Transportation,50.00,Pass
+20,1,2023-08-01,Transportation,50.00,Pass
+21,1,2023-09-01,Transportation,50.00,Pass
+22,1,2023-10-01,Transportation,50.00,Pass
+23,1,2023-11-01,Transportation,50.00,Pass
+24,1,2023-12-01,Transportation,50.00,Pass
+25,1,2023-01-03,Food,45.00,Grocery shopping
+26,1,2023-01-05,Healthcare,150.00,Doctor visit
+27,1,2023-01-08,Debt Payments,200.00,Credit card payment
+28,1,2023-01-10,Investments,500.00,Stock purchase
+29,1,2023-01-12,Entertainment & Leisure,60.00,Concert tickets
+30,1,2023-01-15,Personal Care,30.00,Haircut
+31,1,2023-01-18,Education,100.00,Textbooks
+32,1,2023-01-20,Miscellaneous,25.00,Gift for friend
+33,1,2023-01-22,Food,75.00,Dining out
+34,1,2023-01-24,Healthcare,20.00,Prescription medicine
+35,1,2023-01-26,Debt Payments,150.00,Student loan payment
+36,1,2023-01-28,Investments,300.00,Mutual fund contribution
+37,1,2023-01-30,Entertainment & Leisure,40.00,Movie tickets
+38,1,2023-02-02,Personal Care,50.00,New clothes
+39,1,2023-02-04,Education,200.00,Online course
+40,1,2023-02-06,Miscellaneous,15.00,Charity donation
+41,1,2023-02-08,Food,60.00,Grocery shopping
+42,1,2023-02-10,Healthcare,100.00,Dentist appointment
+43,1,2023-02-12,Debt Payments,175.00,Car loan payment
+44,1,2023-02-14,Investments,250.00,Savings account deposit
+45,1,2023-02-16,Entertainment & Leisure,30.00,Bowling night
+46,1,2023-02-18,Personal Care,40.00,Spa treatment
+47,1,2023-02-20,Education,150.00,Workshop fee
+48,1,2023-02-22,Miscellaneous,35.00,Pet supplies
+49,1,2023-02-24,Food,80.00,Dining out
+50,1,2023-02-26,Healthcare,25.00,Over-the-counter medicine
+51,1,2023-02-28,Debt Payments,300.00,Personal loan payment
+52,1,2023-03-02,Investments,400.00,ETF purchase
+53,1,2023-03-04,Entertainment & Leisure,20.00,Streaming service
+54,1,2023-03-06,Personal Care,25.00,Manicure
+55,1,2023-03-08,Education,75.00,Online seminar
+56,1,2023-03-10,Miscellaneous,10.00,Lottery tickets
+57,1,2023-03-12,Food,55.00,Grocery shopping
+58,1,2023-03-14,Healthcare,80.00,Optometrist visit
+59,1,2023-03-16,Debt Payments,250.00,Credit card payment
+60,1,2023-03-18,Investments,350.00,IRA contribution
+61,1,2023-03-20,Entertainment & Leisure,50.00,Theater tickets
+62,1,2023-03-22,Personal Care,35.00,Haircut
+63,1,2023-03-24,Education,100.00,Course materials
+64,1,2023-03-26,Miscellaneous,20.00,Parking fees
+65,1,2023-03-28,Food,90.00,Dining out
+66,1,2023-03-30,Healthcare,50.00,Chiropractor visit
+67,1,2023-04-02,Debt Payments,100.00,Credit card payment
+68,1,2023-04-04,Investments,150.00,Stock purchase
+69,1,2023-04-06,Entertainment & Leisure,70.00,Amusement park tickets
+70,1,2023-04-08,Personal Care,45.00,Gym membership
+71,1,2023-04-10,Education,90.00,Webinar fee
+72,1,2023-04-12,Miscellaneous,30.00,Pet grooming
+73,1,2023-04-14,Food,65.00,Grocery shopping
+74,1,2023-04-16,Healthcare,120.00,Specialist consultation
+75,1,2023-04-18,Debt Payments,200.00,Student loan payment
+76,1,2023-04-20,Investments,500.00,Cryptocurrency investment
+77,1,2023-04-22,Entertainment & Leisure,60.00,Sporting event tickets
+78,1,2023-04-24,Personal Care,35.00,Hair products
+79,1,2023-04-26,Education,110.00,Conference registration
+80,1,2023-04-28,Miscellaneous,25.00,Office supplies
+81,1,2023-04-30,Food,75.00,Dining out
+82,1,2023-05-02,Healthcare,130.00,Physical therapy
+83,1,2023-05-04,Debt Payments,150.00,Credit card payment
+84,1,2023-05-06,Investments,250.00,Real estate crowdfunding
+85,1,2023-05-08,Entertainment & Leisure,45.00,Concert tickets
+86,1,2023-05-10,Personal Care,40.00,Facial treatment
+87,1,2023-05-12,Education,120.00,Certification exam fee
+88,1,2023-05-14,Miscellaneous,50.00,Home improvement supplies
+89,1,2023-05-16,Food,60.00,Grocery shopping
+90,1,2023-05-18,Healthcare,70.00,Therapist session
+91,1,2023-05-20,Debt Payments,100.00,Credit card payment
+92,1,2023-05-22,Investments,400.00,Index fund purchase
+93,1,2023-05-24,Entertainment & Leisure,35.00,Bowling night
+94,1,2023-05-26,Personal Care,45.00,New clothes
+95,1,2023-05-28,Education,95.00,Online course materials
+96,1,2023-05-30,Miscellaneous,20.00,Pet toys
+97,1,2023-06-02,Food,55.00,Dining out
+98,1,2023-06-04,Healthcare,85.00,Optometrist visit
+99,1,2023-06-06,Debt Payments,200.00,Car loan payment
+100,1,2023-06-08,Investments,150.00,Savings bond purchase
+101,1,2023-06-10,Entertainment & Leisure,50.00,Theater tickets
+102,1,2023-06-12,Personal Care,30.00,Haircut
+103,1,2023-06-14,Education,80.00,Online seminar
+104,1,2023-06-16,Miscellaneous,25.00,Gift for friend
+105,1,2023-06-18,Food,70.00,Grocery shopping
+106,1,2023-06-20,Healthcare,120.00,Doctor visit
+107,1,2023-06-22,Debt Payments,175.00,Student loan payment
+108,1,2023-06-24,Investments,300.00,Mutual fund contribution
+109,1,2023-06-26,Entertainment & Leisure,40.00,Movie tickets
+110,1,2023-06-28,Personal Care,35.00,Spa treatment
+111,1,2023-06-30,Education,100.00,Course materials
+112,1,2023-07-02,Miscellaneous,20.00,Parking fees
+113,1,2023-07-04,Food,80.00,Dining out
+114,1,2023-07-06,Healthcare,50.00,Chiropractor visit
+115,1,2023-07-08,Debt Payments,100.00,Credit card payment
+116,1,2023-07-10,Investments,150.00,Stock purchase
+117,1,2023-07-12,Entertainment & Leisure,70.00,Amusement park tickets
+118,1,2023-07-14,Personal Care,45.00,Gym membership
+119,1,2023-07-16,Education,90.00,Webinar fee
+120,1,2023-07-18,Miscellaneous,30.00,Pet grooming
+121,1,2023-07-20,Food,65.00,Grocery shopping
+122,1,2023-07-22,Healthcare,120.00,Specialist consultation
+123,1,2023-07-24,Debt Payments,200.00,Student loan payment
+124,1,2023-07-26,Investments,500.00,Cryptocurrency investment
+125,1,2023-07-28,Entertainment & Leisure,60.00,Sporting event tickets
+126,1,2023-07-30,Personal Care,35.00,Hair products
+127,1,2023-08-02,Education,110.00,Conference registration
+128,1,2023-08-04,Miscellaneous,25.00,Office supplies
+129,1,2023-08-06,Food,75.00,Dining out
+130,1,2023-08-08,Healthcare,130.00,Physical therapy
+131,1,2023-08-10,Debt Payments,150.00,Credit card payment
+132,1,2023-08-12,Investments,250.00,Real estate crowdfunding
+133,1,2023-08-14,Entertainment & Leisure,45.00,Concert tickets
+134,1,2023-08-16,Personal Care,40.00,Facial treatment
+135,1,2023-08-18,Education,120.00,Certification exam fee
+136,1,2023-08-20,Miscellaneous,50.00,Home improvement supplies
+137,1,2023-08-22,Food,60.00,Grocery shopping
+138,1,2023-08-24,Healthcare,70.00,Therapist session
+139,1,2023-08-26,Debt Payments,100.00,Credit card payment
+140,1,2023-08-28,Investments,400.00,Index fund purchase
+141,1,2023-08-30,Entertainment & Leisure,35.00,Bowling night
+142,1,2023-09-02,Personal Care,45.00,New clothes
+143,1,2023-09-04,Education,95.00,Online course materials
+144,1,2023-09-06,Miscellaneous,20.00,Pet toys
+145,1,2023-09-08,Food,55.00,Dining out
+146,1,2023-09-10,Healthcare,85.00,Optometrist visit
+147,1,2023-09-12,Debt Payments,200.00,Car loan payment
+148,1,2023-09-14,Investments,150.00,Savings bond purchase
+149,1,2023-09-16,Entertainment & Leisure,50.00,Theater tickets
+150,1,2023-09-18,Personal Care,30.00,Haircut
+151,1,2023-09-20,Education,80.00,Online seminar
+152,1,2023-09-22,Miscellaneous,25.00,Gift for friend
+153,1,2023-09-24,Food,70.00,Grocery shopping
+154,1,2023-09-26,Healthcare,120.00,Doctor visit
+155,1,2023-09-28,Debt Payments,175.00,Student loan payment
+156,1,2023-09-30,Investments,300.00,Mutual fund contribution
+157,1,2023-10-02,Entertainment & Leisure,40.00,Movie tickets
+158,1,2023-10-04,Personal Care,35.00,Spa treatment
+159,1,2023-10-06,Education,100.00,Course materials
+160,1,2023-10-08,Miscellaneous,20.00,Parking fees
+161,1,2023-10-10,Food,80.00,Dining out
+162,1,2023-10-12,Healthcare,50.00,Chiropractor visit
+163,1,2023-10-14,Debt Payments,100.00,Credit card payment
+164,1,2023-10-16,Investments,150.00,Stock purchase
+165,1,2023-10-18,Entertainment & Leisure,70.00,Amusement park tickets
+166,1,2023-10-20,Personal Care,45.00,Gym membership
+167,1,2023-10-22,Education,90.00,Webinar fee
+168,1,2023-10-24,Miscellaneous,30.00,Pet grooming
+169,1,2023-10-26,Food,65.00,Grocery shopping
+170,1,2023-10-28,Healthcare,120.00,Specialist consultation
+171,1,2023-10-30,Debt Payments,200.00,Student loan payment
+172,1,2023-11-02,Investments,500.00,Cryptocurrency investment
+173,1,2023-11-04,Entertainment & Leisure,60.00,Sporting event tickets
+174,1,2023-11-06,Personal Care,35.00,Hair products
+175,1,2023-11-08,Education,110.00,Conference registration
+176,1,2023-11-10,Miscellaneous,25.00,Office supplies
+177,1,2023-11-12,Food,75.00,Dining out
+178,1,2023-11-14,Healthcare,130.00,Physical therapy
+179,1,2023-11-16,Debt Payments,150.00,Credit card payment
+180,1,2023-11-18,Investments,250.00,Real estate crowdfunding
+181,1,2023-11-20,Entertainment & Leisure,45.00,Concert tickets
+182,1,2023-11-22,Personal Care,40.00,Facial treatment
+183,1,2023-11-24,Education,120.00,Certification exam fee
+184,1,2023-11-26,Miscellaneous,50.00,Home improvement supplies
+185,1,2023-11-28,Food,60.00,Grocery shopping
+186,1,2023-11-30,Healthcare,70.00,Therapist session
+187,1,2023-12-02,Debt Payments,100.00,Credit card payment
+188,1,2023-12-04,Investments,400.00,Index fund purchase
+189,1,2023-12-06,Entertainment & Leisure,35.00,Bowling night
+190,1,2023-12-08,Personal Care,45.00,New clothes
+191,1,2023-12-10,Education,95.00,Online course materials
+192,1,2023-12-12,Miscellaneous,20.00,Pet toys
+193,1,2023-12-14,Food,55.00,Dining out
+194,1,2023-12-16,Healthcare,85.00,Optometrist visit
+195,1,2023-12-18,Debt Payments,200.00,Car loan payment
+196,1,2023-12-20,Investments,150.00,Savings bond purchase
+197,1,2023-12-22,Entertainment & Leisure,50.00,Theater tickets
+198,1,2023-12-24,Personal Care,30.00,Haircut
+199,1,2023-12-26,Education,80.00,Online seminar
+200,1,2023-12-28,Miscellaneous,25.00,Gift for friend
+201,1,2023-12-30,Food,70.00,Grocery shopping
+202,1,2023-12-31,Healthcare,120.00,Doctor visit
 203,1,2024-05-21,Food,25.0,Tacos with Friends
