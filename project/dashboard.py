@@ -8,6 +8,12 @@ from datetime import datetime
 app = Dash(__name__)
 
 # -- Import and clean data (importing csv into pandas)
+def prepare_transactions_data(transactions_df):
+    # Convert date to datetime format if not already
+    transactions_df['date'] = pd.to_datetime(transactions_df['date'])
+    transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
+    transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
+    return transactions_df
 
 def load_data():
     # Connection setup   
@@ -30,7 +36,8 @@ def load_data():
 
     engine.dispose()  # Close the connection safely
 
-    transactions_df['date'] = pd.to_datetime(transactions_df['date']).dt.date
+    transactions_df = prepare_transactions_data(transactions_df)
+
     return transactions_df, monthly_budgets_df, categorical_budgets_df
 
 # Using the function
@@ -121,7 +128,13 @@ app.layout = html.Div([
                     html.H3("Recent Transactions", className = 'dataTitle'),
                     dash_table.DataTable(
                         id='transactions_table',
-                        columns=[{"name": col, "id": col} for col in transactions_df.columns if col not in ['transactionid', 'userid']],
+                        columns=[
+                                    {"name": "Date", "id": "date_display"},
+                                    {"name": "Category Name", "id": "categoryname"},
+                                    {"name": "Amount", "id": "amount"},
+                                    {"name": "Description", "id": "description"}
+                        ],
+
                         data=transactions_df.to_dict('records'),
                         style_table={
                             'height': '300px',
@@ -189,13 +202,6 @@ def update_graph(selected_year, selected_month):
     budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
 
     return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
-
-def prepare_transactions_data(transactions_df):
-    transactions_df['date'] = transactions_df['date'].dt.strftime('%Y-%m-%d')  # Format date
-    transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
-    return transactions_df
-
-transactions_df = prepare_transactions_data(transactions_df)
 
 def calculated_daily_budget(monthly_budget, year, month):
     days_in_month = pd.Period(f'{year}-{month}').days_in_month
