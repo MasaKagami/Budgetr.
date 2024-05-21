@@ -179,7 +179,7 @@ app.layout = html.Div([
             type='number',
             min=0,
             placeholder='Enter Budget',
-            style={'width': '40%', 'margin': '10px auto', 'display': 'inline-block', 'margin-left': '10px'}
+            style={'width': '10%', 'margin': '10px auto', 'display': 'inline-block', 'margin-left': '10px'}
         ),
         html.Button('Update Category Budget', id='submit_category_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
         html.Div(id='category_budget_status', style={'text-align': 'center'})
