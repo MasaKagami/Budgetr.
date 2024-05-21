@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
-import plotly.graph_objects as go
 from dash import dash_table, Dash, dcc, html, Input, Output  # pip install dash (version 2.0.0 or higher)
 from datetime import datetime
 
@@ -167,7 +166,8 @@ app.layout = html.Div([
         Output('status-output', 'children'),
         Output('expense_categorization_graph', 'figure'), 
         Output('daily_spending_trend_graph', 'figure'),
-        Output('budget_vs_actual_spending_graph', 'figure')
+        Output('budget_vs_actual_spending_graph', 'figure'),
+        Output('transactions_table', 'data')
     ],
     [
         Input('slct_year', 'value'),
@@ -200,8 +200,10 @@ def update_graph(selected_year, selected_month):
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
     daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month)
     budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
+    
+    transactions_table_data = filtered_df[['date_display', 'categoryname', 'amount', 'description']].to_dict('records')
 
-    return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
+    return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig, transactions_table_data
 
 def calculated_daily_budget(monthly_budget, year, month):
     days_in_month = pd.Period(f'{year}-{month}').days_in_month
@@ -222,12 +224,18 @@ def format_net_balance(net_balance, ):
 def determine_status(monthly_budget, total_spent, selected_year, selected_month):
     
     status_colors = {
-        "PERFECT": "green",
-        "GOOD": "blue",
-        "OKAY": "yellow",
-        "POOR": "orange",
-        "HORRIBLE": "red"
+        "EXCELLENT": "#00FF00",     
+        "VERY GOOD": "#7FFF00",     
+        "GOOD": "#FFFF00",          
+        "FAIR": "#FFD700",          
+        "NEEDS IMPROVEMENT": "#FFA500",
+        "POOR": "#FF8C00",          
+        "VERY POOR": "#FF4500",      
+        "EXTREMELY POOR": "#FF0000",
+        "CRITICAL": "#DC143C",      
+        "SEVERE": "#8B0000"         
     }
+
 
     daily_budget = calculated_daily_budget(monthly_budget, selected_year, selected_month)
     today = pd.Timestamp.today()
@@ -239,15 +247,27 @@ def determine_status(monthly_budget, total_spent, selected_year, selected_month)
     average_daily_spending = total_spent / days_so_far
     spent_percentage = (average_daily_spending/daily_budget) * 100
 
-    status_key = "HORRIBLE"  # Default to the worst case
-    if spent_percentage < 60:
-        status_key = "PERFECT"
-    elif 60 <= spent_percentage < 80:
+    if spent_percentage < 50:
+        status_key = "EXCELLENT"
+    elif 50 <= spent_percentage < 70:
+        status_key = "VERY GOOD"
+    elif 70 <= spent_percentage < 85:
         status_key = "GOOD"
-    elif 80 <= spent_percentage < 90:
-        status_key = "OKAY"
-    elif 90 <= spent_percentage < 100:
+    elif 85 <= spent_percentage < 95:
+        status_key = "FAIR"
+    elif 95 <= spent_percentage < 100:
+        status_key = "NEEDS IMPROVEMENT"
+    elif 100 <= spent_percentage < 110:
         status_key = "POOR"
+    elif 110 <= spent_percentage < 120:
+        status_key = "VERY POOR"
+    elif 120 <= spent_percentage < 130:
+        status_key = "EXTREMELY POOR"
+    elif 130 <= spent_percentage < 150:
+        status_key = "CRITICAL"
+    else:
+        status_key = "SEVERE"
+
 
     return status_key, status_colors[status_key]
 
