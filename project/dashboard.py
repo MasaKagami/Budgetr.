@@ -189,14 +189,17 @@ def update_expense_categorization_graph(filtered_df):
     fig.update_traces(
         # textinfo='percent',  # Show both percentage and label
         insidetextorientation='radial',  # Better orientation for text inside
+        textfont=dict(
+            color='#eeeee4',
+            size=13
+        )
     )
 
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         margin=dict(l=0, r=0, t=0, b=0),
-        uniformtext_minsize=12,  # Minimum text size
-        uniformtext_mode='hide',  # Hide text if too small
+        height=300,
         legend=dict(
             font=dict(
                 color="#eeeee4",
