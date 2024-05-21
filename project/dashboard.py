@@ -8,15 +8,12 @@ app = Dash(__name__)
 
 # -- Import and clean data (importing csv into pandas)
 def prepare_transactions_data(transactions_df):
-    # Convert date to datetime format if not already
     transactions_df['date'] = pd.to_datetime(transactions_df['date'])
     transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
     transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
     return transactions_df
 
 def load_data():
-    # Connection setup   
-    # Database URL  
     DATABASE_URL = "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
     #creating an SQLAlchemy engine
     engine = create_engine(DATABASE_URL)
@@ -33,16 +30,21 @@ def load_data():
     categorical_budgets_query = "SELECT * FROM CategoricalBudgets;"
     categorical_budgets_df = pd.read_sql(categorical_budgets_query, engine)
 
-    engine.dispose()  # Close the connection safely
+    #close connection
+    engine.dispose()
 
     transactions_df = prepare_transactions_data(transactions_df)
 
     return transactions_df, monthly_budgets_df, categorical_budgets_df
 
-# Using the function
 transactions_df, monthly_budgets_df, categorical_budgets_df = load_data()
+print("transactions_df: ")
 print(transactions_df[:5])
+print("monthly_budgets_df: ")
 print(monthly_budgets_df[:5])
+print("categorical_budgets_df: ")
+
+
 print(categorical_budgets_df[:5])
 
 # ------------------------------------------------------------------------------
@@ -307,14 +309,14 @@ def update_expense_categorization_graph(filtered_df):
 
 def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month):
     
-    # Ensure 'budgetmonth' is a datetime object
+    #datetime object
     monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
 
     # Extract the monthly budget for the selected year and month
     monthly_budget = monthly_budgets_df[
         (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
         (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
-    ]['totalbudget'].iloc[0]  # Get the first item
+    ]['totalbudget'].iloc[0]
 
     # Sum daily spending and calculate cumulative total
     daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().cumsum().reset_index()
@@ -331,9 +333,21 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
     daily_spending['Status'] = daily_spending['Cumulative Spending'].apply(
         lambda x: 'Under' if x <= monthly_budget else 'Over'
     )
+    
+    over_index = daily_spending[daily_spending['Status'] == 'Over'].index.min()
+
+    # If there is an 'Over' index, create two segments: 'Under' and 'Over'
+    if not pd.isna(over_index):
+        under_spending = daily_spending.loc[:over_index]
+        over_spending = daily_spending.loc[over_index-1:].copy()
+        over_spending.iloc[0, daily_spending.columns.get_loc('Status')] = 'Over'
+    else:
+        under_spending = daily_spending
+        over_spending = pd.DataFrame(columns=daily_spending.columns)
+
 
     fig = px.line(
-        daily_spending,
+        under_spending,
         x='Day',
         y='Cumulative Spending',
         labels={
@@ -345,15 +359,17 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
         markers=True,
         # color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
     )
-
-    fig.update_traces(
-        line=dict(width=3)
-    )  # Set the line width to 4 pixels
-
+    
+    # Add the 'Over' segment if it exists
+    if not over_spending.empty:
+        fig.add_scatter(x=over_spending['Day'], y=over_spending['Cumulative Spending'], mode='lines+markers', name='Over', line=dict(color='red', width=3))
 
     #add budget line to function
-     # Add budget line to the same figure
     fig.add_scatter(x=budget_line['Day'], y=budget_line['Total Budget'], mode='lines', name='Total Budget', line=dict(color='red', dash='dash'))
+    
+    fig.update_traces(
+        line=dict(width=3)
+    ) 
 
     # Customize the plot
     fig.update_layout(
