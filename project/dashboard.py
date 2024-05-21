@@ -30,6 +30,7 @@ def load_data():
 
     engine.dispose()  # Close the connection safely
 
+    transactions_df['date'] = pd.to_datetime(transactions_df['date']).dt.date
     return transactions_df, monthly_budgets_df, categorical_budgets_df
 
 # Using the function
@@ -120,7 +121,7 @@ app.layout = html.Div([
                     html.H3("Recent Transactions", className = 'dataTitle'),
                     dash_table.DataTable(
                         id='transactions_table',
-                        columns=[{"name": i, "id": i} for i in transactions_df.columns],
+                        columns=[{"name": col, "id": col} for col in transactions_df.columns if col not in ['transactionid', 'userid']],
                         data=transactions_df.to_dict('records'),
                         style_table={
                             'height': '300px',
@@ -189,6 +190,12 @@ def update_graph(selected_year, selected_month):
 
     return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
 
+def prepare_transactions_data(transactions_df):
+    transactions_df['date'] = transactions_df['date'].dt.strftime('%Y-%m-%d')  # Format date
+    transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
+    return transactions_df
+
+transactions_df = prepare_transactions_data(transactions_df)
 
 def calculated_daily_budget(monthly_budget, year, month):
     days_in_month = pd.Period(f'{year}-{month}').days_in_month
