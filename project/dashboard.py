@@ -36,7 +36,7 @@ def load_data():
 transactions_df, monthly_budgets_df, categorical_budgets_df = load_data()
 print(transactions_df[:5])
 print(monthly_budgets_df[:5])
-print(monthly_budgets_df[:5])
+print(categorical_budgets_df[:5])
 
 # ------------------------------------------------------------------------------
 # App layout
@@ -160,7 +160,7 @@ def update_graph(selected_year, selected_month):
         
     monthly_expense_fig = update_monthly_expense_graph(filtered_df)
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
-    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df)
+    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month)
     budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
 
     return monthly_expense_fig, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
@@ -179,42 +179,83 @@ def update_expense_categorization_graph(filtered_df):
     )
     return fig
 
-def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df):
-    daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().reset_index()
-    daily_spending.columns = ['Day', 'Total Spent']
+def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month):
+    
+    # Ensure 'budgetmonth' is a datetime object
+    monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
 
-    daily_spending['Cumulative Spending'] = daily_spending['Total Spent'].cumsum()
+    # Extract the monthly budget for the selected year and month
+    monthly_budget = monthly_budgets_df[
+        (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
+        (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
+    ]['totalbudget'].iloc[0]  # Get the first item
 
-    budget = monthly_budgets_df
+    # Sum daily spending and calculate cumulative total
+    daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().cumsum().reset_index()
+    daily_spending.columns = ['Day', 'Cumulative Spending']
+
+    # Prepare a DataFrame for plotting the constant budget line
+    max_day = daily_spending['Day'].max()
+    budget_line = pd.DataFrame({
+        'Day': [1, max_day],
+        'Total Budget': [monthly_budget, monthly_budget]
+    })
 
     fig = px.line(
-        daily_spending, 
-        x='Day', 
-        y=['Total Spent'], 
+        daily_spending,
+        x='Day',
+        y='Cumulative Spending',
         labels={
-            'Day': 'day',
-            'Total Spent': 'money spent ($)'
-            },
-        markers=True
+            'Cumulative Spending': 'cumulative spending ($)',
+            'Day': 'day of the month'
+        },
+        markers=True,
+        color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
     )
 
+    fig.update_traces(
+        line=dict(width=3)
+    )  # Set the line width to 4 pixels
+
+
+    #add budget line to function
+     # Add budget line to the same figure
+    fig.add_scatter(x=budget_line['Day'], y=budget_line['Total Budget'], mode='lines', name='Total Budget', line=dict(color='red', dash='dash'))
+
+    # Customize the plot
     fig.update_layout(
-        # showlegend=False
+        margin=dict(l=0, r=0, t=0, b=0),  # Left, Right, Top, Bottom margins in pixels
+
+        xaxis_tickangle=45,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        legend = dict(
-            orientation="h",
-            yanchor="bottom",
+        xaxis=dict(
+            tickmode='array',
+            tickvals=list(range(1, max_day + 1, 1)),  # Tick every day
+            title_font=dict(color="#eeeee4"),
+            tickfont=dict(color="#eeeee4"),
+            showgrid=False
+            # gridcolor='rgba(0,0,0,0)'
+
+        ),
+        yaxis=dict(
+            title_font=dict(color="#eeeee4"),
+            tickfont=dict(color="#eeeee4"),
+            showgrid=True,
+            gridcolor='lightblue'
+        ),
+        legend=dict(
+            title='',
+            orientation='h',
+            yanchor='bottom',
             y=1.02,
-            xanchor="center",
+            xanchor='center',
             x=0.5,
             font=dict(
                 color="#eeeee4",
                 size=12
             )
-        ),
-
-
+        )
     )
 
     return fig
@@ -229,20 +270,24 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
     summary_df = pd.merge(budget_data, actual_spending, on='categoryname', how='left')
     summary_df.fillna(0, inplace=True)  # Replace NaN with 0 for categories with no spending
 
+    summary_df.rename(columns={'categorybudget': 'Budget', 'amount': 'Spent'}, inplace=True)
+
     # Create the bar chart for Budget vs Actual Spending
     fig = px.bar(
         summary_df, 
         x='categoryname', 
-        y=['categorybudget', 'amount'],
+        y=['Budget', 'Spent'],
         labels={
             'categoryname': 'category types',
-            'value': 'amount ($)' #represented with 2 different y-values, so is labeled as 'value'
+            'value': 'amount ($)', #represented with 2 different y-values, so is labeled as 'value'
+            'variable': '' #represented with 2 different y-values, so is labeled as 'value'
         },
         barmode='group',
         color_discrete_sequence=["#92154f", "#f19500"]  # Blue for Budget, Red for Actual Spending
 
     )
     fig.update_layout(
+        margin=dict(l=0, r=0, t=0, b=0),
         # showlegend=False,
         xaxis_tickangle=45,
         paper_bgcolor='rgba(0,0,0,0)',
