@@ -102,18 +102,35 @@ html, body{
     width: 30%;
     display: flex;
     flex-direction: column;
-    /* align-items: center;
-    justify-content: space-between; */
+    /* align-items: center; */
+    justify-content: center;
     margin-right: 10px;
 }
 
-/* .monthly-summary{
-    padding: 0 20px;
+.financial-overview{
+    margin-bottom: 30px;
 }
 
-.expense-categorization{
-    padding: 0 20px;
-} */
+.outputBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border: solid #eeeee7;
+    color: #f8d44c;
+    height: auto;
+    padding: 20px 0;
+}
+
+.netBalanceOutput{
+    font-size: 80px;
+    font-weight: 700;
+}
+
+.statusOutput{
+    font-size: 48px;
+    font-weight: 700;
+}
 
 .dataContainer2{
     display: flex;

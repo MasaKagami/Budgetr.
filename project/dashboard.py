@@ -86,10 +86,16 @@ app.layout = html.Div([
         html.Div([
             html.Div([
                 html.Div([
-                    html.H3("Financial Overview", className = 'dataTitle'),
-                    html.P(id='net-balance-output'),
-                    html.P(id='status_output'),
-                ], className= 'monthly-summary'),
+                    # html.H3("Financial Overview", className = 'dataTitle'),
+                    html.H3("Net Balance", className='dataTitle'),
+                    html.Div([
+                        html.P(id='net-balance-output'),
+                    ], className='outputBox'),
+                    html.H3("Status", className='dataTitle'),
+                    html.Div([
+                        html.P(id='status-output'),
+                    ], className='outputBox')
+                ], className= 'financial-overview'),
 
                 html.Div([
                     html.H3("Expense Cateogrization", className='dataTitle'),
@@ -144,7 +150,7 @@ app.layout = html.Div([
 @app.callback(
     [
         Output('net-balance-output', 'children'), 
-        Output('status_output', 'children'),
+        Output('status-output', 'children'),
         Output('expense_categorization_graph', 'figure'), 
         Output('daily_spending_trend_graph', 'figure'),
         Output('budget_vs_actual_spending_graph', 'figure')
@@ -162,34 +168,57 @@ def update_graph(selected_year, selected_month):
                                   (transactions_df['date'].dt.month == selected_month)]
 
     total_spent = filtered_df['amount'].sum()
+
+    monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
+
     monthly_budget = monthly_budgets_df[
         (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
         (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
-    ]['totalbudget']
+    ]['totalbudget'].iloc[0]
 
-    net_balance = total_spent - monthly_budget
+    net_balance = monthly_budget - total_spent
     net_balance_output = format_net_balance(net_balance)
-    status_output = determine_status(monthly_budget, total_spent)
+    net_balance_output = html.Span(net_balance_output, className='netBalanceOutput')
+    
+    status_text, color = determine_status(monthly_budget, total_spent, selected_year, selected_month)
+    status_output = html.Span(status_text, style={'color': color}, className='statusOutput')
 
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
     daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month)
     budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
 
-    return f"Net Balance: {net_balance_output}", f"Status: {status_output}", expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
+    return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig
 
 
-def daily_budget(monthly_budget, year, month):
+def calculated_daily_budget(monthly_budget, year, month):
     days_in_month = pd.Period(f'{year}-{month}').days_in_month
     return monthly_budget/days_in_month
 
 
-def format_net_balance(net_balance):
-    return f"({-net_balance})" if net_balance < 0 else str(net_balance)
+
+def format_net_balance(net_balance, ):
+    print("Net Balance:", net_balance)  # Debugging statement
+    if net_balance < 0:
+        formatted_balance = f"({-net_balance})"
+    else:
+        formatted_balance = str(net_balance)
+    print("Formatted Balance:", formatted_balance)  # Debugging statement
+    return formatted_balance
+
 
 def determine_status(monthly_budget, total_spent, selected_year, selected_month):
-    daily_budget(monthly_budget, selected_year, selected_month)
+    
+    status_colors = {
+        "PERFECT": "green",
+        "GOOD": "blue",
+        "OKAY": "yellow",
+        "POOR": "orange",
+        "HORRIBLE": "red"
+    }
+
+    daily_budget = calculated_daily_budget(monthly_budget, selected_year, selected_month)
     today = pd.Timestamp.today()
-    if selected_year == today.year & selected_month == today.month:
+    if selected_year == today.year and selected_month == today.month:
         days_so_far = today.day
     else:
         days_so_far = pd.Period(f'{selected_year}-{selected_month}').days_in_month
@@ -197,29 +226,18 @@ def determine_status(monthly_budget, total_spent, selected_year, selected_month)
     average_daily_spending = total_spent / days_so_far
     spent_percentage = (average_daily_spending/daily_budget) * 100
 
+    status_key = "HORRIBLE"  # Default to the worst case
     if spent_percentage < 60:
-        return "Perfect"
+        status_key = "PERFECT"
     elif 60 <= spent_percentage < 80:
-        return "Good"
+        status_key = "GOOD"
     elif 80 <= spent_percentage < 90:
-        return "Okay"
+        status_key = "OKAY"
     elif 90 <= spent_percentage < 100:
-        return "Poor"
-    elif spent_percentage >= 100:
-        return "Horrible"
+        status_key = "POOR"
 
-def update_monthly_expense_graph(filtered_df, monthly_budgets_df):
-    expense_summary = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
-    # monthly_budget = monthly_budgets_df
-    fig = px.bar(
-        expense_summary,
-        x='categoryname', 
-        y='amount', 
-        )    
-    fig.update_layout(
-        margin=dict(l=0, r=0, t=0, b=0)
-    )
-    return fig
+    return status_key, status_colors[status_key]
+
 
 def update_expense_categorization_graph(filtered_df):
     fig = px.pie(
