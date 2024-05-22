@@ -280,12 +280,27 @@ def calculated_daily_budget(monthly_budget, year, month):
     return monthly_budget/days_in_month
 
 def update_expense_categorization_graph(filtered_df):
+
+    category_Colors = {
+        "housing": "red", 
+        "investments": "blue", 
+        "debt payments": "green",
+        "healthcare": "purple", 
+        "food": "pink",
+        "entertainment & lesiure": "gold", 
+        "education": "gray", 
+        "transportation": "silver", 
+        "personal care": "yellow", 
+        "miscellaneous": "orange"
+    }
+
     fig = px.pie(
         filtered_df, 
         values='amount', 
         names='categoryname', 
         color='categoryname',
-        hole=0.3
+        hole=0.3,
+        color_discrete_map=category_Colors
     )
 
     fig.update_traces(
