@@ -207,7 +207,7 @@ def update_graph(selected_year, selected_month):
     status_output = html.Span(status_text, style={'color': color}, className='statusOutput')
 
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
-    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month)
+    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budget)
     budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
     
     transactions_table_data = filtered_df[['date_display', 'categoryname', 'amount', 'description']].to_dict('records')
@@ -312,38 +312,40 @@ def update_expense_categorization_graph(filtered_df):
 
     return fig
 
-def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month):
-    
-    monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
-
-    monthly_budget = monthly_budgets_df[
-        (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
-        (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
-    ]['totalbudget'].iloc[0]
+def update_daily_spending_trend_graph(filtered_df, monthly_budget):
 
     # Sum daily spending and calculate cumulative total
     daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().cumsum().reset_index()
     daily_spending.columns = ['Day', 'Cumulative Spending']
 
-    # Prepare a DataFrame for plotting the constant budget line
+    # is creating a new dataFrame, budget_line
     max_day = daily_spending['Day'].max()
     budget_line = pd.DataFrame({
+        # creates a column named 'day' consisting of the values '1' and 'max_day'
         'Day': [1, max_day],
         'Total Budget': [monthly_budget, monthly_budget]
     })
 
-    # Add a column to classify spending relative to budget
+    # Adds a column called 'status' to the daily_spending dataFrame
     daily_spending['Status'] = daily_spending['Cumulative Spending'].apply(
+        # The lambda keyword creates an anonymous (inline) function
+        # x: The input value (each value in the Cumulative Spending column).
         lambda x: 'Under' if x <= monthly_budget else 'Over'
     )
+
+    print("daily_spending: ")
+    print(daily_spending[:5])
     
     over_index = daily_spending[daily_spending['Status'] == 'Over'].index.min()
 
     # If there is an 'Over' index, create two segments: 'Under' and 'Over'
     if not pd.isna(over_index):
         under_spending = daily_spending.loc[:over_index]
+        # .copy ensures that modifications to over_spending doesn't affect daily_spending
         over_spending = daily_spending.loc[over_index-1:].copy()
+        # ensures that the first row of the over_spending DataFrame is correctly labeled as 'Over'
         over_spending.iloc[0, daily_spending.columns.get_loc('Status')] = 'Over'
+        # 1 for ov
         combined_spending = pd.concat([under_spending, over_spending[1:]])
     else:
         combined_spending = daily_spending
@@ -363,7 +365,14 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
     
     # Add the 'Over' segment if it exists
     if not over_spending.empty:
-        fig.add_scatter(x=over_spending['Day'], y=over_spending['Cumulative Spending'], mode='lines+markers', name='Over', line=dict(color='red', width=3), showlegend= False)
+        fig.add_scatter(
+            x=over_spending['Day'], 
+            y=over_spending['Cumulative Spending'], 
+            mode='lines+markers', 
+            name='Over', 
+            line=dict(color='red', 
+            width=3), 
+            showlegend= False)
 
     #add budget line to function
     fig.add_scatter(
@@ -450,7 +459,6 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
     )
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),
-        # showlegend=False,
         xaxis_tickangle=45,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
