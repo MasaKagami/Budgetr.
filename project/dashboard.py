@@ -341,13 +341,12 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
         under_spending = daily_spending.loc[:over_index]
         over_spending = daily_spending.loc[over_index-1:].copy()
         over_spending.iloc[0, daily_spending.columns.get_loc('Status')] = 'Over'
+        combined_spending = pd.concat([under_spending, over_spending[1:]])
     else:
-        under_spending = daily_spending
-        over_spending = pd.DataFrame(columns=daily_spending.columns)
-
+        combined_spending = daily_spending
 
     fig = px.line(
-        under_spending,
+        combined_spending,
         x='Day',
         y='Cumulative Spending',
         labels={
