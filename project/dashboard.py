@@ -2,15 +2,14 @@ from sqlalchemy import create_engine
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
-from dash import Dash, dcc, html, dash_table, Input, Output, State, ALL
+from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context
 
 app = Dash(__name__)
 app.title = 'myfinanceplanner'
 
 # -- Import and clean data (importing csv into pandas)
 def load_data():
-    # Connection setup   
-    # Database URL  
+    # Connection setup
     DATABASE_URL = "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
 
     # Creating an SQLAlchemy engine
@@ -27,7 +26,6 @@ def load_data():
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 def load_local_database():
-    # Load data from CSV files
     transactions_df = pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
     categories_df = pd.read_csv('../localdb/categories.csv')
     users_df = pd.read_csv('../localdb/users.csv')
@@ -39,6 +37,7 @@ def load_local_database():
 # Loading data
 transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
 # transactions_df, categories_df, users_df, budgets_df = load_data()
+
 # print('\nTRANSACTIONS DB\n', transactions_df[:5])
 # print('CATEGORIES DB\n', categories_df[:5])
 # print('USERS DB\n', users_df[:5])
@@ -64,203 +63,523 @@ monthsToInt = {
 # Reverse the dictionary to convert the integers to month names
 IntToMonths = {v: k for k, v in monthsToInt.items()} 
 
+# Get the current month and year
 current_month = datetime.now().month
 current_year = datetime.now().year
 
 # ------------------------------------------------------------------------------
-# App layout
+# Main App layout
 app.layout = html.Div([
-    html.H1("My Financial Dashboard", style={'text-align': 'center'}),
-
-    dcc.RadioItems(id='chart_type',
-                   options=[
-                       {'label': 'Line Chart', 'value': 'line'},
-                       {'label': 'Bar Chart', 'value': 'bar'},
-                       {'label': 'Stacked Bar Chart', 'value': 'stacked_bar'}
-                   ],
-                   value='line',
-                   style={'margin-top': '20px'}
-                   ),
-
-    # Put month selector in a container so it can be hidden when not needed
-    html.Div(id='month_selector_container', children=[
-        html.H4("Select Month", style = {'text-align': 'left'}),
-        dcc.Dropdown(id="slct_month",
-                    options= [{'label': key, 'value': value} for key, value in monthsToInt.items()], # Convert the python dictionary to a list of dictionaries in HTML
-                    multi=False,
-                    value=current_month, # Initial value
-                    style={'width': "40%"}
-                    ),
-    ]),
-
-    html.Div(id='output_container', children=[]),
-    html.Br(),
-
-    dcc.Graph(id='my_spending_map', figure={}),
-
-    html.H2("Add a New Transaction", style={'text-align': 'center'}),
-        dcc.DatePickerSingle(
-            id='input_date',
-            date=pd.Timestamp.now().strftime('%Y-%m-%d'),
-            display_format='YYYY-MM-DD',
-            style={'width': '10%', 'margin': '10px auto', 'display': 'block'}
-        ),
-        dcc.Input(
-            id='input_amount',
-            type='number',
-            min=0,
-            placeholder='Amount',
-            style={'width': '10%', 'margin': '10px auto', 'display': 'block'}
-        ),
-        dcc.Dropdown(
-            id='input_category',
-            options=[{'label': category, 'value': category} for category in categories_df['name']],
-            placeholder='Select Category',
-            style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
-        ),
-        dcc.Input(
-            id='input_description',
-            type='text',
-            placeholder='Description',
-            style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
-        ),
-        html.Button('Add Transaction', id='submit_transaction', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
-    html.Div(id='transaction_status', style={'text-align': 'center'}), # Display the status of the transaction   
-
-    html.H2("Manage Budget", style={'text-align': 'center'}),
-    html.Div(id='budget_month_selector', children=[
-        dcc.Dropdown(id="slct_budget_month",
-                    options= [{'label': key, 'value': value} for key, value in monthsToInt.items()],
-                    multi=False,
-                    value=current_month, # Initial value
-                    style={'width': "40%", 'margin': '10px auto', 'display': 'inline-block'}
-                    ),
-        dcc.Dropdown(id="slct_budget_year",
-                    options= [{'label': year, 'value': year} for year in range(2023, current_year+2)],
-                    multi=False,
-                    value=current_year, # Initial value
-                    style={'width': '150px', 'margin': '10px auto 10px 10px', 'display': 'inline-block'}
-                    ),
-    ], style={'text-align': 'center'}),
+    html.Link(
+        href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
+        rel='stylesheet'
+    ),
     html.Div([
-        html.Label("Total Budget:"),
-        dcc.Input(
-            id='input_total_budget',
-            type='number',
-            min=0,
-            style={'margin-left': '10px', 'margin-bottom': '20px'}
-        ),
-        html.Div(id='budget_overview', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the total budget
-        html.Button('Update Total Budget', id='submit_total_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
-        html.Div(id='total_budget_status', style={'text-align': 'center'})
-    ], style={'text-align': 'center'}),
-    html.Div([
-        dash_table.DataTable(
-            id='budget_table',
-            columns=[
-                {'name': 'Category', 'id': 'categoryname', 'type': 'text'},
-                {'name': 'Budget', 'id': 'categorybudget', 'type': 'numeric', 'editable': True}
-            ],
-            data=[],
-            style_table={'width': '60%', 'margin': 'auto'},
-            style_cell={'textAlign': 'left'}
-        )
-    ], style={'text-align': 'center', 'margin-bottom': '20px'}),
-    html.Div(id='unallocated_budget', style={'text-align': 'center', 'margin-bottom': '20px'}), # Display the unallocated budget
-    html.Div([
-        dcc.Dropdown(
-            id='budget_category_dropdown',
-            options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
-            placeholder='Select Category',
-            style={'width': '40%', 'margin': '10px auto', 'display': 'inline-block'}
-        ),
-        dcc.Input(
-            id='budget_category_input',
-            type='number',
-            min=0,
-            placeholder='Enter Budget',
-            style={'width': '10%', 'margin': '10px auto', 'display': 'inline-block', 'margin-left': '10px'}
-        ),
-        html.Button('Update Category Budget', id='submit_category_budget', n_clicks=0, style={'width': '20%', 'margin': '10px auto', 'display': 'block'}),
-        html.Div(id='category_budget_status', style={'text-align': 'center'})
-    ], style={'text-align': 'center', 'margin-bottom': '20px'}),
-
-    # Hidden div to store update triggers
-    html.Div(id='update_trigger', style={'display': 'none'})
-])
+        html.H1("My Financial Dashboard", style={'text-align': 'center'}),
+        html.Div([
+            html.Button('DASHBOARD', id='view_dashboard'),
+            html.Button('SPENDINGS', id='input_spendings')
+        ], className='button', style={'text-align': 'center', 'margin-bottom': '20px'}),
+        html.Div(id='page_content', className='dataContainer') # Contains the components (and ids) for the dashboard and spendings pages
+    ], className='dashboard')
+], className='background')
 
 # ------------------------------------------------------------------------------
+# Switch between pages based on the button clicked
 @app.callback(
-    [Output('my_spending_map', 'figure')],
-    [Input('chart_type', 'value'),
+    Output('page_content', 'children'),
+    [Input('input_spendings', 'n_clicks'),
+     Input('view_dashboard', 'n_clicks')]
+)
+
+def render_page(input_spendings_clicks=None, view_dashboard_clicks=None):
+    ctx = callback_context
+    if not ctx.triggered:
+        # Set the default button ID if no button has been clicked
+        button_id = 'view_dashboard'
+    else:
+        # Get the ID of the button that triggered the callback
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if button_id == 'view_dashboard':
+        # Prepare the transactions DataFrame for the dashboard, convert date to datetime object
+        transactions_df['date'] = pd.to_datetime(transactions_df['date'])
+        transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
+        transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
+
+        return html.Div([
+            html.Div([
+                html.H4("Select Year and Month: "),
+                dcc.Dropdown(
+                    id="slct_year",
+                    options=[
+                        {'label': str(year), 'value': year} for year in range(2000, current_year + 1)
+                    ],
+                    multi=False,
+                    value=current_year, # Initial value
+                    className='dropdownYear',
+                    style={'width': "150px", 'margin': '10px auto'}
+                ),
+                dcc.Dropdown(
+                    id="slct_month",
+                    options=[{'label': key, 'value': value} for key, value in monthsToInt.items()],
+                    multi=False,
+                    value=current_month, # Initial value
+                    className='dropdownMonth',
+                    style={'width': "150px", 'margin': '10px auto'}
+                ),
+            ], className='selectYearandMonth'),
+
+            html.Div([
+                html.Div([
+                    html.Div([
+                        # html.H3("Financial Overview", className = 'dataTitle'),
+                        html.H3("Net Balance", className='dataTitle'),
+                        html.Div([
+                            html.P(id='net-balance-output'),
+                        ], className='outputBox'),
+                        html.H3("Status", className='dataTitle'),
+                        html.Div([
+                            html.P(id='status-output'),
+                        ], className='outputBox')
+                    ], className='financial-overview'),
+
+                    html.Div([
+                        html.H3("Expense Categorization", className='dataTitle'),
+                        dcc.Graph(id='expense_categorization_graph', figure={}),
+                    ], className='expense-categorization')
+                ], className='section3'),
+
+                html.Div([
+                    html.Div([
+                        html.H3("Daily Spending Trend", className='dataTitle'),
+                        dcc.Graph(id='daily_spending_trend_graph', figure={}),
+                    ], className='daily-spending-trend'),
+
+                    html.Div([
+                        html.H3("Budget vs. Actual Spending Per Category", className='dataTitle'),
+                        dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
+                    ], className='budget-vs-actual-spending'),
+                ], className='section4'),
+
+                html.Div([
+                    html.H3("Recent Transactions", className='dataTitle'),
+                    dash_table.DataTable(
+                        id='transactions_table',
+                        columns=[
+                            {"name": "Date", "id": "date_display"},
+                            {"name": "Category Name", "id": "categoryname"},
+                            {"name": "Amount", "id": "amount"},
+                            {"name": "Description", "id": "description"}
+                        ],
+                        data=transactions_df.to_dict('records'),
+                        style_table={
+                            'height': '300px',
+                            'overflowY': 'auto'
+                        },
+                        style_cell={
+                            'textAlign': 'left',
+                            'color': 'white',
+                            'backgroundColor': '#151a28',
+                            'border': 'none'
+                        },
+                        style_header={
+                            'backgroundColor': '#222222',
+                            'fontWeight': 'bold'
+                        }
+                    )
+                ], className='section5'),
+            ], className='dataContainer2')
+        ])
+    
+    elif button_id == 'input_spendings':
+        return html.Div([
+            html.H2("Add a New Transaction", style={'text-align': 'center'}),
+            dcc.DatePickerSingle(
+                id='input_date',
+                date=pd.Timestamp.now().strftime('%Y-%m-%d'),
+                display_format='YYYY-MM-DD',
+                style={'width': '150px', 'margin': '10px auto', 'display': 'block'}
+            ),
+            dcc.Input(
+                id='input_amount',
+                type='number',
+                min=0,
+                placeholder='Amount',
+                style={'width': '150px', 'margin': '10px auto', 'display': 'block'}
+            ),
+            dcc.Dropdown(
+                id='input_category',
+                options=[{'label': category, 'value': category} for category in categories_df['name']],
+                placeholder='Select Category',
+                style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
+            ),
+            dcc.Input(
+                id='input_description',
+                type='text',
+                placeholder='Description',
+                style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
+            ),
+            html.Button('Add Transaction', id='submit_transaction', n_clicks=0, style={'width': '150px', 'margin': '10px auto', 'display': 'block'}),
+            html.Div(id='transaction_status', style={'text-align': 'center'}),  # Display the status of the transaction   
+
+            html.H2("Manage Budget", style={'text-align': 'center'}),
+            html.Div(id='budget_month_selector', children=[
+                dcc.Dropdown(id="slct_budget_month",
+                            options=[{'label': key, 'value': value} for key, value in monthsToInt.items()],
+                            multi=False,
+                            value=current_month, # Initial value
+                            style={'width': "150px", 'margin': '10px auto'}
+                            ),
+                dcc.Dropdown(id="slct_budget_year",
+                            options=[{'label': year, 'value': year} for year in range(2000, current_year + 1)],
+                            multi=False,
+                            value=current_year, # Initial value
+                            style={'width': '150px', 'margin': '10px auto'}
+                            ),
+            ], style={'text-align': 'center'}),
+            html.Div([
+                html.Label("Total Budget:"),
+                dcc.Input(
+                    id='input_total_budget',
+                    type='number',
+                    min=0,
+                    style={'margin-left': '10px', 'margin-bottom': '20px'}
+                ),
+                html.Div(id='budget_overview', style={'text-align': 'center', 'margin-bottom': '20px'}),
+                html.Button('Update Total Budget', id='submit_total_budget', n_clicks=0, style={'width': '150px', 'margin': '10px auto', 'display': 'block'}),
+                html.Div(id='total_budget_status', style={'text-align': 'center'})
+            ], style={'text-align': 'center'}),
+            html.Div([
+                dash_table.DataTable(
+                    id='budget_table',
+                    columns=[
+                        {'name': 'Category', 'id': 'categoryname', 'type': 'text'},
+                        {'name': 'Budget', 'id': 'categorybudget', 'type': 'numeric', 'editable': True}
+                    ],
+                    data=[],
+                    style_table={'width': '60%', 'margin': 'auto'},
+                    style_cell={'textAlign': 'left'}
+                )
+            ], style={'text-align': 'center', 'margin-bottom': '20px'}),
+            html.Div(id='unallocated_budget', style={'text-align': 'center', 'margin-bottom': '20px'}),  # Display the unallocated budget
+            html.Div([
+                dcc.Dropdown(
+                    id='budget_category_dropdown',
+                    options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
+                    placeholder='Select Category',
+                    style={'width': '40%', 'margin': '10px auto', 'display': 'inline-block'}
+                ),
+                dcc.Input(
+                    id='budget_category_input',
+                    type='number',
+                    min=0,
+                    placeholder='Enter Budget',
+                    style={'width': '150px', 'margin': '10px auto', 'display': 'inline-block', 'margin-left': '10px'}
+                ),
+                html.Button('Update Category Budget', id='submit_category_budget', n_clicks=0, style={'width': '150px', 'margin': '10px auto', 'display': 'block'}),
+                html.Div(id='category_budget_status', style={'text-align': 'center'})
+            ], style={'text-align': 'center', 'margin-bottom': '20px'}),
+
+            # Hidden div to store update triggers
+            html.Div(id='update_trigger', style={'display': 'none'})
+        ])
+
+    return html.Div()  # Default content if no button is clicked
+
+# ------------------------------------------------------------------------------
+# Callback for updating the dashboard page
+@app.callback(
+    [Output('net-balance-output', 'children'), 
+     Output('status-output', 'children'),
+     Output('expense_categorization_graph', 'figure'), 
+     Output('daily_spending_trend_graph', 'figure'),
+     Output('budget_vs_actual_spending_graph', 'figure'),
+     Output('transactions_table', 'data')],
+    [Input('slct_year', 'value'),
      Input('slct_month', 'value')]
 )
 
-def update_graph(chart_type, selected_month):
+def update_graph(selected_year, selected_month):
     # Filter the DataFrame to the selected month
-    filtered_df = transactions_df[transactions_df['date'].dt.month == selected_month]
+    filtered_df = transactions_df[(transactions_df['date'].dt.year == selected_year) &
+                                  (transactions_df['date'].dt.month == selected_month)]
 
-    if chart_type == 'line':
-        # Group by day of the month and sum the amounts
-        daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().reset_index()
-        daily_spending.columns = ['Day', 'Total Spent']
+    total_spent = filtered_df['amount'].sum()
 
-        # Create a line chart with Plotly Express
-        fig = px.line(
-            daily_spending, x='Day', y='Total Spent',
-            title=f'Spending Trend for {IntToMonths[selected_month]}',
-            labels={'Day': 'Day of the Month', 'Total Spent': 'Amount Spent ($)'},
-            markers=True, # Makes it easier to see individual data points
-            range_x=[1, 31] # Show all days of the month
-            )
-        
-        # Show the x-axis ticks for each day of the month
-        fig.update_layout(
-            xaxis = dict(
-                tickmode = 'linear'
+    monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
+
+    monthly_budget = monthly_budgets_df[
+        (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
+        (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
+    ]['totalbudget'].iloc[0]
+
+    net_balance = monthly_budget - total_spent
+    net_balance_output = format_net_balance(net_balance)
+    net_balance_output = html.Span(net_balance_output, className='netBalanceOutput')
+    
+    status_text, color = determine_status(monthly_budget, total_spent, selected_year, selected_month)
+    status_output = html.Span(status_text, style={'color': color}, className='statusOutput')
+
+    expense_categorization_fig = update_expense_categorization_graph(filtered_df)
+    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month)
+    budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
+    
+    transactions_table_data = filtered_df[['date_display', 'categoryname', 'amount', 'description']].to_dict('records')
+
+    return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig, transactions_table_data
+
+def calculated_daily_budget(monthly_budget, year, month):
+    days_in_month = pd.Period(f'{year}-{month}').days_in_month
+    return monthly_budget/days_in_month
+
+def format_net_balance(net_balance, ):
+    print("Net Balance:", net_balance)  # Debugging statement
+    if net_balance < 0:
+        formatted_balance = f"({-net_balance})"
+    else:
+        formatted_balance = str(net_balance)
+    print("Formatted Balance:", formatted_balance)  # Debugging statement
+    return formatted_balance
+
+def determine_status(monthly_budget, total_spent, selected_year, selected_month):
+    status_colors = {
+        "EXCELLENT": "#00FF00",     
+        "VERY GOOD": "#7FFF00",     
+        "GOOD": "#FFFF00",          
+        "FAIR": "#FFD700",          
+        "NEEDS IMPROVEMENT": "#FFA500",
+        "POOR": "#FF8C00",          
+        "VERY POOR": "#FF4500",      
+        "EXTREMELY POOR": "#FF0000",
+        "CRITICAL": "#DC143C",      
+        "SEVERE": "#8B0000"         
+    }
+
+    daily_budget = calculated_daily_budget(monthly_budget, selected_year, selected_month)
+    today = pd.Timestamp.today()
+    if selected_year == today.year and selected_month == today.month:
+        days_so_far = today.day
+    else:
+        days_so_far = pd.Period(f'{selected_year}-{selected_month}').days_in_month
+
+    average_daily_spending = total_spent / days_so_far
+    spent_percentage = (average_daily_spending/daily_budget) * 100
+
+    if spent_percentage < 50:
+        status_key = "EXCELLENT"
+    elif 50 <= spent_percentage < 70:
+        status_key = "VERY GOOD"
+    elif 70 <= spent_percentage < 85:
+        status_key = "GOOD"
+    elif 85 <= spent_percentage < 95:
+        status_key = "FAIR"
+    elif 95 <= spent_percentage < 100:
+        status_key = "NEEDS IMPROVEMENT"
+    elif 100 <= spent_percentage < 110:
+        status_key = "POOR"
+    elif 110 <= spent_percentage < 120:
+        status_key = "VERY POOR"
+    elif 120 <= spent_percentage < 130:
+        status_key = "EXTREMELY POOR"
+    elif 130 <= spent_percentage < 150:
+        status_key = "CRITICAL"
+    else:
+        status_key = "SEVERE"
+
+    return status_key, status_colors[status_key]
+
+def update_expense_categorization_graph(filtered_df):
+    fig = px.pie(
+        filtered_df, 
+        values='amount', 
+        names='categoryname', 
+        color='categoryname',
+        hole=0.3
+    )
+
+    fig.update_traces(
+        # textinfo='percent',  # Show both percentage and label
+        insidetextorientation='radial',  # Better orientation for text inside
+        textfont=dict(
+            color='#eeeee4',
+            size=13
+        )
+    )
+
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=0, r=0, t=0, b=0),
+        height=300,
+        legend=dict(
+            font=dict(
+                color="#eeeee4",
+                size=10
             )
         )
-    
-    elif chart_type == 'bar':
-        # Group by category and sum the amounts
-        category_spending = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
-        category_spending.columns = ['Category', 'Total Spent']
+    )
 
-        # Create a bar chart with Plotly Express
-        fig = px.bar(
-            category_spending, x='Category', y='Total Spent',
-            title=f'Spending by Category for {IntToMonths[selected_month]}',
-            labels={'category': 'Category', 'amount': 'Amount Spent ($)'},
-            color='Category'
-            )
-    
-    elif chart_type == 'stacked_bar':
-        # Group by category and sum the amounts
-        daily_category_spending = filtered_df.groupby([filtered_df['date'].dt.day, 'categoryname'])['amount'].sum().reset_index()
-        daily_category_spending.columns = ['Day', 'Category', 'Total Spent']
-        # print("\nSTACKED BAR CHART\n", daily_category_spending)
+    return fig
 
-        # Create a stacked bar chart with Plotly Express
-        fig = px.bar(
-            daily_category_spending, x='Day', y='Total Spent', color='Category',
-            title=f'Spending by Category for {IntToMonths[selected_month]}',
-            labels={'Day': 'Day of the Month', 'Total Spent': 'Amount Spent ($)'}
-            )
-        
-        # Show the x-axis ticks for each day of the month
-        fig.update_layout(
-            xaxis = dict(
-                tickmode = 'linear'
+def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month):
+    # Ensure 'budgetmonth' is a datetime object
+    monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
+
+    # Extract the monthly budget for the selected year and month
+    monthly_budget = monthly_budgets_df[
+        (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
+        (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
+    ]['totalbudget'].iloc[0]  # Get the first item
+
+    # Sum daily spending and calculate cumulative total
+    daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().cumsum().reset_index()
+    daily_spending.columns = ['Day', 'Cumulative Spending']
+
+    # Prepare a DataFrame for plotting the constant budget line
+    max_day = daily_spending['Day'].max()
+    budget_line = pd.DataFrame({
+        'Day': [1, max_day],
+        'Total Budget': [monthly_budget, monthly_budget]
+    })
+
+    # Add a column to classify spending relative to budget
+    daily_spending['Status'] = daily_spending['Cumulative Spending'].apply(
+        lambda x: 'Under' if x <= monthly_budget else 'Over'
+    )
+
+    fig = px.line(
+        daily_spending,
+        x='Day',
+        y='Cumulative Spending',
+        labels={
+            'Cumulative Spending': 'cumulative spending ($)',
+            'Day': 'day of the month'
+        },
+        color='Status',
+        color_discrete_map={'Under': 'green', 'Over': 'red'},
+        markers=True,
+        # color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
+    )
+
+    fig.update_traces(
+        line=dict(width=3)
+    )  # Set the line width to 4 pixels
+
+    # Add budget line to the same figure
+    fig.add_scatter(x=budget_line['Day'], y=budget_line['Total Budget'], mode='lines', name='Total Budget', line=dict(color='red', dash='dash'))
+
+    # Customize the plot
+    fig.update_layout(
+        margin=dict(l=0, r=0, t=0, b=0),  # Left, Right, Top, Bottom margins in pixels
+
+        xaxis_tickangle=0,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        xaxis=dict(
+            tickmode='array',
+            tickvals=list(range(1, max_day + 1, 1)),  # Tick every day
+            tickfont=dict(
+                size=9,
+                color="#eeeee4"
+            ),
+            title_font=dict(
+                color="#eeeee4"),
+            showgrid=False
+        ),
+        yaxis=dict(
+            title_font=dict(color="#eeeee4"),
+            tickfont=dict(color="#eeeee4"),
+            showgrid=True,
+            gridcolor='lightblue'
+        ),
+        legend=dict(
+            title='',
+            orientation='h',
+            yanchor='bottom',
+            y=1.02,
+            xanchor='center',
+            x=0.5,
+            font=dict(
+                color="#eeeee4",
+                size=12
             )
         )
+    )
 
-    return [fig]
+    return fig
+
+def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
+    # Merge actual spending data with budgets data
+    actual_spending = filtered_df.groupby('categoryname')['amount'].sum().reset_index()
+    budget_data = categorical_budgets_df[['categoryname', 'categorybudget']].groupby('categoryname').sum().reset_index() 
+    
+    # Merging the actual spending with the budgets
+    summary_df = pd.merge(budget_data, actual_spending, on='categoryname', how='left')
+    summary_df.fillna(0, inplace=True)  # Replace NaN with 0 for categories with no spending
+
+    summary_df.rename(columns={'categorybudget': 'Budget', 'amount': 'Spent'}, inplace=True)
+
+    # Create the bar chart for Budget vs Actual Spending
+    fig = px.bar(
+        summary_df, 
+        x='categoryname', 
+        y=['Budget', 'Spent'],
+        labels={
+            'categoryname': 'category types',
+            'value': 'amount ($)', #represented with 2 different y-values, so is labeled as 'value'
+            'variable': '' #represented with 2 different y-values, so is labeled as 'value'
+        },
+        barmode='group',
+        color_discrete_sequence=["#92154f", "#f19500"]  # Blue for Budget, Red for Actual Spending
+    )
+    
+    fig.update_layout(
+        margin=dict(l=0, r=0, t=0, b=0),
+        # showlegend=False,
+        xaxis_tickangle=45,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+
+        legend = dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            font=dict(
+                color="#eeeee4",
+                size=12
+            )
+        ),
+        xaxis=dict(
+            title_font=dict(color="#eeeee4"),  # Color for the X-axis title
+            tickfont=dict(
+                color="#eeeee4",
+                size=10
+                ),  # Color for the X-axis ticks
+            showgrid=True,  # Determines whether or not grid lines are drawn
+            gridcolor='rgba(0,0,0,0)'  # Color of grid lines
+        ),
+        yaxis=dict(
+            title_font=dict(color="#eeeee4"),  # Color for the Y-axis title
+            tickfont=dict(color="#eeeee4"),  # Color for the Y-axis ticks
+            showgrid=True,  # Determines whether or not grid lines are drawn
+            gridcolor='lightblue'  # Color of grid lines
+        )
+    )
+                 
+    return fig
 
 # ------------------------------------------------------------------------------
+# Callback for adding transactions
 @app.callback(
     Output('transaction_status', 'children'),
     [Input('submit_transaction', 'n_clicks')],
-    [State('input_date', 'date'), State('input_amount', 'value'), State('input_category', 'value'), State('input_description', 'value')]
+    [State('input_date', 'date'), 
+     State('input_amount', 'value'), 
+     State('input_category', 'value'), 
+     State('input_description', 'value')]
 )
 
 def add_transaction(n_clicks, date, amount, category, description):
@@ -296,6 +615,7 @@ def add_transaction(n_clicks, date, amount, category, description):
     return "" # If the button has not been clicked
 
 # ------------------------------------------------------------------------------
+# Update the budget overview when a new month is selected
 @app.callback(
     [Output('budget_overview', 'children'),
      Output('input_total_budget', 'value'),
@@ -340,6 +660,7 @@ def display_budget_overview(selected_month, selected_year, _):
     return budget_overview, total_budget, budget_table_data, unallocated_budget_display
 
 # ------------------------------------------------------------------------------
+# Update the total budget when a new total budget is submitted
 @app.callback(
     Output('total_budget_status', 'children'),
     [Input('submit_total_budget', 'n_clicks')],
@@ -378,6 +699,7 @@ def update_total_budget(n_clicks, selected_month, selected_year, total_budget):
     return ""
 
 # ------------------------------------------------------------------------------
+# Update the category budget when a new category budget is submitted
 @app.callback(
     Output('category_budget_status', 'children'),
     [Input('submit_category_budget', 'n_clicks')],
@@ -405,6 +727,7 @@ def update_category_budget(n_clicks, selected_category, new_category_budget):
     return ""
 
 # ------------------------------------------------------------------------------
+# Force an update to the budget table when a new category budget is submitted
 @app.callback(
     Output('update_trigger', 'children'),
     [Input('submit_total_budget', 'n_clicks'),

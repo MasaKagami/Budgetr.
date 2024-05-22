@@ -1,0 +1,182 @@
+.background {
+    background-color: #1e2130;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: auto;
+    font-family: 'Lexend', sans-serif;
+}
+
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.dashboard{
+    width: 100%;
+    max-width: 80%;
+    flex-direction: column;
+    background-color: #1e2130;
+    color: white;
+    padding: 20px;
+}
+
+.header{
+    font-weight: 600;
+    font-size: 30px;
+    padding: 10px 0;
+    display: flex; /* row by default */
+    align-items: center;
+    justify-content: left;
+    width: 100%;
+    /* background-color: gray; */
+}
+
+.selectYearandMonth{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.selectYearandMonth H4{
+    font-size: 16px;
+    margin-right: 10px;
+    font-weight: 400;
+    flex-shrink: 0;
+}
+
+.dropdownYear{
+    color: black;
+    width: 100px;
+    margin-right: 5px;
+}
+
+.dropdownMonth {
+    color: black;
+    width: 130px;
+}
+
+.button{
+    display: flex;
+    width: 100%;
+    height: auto;
+}
+
+.button button{
+    flex: 1;
+    cursor: pointer;
+    padding: 10px 15px; /* 10 is for top and bottom, 15 is for left and right */
+    font-size: 16px;
+    font-weight: 400;
+    background-color: #151a28;
+    color: white;
+    border: none; 
+    margin-bottom: 8px;
+}
+
+.button button:first-child{
+    margin-right: 8px;
+}
+
+.dataContainer{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+    width: 100%;
+    /* background-color: gray; */
+}
+
+.dataTitle{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.section3{
+    background-color: #151a28;
+    padding: 0 20px;
+    padding-bottom: 20px;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.financial-overview{
+    margin-bottom: 30px;
+}
+
+.outputBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border: solid #eeeee7;
+    color: #f8d44c;
+    height: auto;
+    padding: 20px 0;
+}
+
+.netBalanceOutput{
+    font-size: 80px;
+    font-weight: 700;
+}
+
+.statusOutput{
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.dataContainer2{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.section4{ /* consists of the daily spending trend and budge v actual */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.daily-spending-trend{
+    padding: 0 20px;
+    padding-bottom: 20px;
+    flex: 1;
+    margin-right: 10px;
+    background-color: #151a28;
+}
+
+.budget-vs-actual-spending{
+    padding: 0 20px;
+    padding-bottom: 20px;
+    flex: 1;
+    background-color: #151a28;
+}
+
+.section5{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #151a28;
+    padding: 0 20px;
+    padding-bottom: 20px;
+}
+
+.section4, .section5 {
+    flex: 1; /* Flex grow to take up available space in dataContainer2 equally */
+    /* padding: 20px; */
+}
+
+.section3, .dataContainer2 {
+    align-items: stretch; /* Align items to stretch to fill the container */
+    flex-grow: 1; /* Allow the containers to grow as needed */
+}
