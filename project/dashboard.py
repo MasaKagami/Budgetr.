@@ -351,17 +351,16 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
         y='Cumulative Spending',
         labels={
             'Cumulative Spending': 'cumulative spending ($)',
-            'Day': 'day of the month'
+            'Day': 'day'
         },
         color='Status',
         color_discrete_map={'Under': 'green', 'Over': 'red'},
         markers=True,
-        # color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
     )
     
     # Add the 'Over' segment if it exists
     if not over_spending.empty:
-        fig.add_scatter(x=over_spending['Day'], y=over_spending['Cumulative Spending'], mode='lines+markers', name='Over', line=dict(color='red', width=3))
+        fig.add_scatter(x=over_spending['Day'], y=over_spending['Cumulative Spending'], mode='lines+markers', name='Over', line=dict(color='red', width=3), showlegend= False)
 
     #add budget line to function
     fig.add_scatter(x=budget_line['Day'], y=budget_line['Total Budget'], mode='lines', name='Total Budget', line=dict(color='red', dash='dash'))
