@@ -44,6 +44,11 @@ transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budget
 # print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
 # print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
+# Prepare the transactions DataFrame for the dashboard, convert date to datetime object
+transactions_df['date'] = pd.to_datetime(transactions_df['date'])
+transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
+transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
+
 # Dictionary to convert month names to integer values
 monthsToInt = {
     'January': 1,
@@ -80,34 +85,8 @@ app.layout = html.Div([
             html.Button('DASHBOARD', id='view_dashboard'),
             html.Button('SPENDINGS', id='input_spendings')
         ], className='button', style={'text-align': 'center', 'margin-bottom': '20px'}),
-        html.Div(id='page_content', className='dataContainer') # Contains the components (and ids) for the dashboard and spendings pages
-    ], className='dashboard')
-], className='background')
 
-# ------------------------------------------------------------------------------
-# Switch between pages based on the button clicked
-@app.callback(
-    Output('page_content', 'children'),
-    [Input('input_spendings', 'n_clicks'),
-     Input('view_dashboard', 'n_clicks')]
-)
-
-def render_page(input_spendings_clicks=None, view_dashboard_clicks=None):
-    ctx = callback_context
-    if not ctx.triggered:
-        # Set the default button ID if no button has been clicked
-        button_id = 'view_dashboard'
-    else:
-        # Get the ID of the button that triggered the callback
-        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-
-    if button_id == 'view_dashboard':
-        # Prepare the transactions DataFrame for the dashboard, convert date to datetime object
-        transactions_df['date'] = pd.to_datetime(transactions_df['date'])
-        transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
-        transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
-
-        return html.Div([
+        html.Div(id='dashboard_page', style={'display': 'none'}, children=[
             html.Div([
                 html.H4("Select Year and Month: "),
                 dcc.Dropdown(
@@ -116,7 +95,7 @@ def render_page(input_spendings_clicks=None, view_dashboard_clicks=None):
                         {'label': str(year), 'value': year} for year in range(2000, current_year + 1)
                     ],
                     multi=False,
-                    value=current_year, # Initial value
+                    value=current_year-1, # Initial value (last year)
                     className='dropdownYear',
                     style={'width': "150px", 'margin': '10px auto'}
                 ),
@@ -190,10 +169,9 @@ def render_page(input_spendings_clicks=None, view_dashboard_clicks=None):
                     )
                 ], className='section5'),
             ], className='dataContainer2')
-        ])
-    
-    elif button_id == 'input_spendings':
-        return html.Div([
+        ], className= 'dataContainer'), # Contains all the data components for the dashboard page
+
+        html.Div(id='spendings_page', style={'display': 'none'}, children=[
             html.H2("Add a New Transaction", style={'text-align': 'center'}),
             dcc.DatePickerSingle(
                 id='input_date',
@@ -283,9 +261,35 @@ def render_page(input_spendings_clicks=None, view_dashboard_clicks=None):
 
             # Hidden div to store update triggers
             html.Div(id='update_trigger', style={'display': 'none'})
-        ])
+        ]),
+    ], className='dashboard')
+], className='background')
 
-    return html.Div()  # Default content if no button is clicked
+# ------------------------------------------------------------------------------
+# Callback to switch between pages
+@app.callback(
+    [Output('dashboard_page', 'style'),
+     Output('spendings_page', 'style')],
+    [Input('input_spendings', 'n_clicks'),
+     Input('view_dashboard', 'n_clicks')]
+)
+
+def toggle_pages(input_spendings_clicks=None, view_dashboard_clicks=None):
+    ctx = callback_context
+    if not ctx.triggered:
+        # Set the default button ID if no button has been clicked
+        button_id = 'view_dashboard'
+    else:
+        # Get the ID of the button that triggered the callback
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    # Return the display style for the dashboard and spendings pages
+    if button_id == 'view_dashboard':
+        return {'display': 'block'}, {'display': 'none'}
+    elif button_id == 'input_spendings':
+        return {'display': 'none'}, {'display': 'block'}
+
+    return {'display': 'none'}, {'display': 'block'} # Default to the dashboard page
 
 # ------------------------------------------------------------------------------
 # Callback for updating the dashboard page
