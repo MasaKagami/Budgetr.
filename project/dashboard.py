@@ -596,7 +596,7 @@ def add_transaction(n_clicks, date, amount, category, description):
         new_transaction = {
             'transactionid': transactions_df['transactionid'].max() + 1, # Increment the transaction ID
             'userid': 1, # Hardcoded for now
-            'date': date,
+            'date': date + ' 00:00:00',
             'categoryname': category,
             'amount': amount, 
             'description': description
