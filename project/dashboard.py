@@ -276,7 +276,6 @@ def determine_status(monthly_budget, total_spent, selected_year, selected_month)
     else:
         status_key = "SEVERE"
 
-
     return status_key, status_colors[status_key]
 
 def calculated_daily_budget(monthly_budget, year, month):
