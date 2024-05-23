@@ -56,17 +56,22 @@ app.layout = html.Div([
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
         rel='stylesheet'
     ),
-    # html.Div([
+
+# ------------------------------------------------------------------------------
+# Side Bar
+
     html.Div([
+
         dcc.Link('Dashboard', href='/dashboard', className='tab'),
-        dcc.Link('Record Spendings', href='/record-spendings', className='tab'),
+        dcc.Link('Record Spendings', href='/record', className='tab'),
         dcc.Link('Settings', href='/settings', className='tab'),
         dcc.Link('Support', href='/support', className='tab'),
         dcc.Link('Logout', href='/logout', className='tab')
+        
     ], className='sidebar'),
 
-
-    # ], className= 'sidebar'),
+# ------------------------------------------------------------------------------
+# Dashboard
 
     html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
