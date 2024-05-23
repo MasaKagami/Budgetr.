@@ -17,6 +17,27 @@ html, body{
     overflow-x: hidden;
 }
 
+.sidebar{
+    width:15%;
+    background: black;
+    display:flex;
+    flex-direction: column;
+}
+
+.sidebarOptions{
+    width: 100%;
+    background-color: gray;
+}
+
+.tab {
+    background-color: blue;
+    margin: 10px 0;  
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+}
+
+
 .dashboard{
     width: 100%;
     max-width: 90%;
