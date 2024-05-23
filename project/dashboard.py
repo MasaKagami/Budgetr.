@@ -83,7 +83,7 @@ app.layout = html.Div([
         rel='stylesheet'
     ),
     html.Div([
-        html.H1("My Financial Dashboard", style={'text-align': 'center'}),
+        html.H1("MyFINANCE DASHBOARD", style={'text-align': 'center'}),
         html.Div([
             html.Button('DASHBOARD', id='view_dashboard'),
             html.Button('SPENDINGS', id='input_spendings')
