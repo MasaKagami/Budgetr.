@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context
+from turtle import width
 
 app = Dash(__name__)
 app.title = 'myfinanceplanner'
@@ -21,7 +22,9 @@ def load_data():
     users_df = pd.read_sql("SELECT * FROM Users;", engine)
     monthly_budgets_df = pd.read_sql("SELECT * FROM MonthlyBudgets;", engine, parse_dates=['budgetmonth'])
     categorical_budgets_df = pd.read_sql("SELECT * FROM CategoricalBudgets;", engine)
-    engine.dispose()  # Close the connection safely
+    
+    # Close the connection safely
+    engine.dispose()
 
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
@@ -38,11 +41,11 @@ def load_local_database():
 transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
 # transactions_df, categories_df, users_df, budgets_df = load_data()
 
-# print('\nTRANSACTIONS DB\n', transactions_df[:5])
-# print('CATEGORIES DB\n', categories_df[:5])
-# print('USERS DB\n', users_df[:5])
-# print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
-# print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
+print('\nTRANSACTIONS DB\n', transactions_df[:5])
+print('CATEGORIES DB\n', categories_df[:5])
+print('USERS DB\n', users_df[:5])
+print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
+print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
 # Prepare the transactions DataFrame for the dashboard, convert date to datetime object
 transactions_df['date'] = pd.to_datetime(transactions_df['date'])
@@ -305,20 +308,26 @@ def toggle_pages(input_spendings_clicks=None, view_dashboard_clicks=None):
 )
 
 def update_graph(selected_year, selected_month):
-    # Filter the DataFrame to the selected month
+    # Filters to only include rows where the year and month match the input year and month
+    # Boolean indexing: [ ] filters rows based on a condition
     filtered_df = transactions_df[(transactions_df['date'].dt.year == selected_year) &
                                   (transactions_df['date'].dt.month == selected_month)]
 
+    # total spent in a month
     total_spent = filtered_df['amount'].sum()
 
+    # converting to date-time
     monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
 
+    # .iloc[0] retrieves the first value from the resulting series
     monthly_budget = monthly_budgets_df[
         (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
         (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
     ]['totalbudget'].iloc[0]
 
     net_balance = monthly_budget - total_spent
+    print("Net Balance:", net_balance)  # Debugging statement
+
     net_balance_output = format_net_balance(net_balance)
     net_balance_output = html.Span(net_balance_output, className='netBalanceOutput')
     
@@ -326,19 +335,15 @@ def update_graph(selected_year, selected_month):
     status_output = html.Span(status_text, style={'color': color}, className='statusOutput')
 
     expense_categorization_fig = update_expense_categorization_graph(filtered_df)
-    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month)
+    daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budget)
     budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
     
     transactions_table_data = filtered_df[['date_display', 'categoryname', 'amount', 'description']].to_dict('records')
-
+    
+    # same order as in the output call-back
     return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig, transactions_table_data
 
-def calculated_daily_budget(monthly_budget, year, month):
-    days_in_month = pd.Period(f'{year}-{month}').days_in_month
-    return monthly_budget/days_in_month
-
 def format_net_balance(net_balance, ):
-    print("Net Balance:", net_balance)  # Debugging statement
     if net_balance < 0:
         formatted_balance = f"({-net_balance})"
     else:
@@ -347,6 +352,7 @@ def format_net_balance(net_balance, ):
     return formatted_balance
 
 def determine_status(monthly_budget, total_spent, selected_year, selected_month):
+    # key-value pairs
     status_colors = {
         "EXCELLENT": "#00FF00",     
         "VERY GOOD": "#7FFF00",     
@@ -393,13 +399,31 @@ def determine_status(monthly_budget, total_spent, selected_year, selected_month)
 
     return status_key, status_colors[status_key]
 
+def calculated_daily_budget(monthly_budget, year, month):
+    days_in_month = pd.Period(f'{year}-{month}').days_in_month
+    return monthly_budget/days_in_month
+
 def update_expense_categorization_graph(filtered_df):
+    category_Colors = {
+        "housing": "red", 
+        "investments": "blue", 
+        "debt payments": "green",
+        "healthcare": "purple", 
+        "food": "pink",
+        "entertainment & lesiure": "gold", 
+        "education": "gray", 
+        "transportation": "silver", 
+        "personal care": "yellow", 
+        "miscellaneous": "orange"
+    }
+    
     fig = px.pie(
         filtered_df, 
         values='amount', 
         names='categoryname', 
         color='categoryname',
-        hole=0.3
+        hole=0.3,
+        color_discrete_map=category_Colors
     )
 
     fig.update_traces(
@@ -419,59 +443,90 @@ def update_expense_categorization_graph(filtered_df):
         legend=dict(
             font=dict(
                 color="#eeeee4",
-                size=10
+                size=11
             )
         )
     )
 
     return fig
 
-def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_year, selected_month):
-    # Ensure 'budgetmonth' is a datetime object
-    monthly_budgets_df['budgetmonth'] = pd.to_datetime(monthly_budgets_df['budgetmonth'])
-
-    # Extract the monthly budget for the selected year and month
-    monthly_budget = monthly_budgets_df[
-        (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
-        (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
-    ]['totalbudget'].iloc[0]  # Get the first item
-
+def update_daily_spending_trend_graph(filtered_df, monthly_budget):
     # Sum daily spending and calculate cumulative total
     daily_spending = filtered_df.groupby(filtered_df['date'].dt.day)['amount'].sum().cumsum().reset_index()
     daily_spending.columns = ['Day', 'Cumulative Spending']
 
-    # Prepare a DataFrame for plotting the constant budget line
+    # Creating a new dataFrame, budget_line
     max_day = daily_spending['Day'].max()
     budget_line = pd.DataFrame({
+        # creates a column named 'day' consisting of the values '1' and 'max_day'
         'Day': [1, max_day],
         'Total Budget': [monthly_budget, monthly_budget]
     })
 
-    # Add a column to classify spending relative to budget
+    # Adds a column called 'status' to the daily_spending dataFrame
     daily_spending['Status'] = daily_spending['Cumulative Spending'].apply(
+        # The lambda keyword creates an anonymous (inline) function
+        # x: The input value (each value in the Cumulative Spending column).
         lambda x: 'Under' if x <= monthly_budget else 'Over'
     )
 
+    print("daily_spending: ")
+    print(daily_spending[:5])
+
+    over_index = daily_spending[daily_spending['Status'] == 'Over'].index.min()
+
+    # If there is an 'Over' index, create two segments: 'Under' and 'Over'
+    if not pd.isna(over_index):
+        under_spending = daily_spending.loc[:over_index]
+        # .copy ensures that modifications to over_spending doesn't affect daily_spending
+        over_spending = daily_spending.loc[over_index-1:].copy()
+        # ensures that the first row of the over_spending DataFrame is correctly labeled as 'Over'
+        over_spending.iloc[0, daily_spending.columns.get_loc('Status')] = 'Over'
+        # 1 for over_spending[1:] ensures that the first row is not duplicated  
+        combined_spending = pd.concat([under_spending, over_spending[1:]])
+    else:
+        combined_spending = daily_spending
+
     fig = px.line(
-        daily_spending,
+        combined_spending,
         x='Day',
         y='Cumulative Spending',
         labels={
             'Cumulative Spending': 'cumulative spending ($)',
-            'Day': 'day of the month'
+            'Day': 'day'
         },
         color='Status',
         color_discrete_map={'Under': 'green', 'Over': 'red'},
-        markers=True,
-        # color_discrete_sequence=["#92154f"],  # Blue for Budget, Red for Actual Spending
+        markers=True
+    )
+
+    # Add the 'Over' segment if it exists
+    if not over_spending.empty:
+        fig.add_scatter(
+            x=over_spending['Day'], 
+            y=over_spending['Cumulative Spending'], 
+            mode='lines+markers', 
+            name='Over', 
+            line=dict(color='red', 
+            width=3), 
+            showlegend= False)
+        
+    # Add budget line to the same figure
+    fig.add_scatter(
+        x=budget_line['Day'], 
+        y=budget_line['Total Budget'], 
+        mode='lines', 
+        name='Monthly Budget', 
+        line=dict(
+            color='#f8d44c', 
+            dash='dash',
+            width=5
+        )
     )
 
     fig.update_traces(
         line=dict(width=3)
-    )  # Set the line width to 4 pixels
-
-    # Add budget line to the same figure
-    fig.add_scatter(x=budget_line['Day'], y=budget_line['Total Budget'], mode='lines', name='Total Budget', line=dict(color='red', dash='dash'))
+    ) 
 
     # Customize the plot
     fig.update_layout(
@@ -484,7 +539,7 @@ def update_daily_spending_trend_graph(filtered_df, monthly_budgets_df, selected_
             tickmode='array',
             tickvals=list(range(1, max_day + 1, 1)),  # Tick every day
             tickfont=dict(
-                size=9,
+                size=10,
                 color="#eeeee4"
             ),
             title_font=dict(
@@ -540,7 +595,6 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
     
     fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),
-        # showlegend=False,
         xaxis_tickangle=45,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
@@ -560,7 +614,7 @@ def update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df):
             title_font=dict(color="#eeeee4"),  # Color for the X-axis title
             tickfont=dict(
                 color="#eeeee4",
-                size=10
+                size=11
                 ),  # Color for the X-axis ticks
             showgrid=True,  # Determines whether or not grid lines are drawn
             gridcolor='rgba(0,0,0,0)'  # Color of grid lines
@@ -737,6 +791,7 @@ def update_category_budget(n_clicks, selected_category, new_category_budget):
     [Input('submit_total_budget', 'n_clicks'),
      Input('submit_category_budget', 'n_clicks')]
 )
+
 def trigger_update(total_budget_clicks, category_budget_clicks):
     return total_budget_clicks + category_budget_clicks
 
