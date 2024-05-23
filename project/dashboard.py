@@ -57,6 +57,10 @@ app.layout = html.Div([
         rel='stylesheet'
     ),
     html.Div([
+        html.Button("☰")
+    ]),
+
+    html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
             html.H4("Select Year and Month: "),
@@ -281,18 +285,19 @@ def calculated_daily_budget(monthly_budget, year, month):
 
 def update_expense_categorization_graph(filtered_df):
 
-    category_Colors = {
-        "housing": "red", 
-        "investments": "blue", 
-        "debt payments": "green",
-        "healthcare": "purple", 
-        "food": "pink",
-        "entertainment & lesiure": "gold", 
-        "education": "gray", 
-        "transportation": "silver", 
-        "personal care": "yellow", 
-        "miscellaneous": "orange"
+    category_colors = {
+        "Housing": "#FF5733",           # Vibrant Red
+        "Investments": "#1F77B4",       # Bright Blue
+        "Debt Payments": "#2CA02C",     # Bold Green
+        "Healthcare": "#9467BD",        # Medium Purple
+        "Food": "#FF69B4",              # Hot Pink
+        "Entertainment & Leisure": "#17BECF",  # Vibrant Teal
+        "Education": "#7F7F7F",         # Neutral Gray
+        "Transportation": "#C0C0C0",    # Light Silver
+        "Personal Care": "#FFA500",     # Bright Orange
+        "Miscellaneous": "#FF4500"      # Orange Red
     }
+
 
     fig = px.pie(
         filtered_df, 
@@ -300,7 +305,7 @@ def update_expense_categorization_graph(filtered_df):
         names='categoryname', 
         color='categoryname',
         hole=0.3,
-        color_discrete_map=category_Colors
+        color_discrete_map=category_colors
     )
 
     fig.update_traces(

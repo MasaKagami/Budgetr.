@@ -1,8 +1,9 @@
 .background {
     background-color: #1e2130;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    /* align-items: center; */
     width: 100vw;
     height: auto;
     font-family: 'Lexend', sans-serif;
