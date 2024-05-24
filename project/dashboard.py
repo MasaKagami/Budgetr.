@@ -56,6 +56,10 @@ app.layout = html.Div([
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
         rel='stylesheet'
     ),
+    html.Link(
+        href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap',
+        rel='stylesheet'
+    ),
 
 # ------------------------------------------------------------------------------
 # Side Bar
@@ -63,6 +67,8 @@ app.layout = html.Div([
     #input 'url'
     dcc.Location(id='url', refresh=False), 
     html.Div([
+        html.H1("Budgetr", className='logo'),
+        # html.Img(src='/assets/Solid_white.png', className='logo'),
         dcc.Link('Dashboard', href='/dashboard', className='tab', id='tab-dashboard'),
         dcc.Link('Record Spendings', href='/record', className='tab', id='tab-record'),
         dcc.Link('Settings', href='/settings', className='tab', id='tab-settings'),
@@ -191,8 +197,9 @@ app.layout = html.Div([
         Output('tab-support', 'className'),
         Output('tab-logout', 'className')
     ],
-
-    [Input('url', 'pathname')]
+    [
+        Input('url', 'pathname')
+    ]
 )
 
 def update_tab_active(pathname):

@@ -24,6 +24,15 @@ html, body{
     flex-direction: column;
 }
 
+.logo{
+    width:100%;
+    height:auto;
+    padding: 30px 10px;
+    /* background-color: gray; */
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
 /* .sidebarOptions{
     width: 100%;
     background-color: 2a2d37;
@@ -32,7 +41,7 @@ html, body{
 .tab {
     background-color: #1e2130;
     padding: 30px 10px;
-    border-bottom: 1px black solid;
+    /* border-bottom: 1px black solid; */
     text-decoration: none;
     color: white;
     font-size: 14px;
@@ -43,7 +52,7 @@ html, body{
     background-color: #2d2f3a;
 }
 
-.active .tab:hover{
+.tab.active{
     background-color: #0d0f16;
 }
 
