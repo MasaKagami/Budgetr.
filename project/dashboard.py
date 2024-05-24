@@ -15,15 +15,28 @@ def load_data():
 
     # Creating an SQLAlchemy engine
     engine = create_engine(DATABASE_URL)
+
+    # Load transactions
+    transactions_query = "SELECT * FROM Transactions;"
+    transactions_df = pd.read_sql(transactions_query, engine, parse_dates=['date'])
+
+    # Load monthly budgets
+    monthly_budgets_query = "SELECT * FROM MonthlyBudgets;"
+    monthly_budgets_df = pd.read_sql(monthly_budgets_query, engine)
+
+    # Load categorical budgets
+    categorical_budgets_query = "SELECT * FROM CategoricalBudgets;"
+    categorical_budgets_df = pd.read_sql(categorical_budgets_query, engine)
+
+    # Load categories
+    categories_df_query = "SELECT * FROM Categories;"
+    categories_df = pd.read_sql(categories_df_query, engine)
     
-    # Use the engine to execute a query and load into DataFrame
-    transactions_df = pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
-    categories_df = pd.read_sql("SELECT * FROM Categories;", engine)
-    users_df = pd.read_sql("SELECT * FROM Users;", engine)
-    monthly_budgets_df = pd.read_sql("SELECT * FROM MonthlyBudgets;", engine, parse_dates=['budgetmonth'])
-    categorical_budgets_df = pd.read_sql("SELECT * FROM CategoricalBudgets;", engine)
+    # Load users
+    users_df_query = "SELECT * FROM Users;"
+    users_df = pd.read_sql(users_df_query, engine)
     
-    # Close the connection safely
+    # Close the connection
     engine.dispose()
 
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
@@ -76,105 +89,129 @@ current_month = datetime.now().month
 current_year = datetime.now().year
 
 # ------------------------------------------------------------------------------
-# Main App layout
+# App layout
+
 app.layout = html.Div([
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
         rel='stylesheet'
     ),
+    html.Link(
+        href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap',
+        rel='stylesheet'
+    ),
+
+    # ------------------------------------------------------------------------------
+    # Side Bar
+
+    #input 'url'
+    dcc.Location(id='url', refresh=False), 
+    html.Div([
+        html.H1("Budgetr", className='logo'),
+        # html.Img(src='/assets/Solid_white.png', className='logo'),
+        dcc.Link('Dashboard', href='/dashboard', className='tab', id='tab-dashboard'),
+        dcc.Link('Record Spendings', href='/record', className='tab', id='tab-record'),
+        dcc.Link('Settings', href='/settings', className='tab', id='tab-settings'),
+        dcc.Link('Support', href='/support', className='tab', id='tab-support'),
+        dcc.Link('Logout', href='/logout', className='tab', id='tab-logout')
+
+    ], className='sidebar'),
+
+    # ------------------------------------------------------------------------------
+    # Dashboard
+
     html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
-            html.Button('DASHBOARD', id='view_dashboard'),
-            html.Button('SPENDINGS', id='input_spendings')
-        ], className='button', style={'text-align': 'center', 'margin-bottom': '20px'}),
+            html.H4("Select Year and Month: "),
+            dcc.Dropdown(
+                id="slct_year",
+                options=[
+                    {'label': str(year), 'value': year} for year in range(2000, current_year + 1)
+                ],
+                multi=False,
+                value=current_year-1, # Initial value (last year)
+                className='dropdownYear'),
 
-        html.Div(id='dashboard_page', style={'display': 'none'}, children=[
+            dcc.Dropdown(
+                id="slct_month",
+                options=[{'label': key, 'value': value} for key, value in monthsToInt.items()],
+                multi=False,
+                value=current_month, # Initial value
+                className='dropdownMonth'),
+        ], className='selectYearandMonth'),
+
+        html.Div([
+            html.Button('INPUT SPENDINGS', id='input_spendings'),
+            html.Button('VIEW DASHBOARD', id='view_dashboard')
+        ], className= 'button'),
+
+        html.Div([
             html.Div([
-                html.H4("Select Year and Month: "),
-                dcc.Dropdown(
-                    id="slct_year",
-                    options=[
-                        {'label': str(year), 'value': year} for year in range(2000, current_year + 1)
-                    ],
-                    multi=False,
-                    value=current_year-1, # Initial value (last year)
-                    className='dropdownYear',
-                    style={'width': "150px", 'margin': '10px auto'}
-                ),
-                dcc.Dropdown(
-                    id="slct_month",
-                    options=[{'label': key, 'value': value} for key, value in monthsToInt.items()],
-                    multi=False,
-                    value=current_month, # Initial value
-                    className='dropdownMonth',
-                    style={'width': "150px", 'margin': '10px auto'}
-                ),
-            ], className='selectYearandMonth'),
+                html.Div([
+                    # html.H3("Financial Overview", className = 'dataTitle'),
+                    html.H3("Net Balance", className='dataTitle'),
+                    html.Div([
+                        html.P(id='net-balance-output'),
+                    ], className='outputBox'),
+                    html.H3("Status", className='dataTitle'),
+                    html.Div([
+                        html.P(id='status-output'),
+                    ], className='outputBox')
+                ], className= 'financial-overview'),
+
+                html.Div([
+                    html.H3("Expense Cateogrization", className='dataTitle'),
+                    dcc.Graph(id='expense_categorization_graph', figure={}),
+                ], className= 'expense-categorization')
+            ], className= 'section3'),
 
             html.Div([
                 html.Div([
                     html.Div([
-                        # html.H3("Financial Overview", className = 'dataTitle'),
-                        html.H3("Net Balance", className='dataTitle'),
-                        html.Div([
-                            html.P(id='net-balance-output'),
-                        ], className='outputBox'),
-                        html.H3("Status", className='dataTitle'),
-                        html.Div([
-                            html.P(id='status-output'),
-                        ], className='outputBox')
-                    ], className='financial-overview'),
+                        html.H3("Daily Spending Trend", className='dataTitle'),
+                        dcc.Graph(id='daily_spending_trend_graph', figure={}),
+                    ], className= 'daily-spending-trend'),
 
                     html.Div([
-                        html.H3("Expense Categorization", className='dataTitle'),
-                        dcc.Graph(id='expense_categorization_graph', figure={}),
-                    ], className='expense-categorization')
-                ], className='section3'),
-
+                        html.H3("Budget vs. Actual Spending Per Category", className='dataTitle'),
+                        dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
+                    ], className= 'budget-vs-actual-spending'),
+                    
+                ], className= 'section4'),
                 html.Div([
-                    html.Div([
-                        html.Div([
-                            html.H3("Daily Spending Trend", className='dataTitle'),
-                            dcc.Graph(id='daily_spending_trend_graph', figure={}),
-                        ], className= 'daily-spending-trend'),
+                    html.H3("Recent Transactions", className = 'dataTitle'),
+                    dash_table.DataTable(
+                        id='transactions_table',
+                        columns=[
+                                    {"name": "Date", "id": "date_display"},
+                                    {"name": "Category Name", "id": "categoryname"},
+                                    {"name": "Amount", "id": "amount"},
+                                    {"name": "Description", "id": "description"}
+                        ],
 
-                        html.Div([
-                            html.H3("Budget vs. Actual Spending Per Category", className='dataTitle'),
-                            dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
-                        ], className= 'budget-vs-actual-spending'),
-                    ], className= 'section4'),
-                    html.Div([
-                        html.H3("Recent Transactions", className = 'dataTitle'),
-                        dash_table.DataTable(
-                            id='transactions_table',
-                            columns=[
-                                        {"name": "Date", "id": "date_display"},
-                                        {"name": "Category Name", "id": "categoryname"},
-                                        {"name": "Amount", "id": "amount"},
-                                        {"name": "Description", "id": "description"}
-                            ],
-
-                            data=transactions_df.to_dict('records'),
-                            style_table={
-                                'height': '300px',
-                                'overflowY': 'auto'
-                            },
-                            style_cell={
-                                'textAlign': 'left',
-                                'color': 'white',
-                                'backgroundColor': '#151a28',
-                                'border': 'none'
-                            },
-                            style_header={
-                                'backgroundColor': '#222222',
-                                'fontWeight': 'bold'
-                            }
-                        )
-                    ], className= 'section5')
+                        data=transactions_df.to_dict('records'),
+                        style_table={
+                            'height': '300px',
+                            'overflowY': 'auto'
+                        },
+                        style_cell={
+                            'textAlign': 'left',
+                            'color': 'white',
+                            'backgroundColor': '#151a28',
+                            'border': 'none'
+                        },
+                        style_header={
+                            'backgroundColor': '#222222',
+                            'fontWeight': 'bold'
+                        }
+                    )
+                ], className= 'section5')
             ], className= 'dataContainer2')
-        ], className= 'dataContainer') # Contains all the data components for the dashboard page
-    ], className='dashboard'),
+    ], className='dataContainer'),
+
+    # ------------------------------------------------------------------------------
+    # Spendings and Budget
 
         html.Div(id='spendings_page', style={'display': 'none'}, children=[
             html.H2("Add a New Transaction", style={'text-align': 'center'}),
@@ -268,13 +305,43 @@ app.layout = html.Div([
             html.Div(id='update_trigger', style={'display': 'none'})
         ]),
     ], className='dashboard') # Contains the buttons and different pages of the dashboard
-    # Consider changing the classname from 'dashboard' to something else so it's less confusing
+    # Consider changing from 'dashboard' to something else so it's less confusing
 ], className='background')
+
+# ------------------------------------------------------------------------------
+# Callback for active state of tabs
+
+@app.callback(
+    [
+        Output('tab-dashboard', 'className'),
+        Output('tab-record', 'className'),
+        Output('tab-settings', 'className'),
+        Output('tab-support', 'className'),
+        Output('tab-logout', 'className')
+    ],
+    [
+        Input('url', 'pathname')
+    ]
+)
+
+def update_tab_active(pathname):
+    # Default class for all tabs
+    default_class = 'tab'
+
+    # Active class for the currently selected tab
+    active_class = 'tab active'
+    return [
+        active_class if pathname == '/dashboard' else default_class,
+        active_class if pathname == '/record' else default_class,
+        active_class if pathname == '/settings' else default_class,
+        active_class if pathname == '/support' else default_class,
+        active_class if pathname == '/logout' else default_class,
+    ]
 
 # ------------------------------------------------------------------------------
 # Callback to switch between pages
 @app.callback(
-    [Output('dashboard_page', 'style'),
+    [Output('dashboard', 'style'),
      Output('spendings_page', 'style')],
     [Input('input_spendings', 'n_clicks'),
      Input('view_dashboard', 'n_clicks')]
@@ -346,7 +413,7 @@ def update_graph(selected_year, selected_month):
     # same order as in the output call-back
     return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig, transactions_table_data
 
-def format_net_balance(net_balance, ):
+def format_net_balance(net_balance):
     if net_balance < 0:
         formatted_balance = f"({-net_balance})"
     else:
@@ -407,26 +474,26 @@ def calculated_daily_budget(monthly_budget, year, month):
     return monthly_budget/days_in_month
 
 def update_expense_categorization_graph(filtered_df):
-    category_Colors = {
-        "housing": "red", 
-        "investments": "blue", 
-        "debt payments": "green",
-        "healthcare": "purple", 
-        "food": "pink",
-        "entertainment & lesiure": "gold", 
-        "education": "gray", 
-        "transportation": "silver", 
-        "personal care": "yellow", 
-        "miscellaneous": "orange"
+    category_colors = {
+        "Housing": "#FF5733",           # Vibrant Red
+        "Investments": "#1F77B4",       # Bright Blue
+        "Debt Payments": "#2CA02C",     # Bold Green
+        "Healthcare": "#9467BD",        # Medium Purple
+        "Food": "#FF69B4",              # Hot Pink
+        "Entertainment & Leisure": "#17BECF",  # Vibrant Teal
+        "Education": "#7F7F7F",         # Neutral Gray
+        "Transportation": "#C0C0C0",    # Light Silver
+        "Personal Care": "#FFA500",     # Bright Orange
+        "Miscellaneous": "#FF4500"      # Orange Red
     }
-    
+
     fig = px.pie(
         filtered_df, 
         values='amount', 
         names='categoryname', 
         color='categoryname',
         hole=0.3,
-        color_discrete_map=category_Colors
+        color_discrete_map=category_colors
     )
 
     fig.update_traces(
