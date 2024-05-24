@@ -38,8 +38,8 @@ def load_local_database():
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 # Loading data
-transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
-# transactions_df, categories_df, users_df, budgets_df = load_data()
+# transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
+transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_data()
 
 print('\nTRANSACTIONS DB\n', transactions_df[:5])
 print('CATEGORIES DB\n', categories_df[:5])
@@ -83,7 +83,7 @@ app.layout = html.Div([
         rel='stylesheet'
     ),
     html.Div([
-        html.H1("MyFINANCE DASHBOARD", style={'text-align': 'center'}),
+        html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
             html.Button('DASHBOARD', id='view_dashboard'),
             html.Button('SPENDINGS', id='input_spendings')
@@ -134,45 +134,47 @@ app.layout = html.Div([
 
                 html.Div([
                     html.Div([
-                        html.H3("Daily Spending Trend", className='dataTitle'),
-                        dcc.Graph(id='daily_spending_trend_graph', figure={}),
-                    ], className='daily-spending-trend'),
+                        html.Div([
+                            html.H3("Daily Spending Trend", className='dataTitle'),
+                            dcc.Graph(id='daily_spending_trend_graph', figure={}),
+                        ], className= 'daily-spending-trend'),
 
+                        html.Div([
+                            html.H3("Budget vs. Actual Spending Per Category", className='dataTitle'),
+                            dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
+                        ], className= 'budget-vs-actual-spending'),
+                    ], className= 'section4'),
                     html.Div([
-                        html.H3("Budget vs. Actual Spending Per Category", className='dataTitle'),
-                        dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
-                    ], className='budget-vs-actual-spending'),
-                ], className='section4'),
+                        html.H3("Recent Transactions", className = 'dataTitle'),
+                        dash_table.DataTable(
+                            id='transactions_table',
+                            columns=[
+                                        {"name": "Date", "id": "date_display"},
+                                        {"name": "Category Name", "id": "categoryname"},
+                                        {"name": "Amount", "id": "amount"},
+                                        {"name": "Description", "id": "description"}
+                            ],
 
-                html.Div([
-                    html.H3("Recent Transactions", className='dataTitle'),
-                    dash_table.DataTable(
-                        id='transactions_table',
-                        columns=[
-                            {"name": "Date", "id": "date_display"},
-                            {"name": "Category Name", "id": "categoryname"},
-                            {"name": "Amount", "id": "amount"},
-                            {"name": "Description", "id": "description"}
-                        ],
-                        data=transactions_df.to_dict('records'),
-                        style_table={
-                            'height': '300px',
-                            'overflowY': 'auto'
-                        },
-                        style_cell={
-                            'textAlign': 'left',
-                            'color': 'white',
-                            'backgroundColor': '#151a28',
-                            'border': 'none'
-                        },
-                        style_header={
-                            'backgroundColor': '#222222',
-                            'fontWeight': 'bold'
-                        }
-                    )
-                ], className='section5'),
-            ], className='dataContainer2')
-        ], className= 'dataContainer'), # Contains all the data components for the dashboard page
+                            data=transactions_df.to_dict('records'),
+                            style_table={
+                                'height': '300px',
+                                'overflowY': 'auto'
+                            },
+                            style_cell={
+                                'textAlign': 'left',
+                                'color': 'white',
+                                'backgroundColor': '#151a28',
+                                'border': 'none'
+                            },
+                            style_header={
+                                'backgroundColor': '#222222',
+                                'fontWeight': 'bold'
+                            }
+                        )
+                    ], className= 'section5')
+            ], className= 'dataContainer2')
+        ], className= 'dataContainer') # Contains all the data components for the dashboard page
+    ], className='dashboard'),
 
         html.Div(id='spendings_page', style={'display': 'none'}, children=[
             html.H2("Add a New Transaction", style={'text-align': 'center'}),
@@ -265,7 +267,8 @@ app.layout = html.Div([
             # Hidden div to store update triggers
             html.Div(id='update_trigger', style={'display': 'none'})
         ]),
-    ], className='dashboard')
+    ], className='dashboard') # Contains the buttons and different pages of the dashboard
+    # Consider changing the classname from 'dashboard' to something else so it's less confusing
 ], className='background')
 
 # ------------------------------------------------------------------------------
