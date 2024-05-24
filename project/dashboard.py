@@ -38,8 +38,8 @@ def load_local_database():
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 # Loading data
-transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
-# transactions_df, categories_df, users_df, budgets_df = load_data()
+# transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
+transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_data()
 
 print('\nTRANSACTIONS DB\n', transactions_df[:5])
 print('CATEGORIES DB\n', categories_df[:5])
