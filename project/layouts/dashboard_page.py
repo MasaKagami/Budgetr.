@@ -1,10 +1,13 @@
 from dash import html, dcc, dash_table
-from datetime import datetime
+import pandas as pd
+from load_data import current_month, current_year, monthsToInt
 
-current_year = datetime.now().year
-current_month = datetime.now().month
+def dashboard_page(transactions_df):
+    # Prepare the transactions data by converting the date to a datetime object
+    transactions_df['date'] = pd.to_datetime(transactions_df['date'])
+    transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
+    transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
 
-def dashboard_page(transactions_df, monthsToInt):
     return html.Div([
         html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
@@ -12,17 +15,17 @@ def dashboard_page(transactions_df, monthsToInt):
             dcc.Dropdown(
                 id="slct_year",
                 options=[
-                    {'label': str(year), 'value': year} for year in range(2000, current_year + 1)
+                    {'label': str(year), 'value': year} for year in range(2000, current_year() + 1)
                 ],
                 multi=False,
-                value=current_year-1, # Initial value (last year)
+                value=current_year()-1, # Initial value (last year)
                 className='dropdownYear'),
 
             dcc.Dropdown(
                 id="slct_month",
-                options=[{'label': key, 'value': value} for key, value in monthsToInt.items()],
+                options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                 multi=False,
-                value=current_month, # Initial value
+                value=current_month(), # Initial value
                 className='dropdownMonth'),
         ], className='selectYearandMonth'),
 

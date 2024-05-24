@@ -1,11 +1,8 @@
 from dash import html, dcc, dash_table
-from datetime import datetime
 import pandas as pd
+from load_data import current_month, current_year, monthsToInt
 
-current_year = datetime.now().year
-current_month = datetime.now().month
-
-def spendings_page(categories_df, categorical_budgets_df, monthsToInt):
+def spendings_page(categories_df, categorical_budgets_df):
     return html.Div(id='spendings_page', children=[
         html.H2("Add a New Transaction", style={'text-align': 'center'}),
         dcc.DatePickerSingle(
@@ -39,15 +36,15 @@ def spendings_page(categories_df, categorical_budgets_df, monthsToInt):
         html.H2("Manage Budget", style={'text-align': 'center'}),
         html.Div(id='budget_month_selector', children=[
             dcc.Dropdown(id="slct_budget_month",
-                        options=[{'label': key, 'value': value} for key, value in monthsToInt.items()],
+                        options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                         multi=False,
-                        value=current_month, # Initial value
+                        value=current_month(), # Initial value
                         style={'width': "150px", 'margin': '10px auto'}
                         ),
             dcc.Dropdown(id="slct_budget_year",
-                        options=[{'label': year, 'value': year} for year in range(2000, current_year + 1)],
+                        options=[{'label': year, 'value': year} for year in range(2000, current_year() + 1)],
                         multi=False,
-                        value=current_year, # Initial value
+                        value=current_year(), # Initial value
                         style={'width': '150px', 'margin': '10px auto'}
                         ),
         ], style={'text-align': 'center'}),

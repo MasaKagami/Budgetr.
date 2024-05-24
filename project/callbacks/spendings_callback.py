@@ -1,7 +1,8 @@
 from dash import Output, Input, State
 import pandas as pd
+from load_data import load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets
 
-def spendings_callback(app, transactions_df, categories_df, categorical_budgets_df, monthsToInt):
+def spendings_callback(app):
     # Callback for adding transactions
     @app.callback(
         Output('transaction_status', 'children'),
@@ -16,7 +17,7 @@ def spendings_callback(app, transactions_df, categories_df, categorical_budgets_
         # If button has been clicked and all fields have been filled out
         if n_clicks > 0 and date and amount and category:
             # Load the latest transactions DB
-            transactions_df = pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
+            transactions_df = load_local_transactions()
 
             # Add the new transaction to the DataFrame
             new_transaction = {
@@ -61,8 +62,8 @@ def spendings_callback(app, transactions_df, categories_df, categorical_budgets_
         selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
         # Load the latest budgets DB
-        monthly_budgets_df = pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
-        categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
+        monthly_budgets_df = load_local_monthly_budgets
+        categorical_budgets_df = load_local_categorical_budgets()
         
         monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]
         if monthly_budget_row.empty:
@@ -108,7 +109,7 @@ def spendings_callback(app, transactions_df, categories_df, categorical_budgets_
             selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
             # Load the latest budgets DB before updating
-            monthly_budgets_df = pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
+            monthly_budgets_df = load_local_monthly_budgets()
 
             # Update or insert the monthly budget
             if selected_date in monthly_budgets_df['budgetmonth'].values:
@@ -141,7 +142,7 @@ def spendings_callback(app, transactions_df, categories_df, categorical_budgets_
         if n_clicks > 0:
             if selected_category and new_category_budget is not None:
                 # Load the latest categorical budgets DB before updating
-                categorical_budgets_df = pd.read_csv('../localdb/categoricalbudgets.csv')
+                categorical_budgets_df = load_local_categorical_budgets()
 
                 # Update the selected category's budget
                 categorical_budgets_df.loc[categorical_budgets_df['categoryname'] == selected_category, 'categorybudget'] = new_category_budget
