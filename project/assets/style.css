@@ -1,3 +1,14 @@
+/* -----------------------------------UNIVERSAL CSS----------------------------------- */
+
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+
+
 .background {
     background-color: #151a28;
     display: flex;
@@ -10,12 +21,110 @@
     font-family: 'Lexend', sans-serif;
 }
 
-html, body{
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+/* -----------------------------------WELCOME PAGE----------------------------------- */
+.sign-in-background{
+    width: 100vw;
+    background-color: rgb(70, 139, 204);
 }
+
+.welcome{
+    width: 100vw;
+    height: auto;
+}
+
+.welcome-nav-background{
+    background-color: #151a28;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-nav{
+    width: 100%;
+    max-width: 80rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;   
+    align-items: center;
+}
+
+.welcome-logo{
+    width:100%;
+    height:auto;
+    color: white;
+}
+
+.welcome-content-background{
+    background-color: rgb(70, 139, 204);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-content{
+    height: auto;
+    width: 100%;
+    max-width: 80rem;
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+.welcome-text{
+    flex: 1;
+    padding: 30px 0px;
+}
+
+.welcome-image{
+    flex: 1;
+}
+
+.sign-in-btn{
+    font-size: 15px;
+    color: white;
+    /* background-color: gray; */
+    width: 5rem;
+    height: auto;
+    border-radius: 10px;
+    padding: 11px 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    border: white 2px solid;
+}
+
+.sign-up-btn{
+    color: #151a28;
+    background-color: rgb(9, 180, 9);
+    width: 14rem;
+    height: auto;
+    padding: 11px 8px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: rgb(9, 180, 9) 2px solid;
+    font-size: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .sidebar{
     width:15%;
