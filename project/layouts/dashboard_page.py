@@ -11,15 +11,22 @@ def dashboard_page(transactions_df):
 
     return html.Div([
 
-        html.Div([
-            dcc.DatePickerSingle(
-                id='month-picker',
-                min_date_allowed=date(1995, 1, 1),
-                max_date_allowed=date(2030, 12, 31),
-                initial_visible_month=date.today(),
-                date=str(date.today().year) + '-' + str(date.today().month) + '-01',  # Set to the first of the current month
-                display_format='MMMM, YYYY'),
-        ]),
+        # html.Div([
+        #     dcc.Dropdown(
+        #         id="slct_year",
+        #         options=[{'label': str(year), 'value': year} for year in range(2000, current_year() + 1)],
+        #         multi=False,
+        #         # value=current_year()-1,  # Initial value (last year)
+        #         placeholder="Select Year",
+        #         className='dashboard-year-input'),
+        #     dcc.Dropdown(
+        #         id="slct_month",
+        #         options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
+        #         multi=False,
+        #         # value=current_month(),  # Initial value
+        #         placeholder="Select Month",
+        #         className='dashboard-month-input'),
+        # ], className='dashboard-date-input'),
 
         html.Div([
             html.H4("Select Year and Month: "),
@@ -29,14 +36,16 @@ def dashboard_page(transactions_df):
                     {'label': str(year), 'value': year} for year in range(2000, current_year() + 1)
                 ],
                 multi=False,
-                value=current_year()-1, # Initial value (last year)
+                # value=current_year()-1, # Initial value (last year)
+                placeholder="Select Year",
                 className='dashboard-year-input'),
 
             dcc.Dropdown(
                 id="slct_month",
                 options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                 multi=False,
-                value=current_month(), # Initial value
+                # value=current_month(), # Initial value
+                placeholder="Select Month",
                 className='dashboard-month-input'),
         ], className='dashboard-date-input'),
 
