@@ -1,6 +1,7 @@
 from dash import html, dcc, dash_table
 import pandas as pd
 from load_data import current_month, current_year, monthsToInt
+from datetime import date
 
 def dashboard_page(transactions_df):
     # Prepare the transactions data by converting the date to a datetime object
@@ -9,6 +10,17 @@ def dashboard_page(transactions_df):
     transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
 
     return html.Div([
+
+        html.Div([
+            dcc.DatePickerSingle(
+                id='month-picker',
+                min_date_allowed=date(1995, 1, 1),
+                max_date_allowed=date(2030, 12, 31),
+                initial_visible_month=date.today(),
+                date=str(date.today().year) + '-' + str(date.today().month) + '-01',  # Set to the first of the current month
+                display_format='MMMM, YYYY'),
+        ]),
+
         html.Div([
             html.H4("Select Year and Month: "),
             dcc.Dropdown(
@@ -18,15 +30,15 @@ def dashboard_page(transactions_df):
                 ],
                 multi=False,
                 value=current_year()-1, # Initial value (last year)
-                className='dropdownYear'),
+                className='dashboard-year-input'),
 
             dcc.Dropdown(
                 id="slct_month",
                 options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                 multi=False,
                 value=current_month(), # Initial value
-                className='dropdownMonth'),
-        ], className='selectYearandMonth'),
+                className='dashboard-month-input'),
+        ], className='dashboard-date-input'),
 
         html.Div([
             html.Div([

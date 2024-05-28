@@ -268,27 +268,27 @@ html, body{
     margin: 0;
 }
 
-.selectYearandMonth{
+.dashboard-date-input{
     display:flex;
     flex-direction: row;
     align-items: center;
     width: 100%;
 }
 
-.selectYearandMonth H4{
+.dashboard-date-input H4{
     font-size: 16px;
     margin-right: 10px;
     font-weight: 400;
     flex-shrink: 0;
 }
 
-.dropdownYear{
+.dashboard-year-input{
     color: black;
     width: 100px;
     margin-right: 5px;
 }
 
-.dropdownMonth {
+.dashboard-month-input {
     color: black;
     width: 130px;
 }
