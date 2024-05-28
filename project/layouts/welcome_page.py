@@ -23,21 +23,25 @@ def welcome_page():
         html.Div([
             html.Div([
                 html.H2("About The Creators"),
-                # html.P("After becoming groupmates in "),
+                html.P("After becoming groupmates in "),
                 html.Div([
                     html.Div([
                         html.Img(src='assets/masa.png', className='creator-image'),
                         html.H3('Nagamasa (Masa) Kagami'),
-                        # html.P('Electrical Engineering Student @ McGill University'),
-                        # dcc.Link('LinkedIn', href='your_linkedin_profile', className='social-link'),
-                        # html.P('\n'),
-                        # dcc.Link('Personal Website', href='masakagami.com', className='social-link')
+                        html.P('Electrical Engineering Student @ McGill University'),
+                        html.Div([
+                            dcc.Link('LinkedIn', href='https://www.linkedin.com/in/nagamasa', className='social-link'),
+                            dcc.Link('Personal Website', href='masakagami.com', className='social-link')
+                        ], className='links-container')
                     ], className='creator-profile'),
                     html.Div([
                         html.Img(src='/path_to_partner_image.jpg', className='creator-image'),
                         html.H3('Partner Name'),
-                        # html.P('A brief bio or description of your partner’s background, expertise, and role in the project.'),
-                        # dcc.Link('LinkedIn', href='partner_linkedin_profile', className='social-link')
+                        html.P('A brief bio or description of your partner’s background, expertise, and role in the project.'),
+                        html.Div([
+                            dcc.Link('LinkedIn', href='https://www.linkedin.com/in/', className='social-link'),
+                            dcc.Link('Personal Website', href='masakagami.com', className='social-link')
+                        ])
                     ], className='creator-profile')
                 ], className='creators-container')
             ], className='welcome-about')            
