@@ -7,7 +7,7 @@ from callbacks.spendings_callback import spendings_callback
 from callbacks.sidebar_callback import sidebar_callback
 import load_data as ld
 
-app = Dash(__name__)
+app = Dash(__name__, suppress_callback_exceptions=True)
 app.title = 'myfinanceplanner'
 
 # Load the data from the remote database
