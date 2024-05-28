@@ -14,8 +14,6 @@ html, body{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    /* justify-content: space-between; */
-    /* align-items: center; */
     width: 100vw;
     height: auto;
     font-family: 'Lexend', sans-serif;
@@ -55,12 +53,15 @@ html, body{
     color: white;
 }
 
+/* --------------------MAIN CONTENT SECTION-------------------- */
+
 .welcome-content-background{
     background-color: rgb(70, 139, 204);
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .welcome-content{
@@ -74,44 +75,114 @@ html, body{
 
 .welcome-text{
     flex: 1;
-    padding: 30px 0px;
+    padding: 200px 0px;
+    margin-right: 20px;
+    color: white;
+}
+
+.welcome-slogan{
+    font-size: 54px;
+    font-weight: 600;
+}
+
+.welcome-paragraph{
+    font-size: 20px;
+    font-weight: 350;
+    font-style: italic;
 }
 
 .welcome-image{
     flex: 1;
+    height: auto;
+    width: 200px;
 }
 
-.sign-in-btn{
-    font-size: 15px;
-    color: white;
-    /* background-color: gray; */
-    width: 5rem;
-    height: auto;
-    border-radius: 10px;
-    padding: 11px 8px;
+/* --------------------ABOUT SECTION-------------------- */
+
+
+.welcome-about-background {
+    background-color: #f8f9fa;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-about {
+    background-color: #f8f9fa; 
+    width: 100%;
+    max-width: 80rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.welcome-about h2{
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.creators-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.creator-profile {
+    width: 45%; 
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 10px; 
+    text-align: center; 
+}
+
+.creator-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; 
+    margin-bottom: 10px;
+}
+
+.social-link {
+    color: #007bff;
+    text-decoration: none; 
+    font-weight: bold; 
+}
+
+
+
+
+
+
+
+
+
+.sign-in-btn, .sign-up-btn {
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 10px;
-    border: white 2px solid;
+    border-radius: 10px;
+    padding: 11px 8px;
+    font-size: 15px;
 }
 
-.sign-up-btn{
+.sign-up-btn {
     color: #151a28;
     background-color: rgb(9, 180, 9);
+    border: 2px solid rgb(9, 180, 9);
     width: 14rem;
-    height: auto;
-    padding: 11px 8px;
-    border-radius: 10px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: rgb(9, 180, 9) 2px solid;
-    font-size: 15px;
 }
 
+.sign-in-btn {
+    color: white;
+    border: 2px solid white;
+    width: 5rem;
+    margin-right: 10px;
+}
 
 
 
