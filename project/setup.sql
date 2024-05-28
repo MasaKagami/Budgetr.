@@ -23,7 +23,7 @@ CREATE TABLE Users
 (
     UserID SERIAL PRIMARY KEY,
     Name VARCHAR(255),
-    Email VARCHAR(255)
+    Email VARCHAR(255),
     Password VARCHAR(255)
 );
 
