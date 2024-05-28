@@ -24,6 +24,7 @@ CREATE TABLE Users
     UserID SERIAL PRIMARY KEY,
     Name VARCHAR(255),
     Email VARCHAR(255)
+    Password VARCHAR(255)
 );
 
 CREATE TABLE Categories
@@ -63,8 +64,8 @@ CREATE TABLE Transactions
 );
 
 -- Insert a user
-INSERT INTO Users (Name, Email) VALUES
-    ('Masa Kagami', 'masa.kagami@gmail.com');
+INSERT INTO Users (Name, Email, Password) VALUES
+    ('Masa Kagami', 'masa.kagami@gmail.com', 'test123');
 
 -- Insert categories
 INSERT INTO Categories (Name) VALUES
