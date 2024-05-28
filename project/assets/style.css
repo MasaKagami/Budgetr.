@@ -116,7 +116,8 @@ html, body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 20px 0;
+    margin: 80px 0;
+    text-align: center;
 }
 
 .welcome-about h2{
@@ -141,7 +142,7 @@ html, body{
     background-color: rgb(255, 255, 255);
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    margin: 10px; 
+    margin: 10px;
     text-align: center; 
 }
 
@@ -166,14 +167,6 @@ html, body{
     justify-content: center;
     margin-top: 10px;
 }
-
-
-
-
-
-
-
-
 
 .sign-in-btn, .sign-up-btn {
     text-decoration: none;
@@ -210,7 +203,7 @@ html, body{
 
 
 
-
+/* -----------------------------------SIDE BAR----------------------------------- */
 
 .sidebar{
     width:15%;

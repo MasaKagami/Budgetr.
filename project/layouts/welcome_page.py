@@ -23,7 +23,9 @@ def welcome_page():
         html.Div([
             html.Div([
                 html.H2("About The Creators"),
-                html.P("After becoming groupmates in "),
+                html.P("After meeting in ECSE 428, a pivotal software engineering course at McGill University, Masa and Shyam quickly discovered their shared passion for technology and innovation. This connection sparked not only a dynamic classroom collaboration but also inspired them to tackle summer projects together, blending their skills to create impactful solutions. Their journey from classmates to co-developers exemplifies the power of teamwork in transforming academic encounters into real-world achievements."),
+                html.Br(),
+                html.P("We're also just bored man."),
                 html.Div([
                     html.Div([
                         html.Img(src='assets/masa.png', className='creator-image'),
