@@ -137,7 +137,7 @@ html, body{
 }
 
 .creator-profile {
-    width: 45%; 
+    width: 40%; 
     background-color: rgb(255, 255, 255);
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -153,9 +153,10 @@ html, body{
 }
 
 .social-link {
+    font-weight: 500;
+    font-size: 13px;
     color: #007bff;
     text-decoration: none; 
-    font-weight: bold; 
     margin-right: 10px;
     /* background: gray; */
     display: inline-block;
