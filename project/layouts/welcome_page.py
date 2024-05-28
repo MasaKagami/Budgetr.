@@ -31,20 +31,20 @@ def welcome_page():
                         html.P('Electrical Engineering Student @ McGill University'),
                         html.Div([
                             dcc.Link('LinkedIn', href='https://www.linkedin.com/in/nagamasa', className='social-link'),
-                            dcc.Link('Personal Website', href='masakagami.com', className='social-link')
+                            dcc.Link('Personal Website', href='https://www.masakagami.com', className='social-link')
                         ], className='links-container')
                     ], className='creator-profile'),
                     html.Div([
                         html.Img(src='/path_to_partner_image.jpg', className='creator-image'),
                         html.H3('Partner Name'),
-                        html.P('A brief bio or description of your partner’s background, expertise, and role in the project.'),
+                        html.P('Software Engineering Student @ McGill University'),
                         html.Div([
                             dcc.Link('LinkedIn', href='https://www.linkedin.com/in/', className='social-link'),
                             dcc.Link('Personal Website', href='masakagami.com', className='social-link')
                         ])
                     ], className='creator-profile')
                 ], className='creators-container')
-            ], className='welcome-about')            
+            ], className='welcome-about')  
         ], className='welcome-about-background')
 
 
