@@ -9,7 +9,6 @@ def dashboard_page(transactions_df):
     transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
 
     return html.Div([
-        html.H1("MyFINANCE DASHBOARD", className = 'header'),
         html.Div([
             html.H4("Select Year and Month: "),
             dcc.Dropdown(
