@@ -5,8 +5,8 @@ def welcome_page():
         html.Div([
             html.Div([
                 html.H1("Budgetr.", className='welcome-logo'),
-                dcc.Link("Sign In", href='/sign-in', className='sign-in-btn'),
-                dcc.Link("Create Your Account", href='/sign-up', className='sign-up-btn')    
+                dcc.Link("Sign In", href='/sign-in', className='sign-in-btn', id='tab-signin'),
+                dcc.Link("Create Your Account", href='/sign-up', className='sign-up-btn', id='tab-signup')
             ], className= 'welcome-nav')
         ], className= 'welcome-nav-background'),
         html.Div([

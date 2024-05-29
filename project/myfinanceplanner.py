@@ -96,7 +96,7 @@ def display_page(pathname):
     [Input('url', 'pathname')]
 )
 def toggle_sidebar_visibility(pathname):
-    if pathname == '/' or pathname == '/sign_in' or pathname == '/sign_up':
+    if pathname == '/' or pathname == '/sign-in' or pathname == '/sign-up':
         return {'display': 'none'}  # Hide sidebar on welcome, sign-in, and sign-up pages
     else:
         return {'display': 'flex'}  # Show sidebar as a flexbox on all other pages
