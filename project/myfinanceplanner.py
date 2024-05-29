@@ -1,23 +1,24 @@
 from dash import Dash, dcc, html, Input, Output
 
-# layouts
+# Layouts
 from layouts.dashboard_page import dashboard_page
 from layouts.spendings_page import spendings_page
 from layouts.welcome_page import welcome_page
 from layouts.sign_in_page import sign_in_page
 from layouts.sign_up_page import sign_up_page
 
-# callbacks
+# Callbacks
 from callbacks.dashboard_callback import dashboard_callback
 from callbacks.spendings_callback import spendings_callback
 from callbacks.sidebar_callback import sidebar_callback
 import load_data as ld
 
 app = Dash(__name__, suppress_callback_exceptions=True)
-app.title = 'myfinanceplanner'
+app.title = 'Budgetr.'
 
 # Load the data from the remote database
 transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = ld.load_remote_database()
+users_df = ld.load_local_users() # Temporary to test login backend using the local database
 ld.print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
 
 # ------------------------------------------------------------------------------
