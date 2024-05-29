@@ -13,7 +13,7 @@ def dashboard_page(transactions_df):
 
         html.Div([
             html.Div([
-                html.H4("Select Year and Month: "),
+                html.H4("Input:"),
                 dcc.Dropdown(
                     id="slct_year",
                     options=[
@@ -36,11 +36,11 @@ def dashboard_page(transactions_df):
                 html.H3("Net Balance", className='dataTitle'),
                 html.Div([
                     html.P(id='net-balance-output'),
-                ], className='outputBox'),
+                ], className='net-outputBox'),
                 html.H3("Status", className='dataTitle'),
                 html.Div([
                     html.P(id='status-output'),
-                ], className='outputBox')
+                ], className='status-outputBox')
             ], className= 'dashboard-net-balance'),
 
             html.Div([
@@ -62,7 +62,7 @@ def dashboard_page(transactions_df):
                     dcc.Graph(id='budget_vs_actual_spending_graph', figure={}),
                 ], className= 'budget-vs-actual-spending'),
                 
-            ], className= 'section4'),
+            ], className= 'dashboard-right-top'),
 
             html.Div([
                 html.H3("Recent Transactions", className = 'dataTitle'),
@@ -91,7 +91,7 @@ def dashboard_page(transactions_df):
                         'fontWeight': 'bold'
                     }
                 )
-            ], className= 'section5')
+            ], className= 'dashboard-right-bottom')
             
         ], className= 'dashboard-right-side')
     ], className='dashboard')

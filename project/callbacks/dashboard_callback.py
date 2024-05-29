@@ -147,7 +147,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             margin=dict(l=0, r=0, t=0, b=0),
-            height=300,
+            height=350,
             legend=dict(
                 font=dict(
                     color="#eeeee4",
@@ -247,7 +247,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
                 tickmode='array',
                 tickvals=list(range(1, max_day + 1, 1)),  # Tick every day
                 tickfont=dict(
-                    size=10,
+                    size=8,
                     color="#eeeee4"
                 ),
                 title_font=dict(
