@@ -10,24 +10,6 @@ def dashboard_page(transactions_df):
     transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
 
     return html.Div([
-
-        # html.Div([
-        #     dcc.Dropdown(
-        #         id="slct_year",
-        #         options=[{'label': str(year), 'value': year} for year in range(2000, current_year() + 1)],
-        #         multi=False,
-        #         # value=current_year()-1,  # Initial value (last year)
-        #         placeholder="Select Year",
-        #         className='dashboard-year-input'),
-        #     dcc.Dropdown(
-        #         id="slct_month",
-        #         options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
-        #         multi=False,
-        #         # value=current_month(),  # Initial value
-        #         placeholder="Select Month",
-        #         className='dashboard-month-input'),
-        # ], className='dashboard-date-input'),
-
         html.Div([
             html.H4("Select Year and Month: "),
             dcc.Dropdown(
@@ -36,7 +18,7 @@ def dashboard_page(transactions_df):
                     {'label': str(year), 'value': year} for year in range(2000, current_year() + 1)
                 ],
                 multi=False,
-                # value=current_year()-1, # Initial value (last year)
+                value=current_year()-1, # Initial value (last year)
                 placeholder="Select Year",
                 className='dashboard-year-input'),
 
@@ -44,7 +26,7 @@ def dashboard_page(transactions_df):
                 id="slct_month",
                 options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                 multi=False,
-                # value=current_month(), # Initial value
+                value=current_month(), # Initial value
                 placeholder="Select Month",
                 className='dashboard-month-input'),
         ], className='dashboard-date-input'),
