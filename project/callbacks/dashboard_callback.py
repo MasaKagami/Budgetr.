@@ -139,7 +139,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
             insidetextorientation='radial',  # Better orientation for text inside
             textfont=dict(
                 color='#eeeee4',
-                size=13
+                size=12
             )
         )
 
