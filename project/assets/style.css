@@ -27,7 +27,6 @@ html, body{
 
 
 
-
 /* -----------------------------------WELCOME PAGE----------------------------------- */
 .sign-in-background{
     width: 100vw;
@@ -84,7 +83,7 @@ html, body{
 
 .welcome-text{
     flex: 1;
-    padding: 240px 0px;
+    padding: 280px 0px;
     margin-right: 20px;
     color: white;
 }
@@ -194,6 +193,7 @@ html, body{
     background-color: rgb(9, 180, 9);
     border: 2px solid rgb(9, 180, 9);
     width: 14rem;
+    font-weight: 600;
 }
 
 .sign-in-btn {
@@ -201,8 +201,28 @@ html, body{
     border: 2px solid white;
     width: 5rem;
     margin-right: 10px;
+    font-weight: 600;
 }
 
+.sign-up-btn-big{
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 11px 8px;
+    font-size: 15px;
+    color: #151a28;
+    background-color: rgb(9, 180, 9);
+    border: 2px solid rgb(9, 180, 9);
+    width: 14rem;
+    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, 
+    rgba(240, 46, 170, 0.3) 10px 10px, 
+    rgba(240, 46, 170, 0.2) 15px 15px, 
+    rgba(240, 46, 170, 0.1) 20px 20px, 
+    rgba(240, 46, 170, 0.05) 25px 25px;
+}
 
 
 
@@ -245,4 +265,9 @@ html, body{
 
 .tab.active{
     background-color: #2980b9;
+}
+
+.logo-link {
+    text-decoration: none; /* Removes underline */
+    color: inherit; /* Inherits the color from parent or specific color */
 }

@@ -47,7 +47,11 @@ app.layout = html.Div([
 
     dcc.Location(id='url', refresh=False), 
     html.Div([
-        html.H1("Budgetr.", className='logo'),
+        dcc.Link(
+            html.H1("Budgetr.", className='logo'),
+            href='/',
+            className='logo-link'
+        ),
         dcc.Link('Dashboard', href='/dashboard', className='tab', id='tab-dashboard'),
         dcc.Link('Record Spendings', href='/record', className='tab', id='tab-record'),
         dcc.Link('Settings', href='/settings', className='tab', id='tab-settings'),

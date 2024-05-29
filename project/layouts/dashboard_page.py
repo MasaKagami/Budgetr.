@@ -13,7 +13,7 @@ def dashboard_page(transactions_df):
 
         html.Div([
             html.Div([
-                html.H4("Select year and month:"),
+                html.H4("Select:"),
                 dcc.Dropdown(
                     id="slct_year",
                     options=[
