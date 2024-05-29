@@ -2,6 +2,18 @@ from dash import html, dcc
 
 def sign_up_page():
     return html.Div([
+        html.Div([
+            html.Div([
+                dcc.Link(
+                    html.H1("Budgetr.", className='welcome-logo'),
+                    href='/',
+                    className='logo-link'
+                ),
+                dcc.Link("Sign In", href='/sign-in', className='sign-in-btn', id='tab-signin'),
+                dcc.Link("Create Your Account", href='/sign-up', className='sign-up-btn', id='tab-signup')
+            ], className= 'welcome-nav')
+        ], className= 'welcome-nav-background'),
+
         html.H2(
             "Sign Up", 
             style={'text-align': 'center'}),

@@ -83,7 +83,9 @@ def display_page(pathname):
     elif pathname == '/sign-up':
         return sign_up_page()
     elif pathname == '/logout':
-        return welcome_page()
+        return "404 Page Not Found"
+
+        # return welcome_page()
     else:
         return "404 Page Not Found"
     
