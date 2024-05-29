@@ -1,0 +1,165 @@
+/* -----------------------------------DASHBOARD----------------------------------- */
+
+.dashboard{
+    flex-grow:1;
+    /* width: 100%; */
+    /* max-width: 85%; */
+    /* height: auto; */
+
+    background-color: #0d0f16;
+    color: white;
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    overflow:hidden;
+    margin: 0;
+}
+
+/* --------------------LEFT SECTION-------------------- */
+
+.dashboard-date-input{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.dashboard-date-input H4{
+    font-size: 16px;
+    margin-right: 10px;
+    font-weight: 400;
+    flex-shrink: 0;
+}
+
+.dashboard-year-input{
+    color: black;
+    width: 130px;
+    margin-right: 10px;
+}
+
+.dashboard-month-input {
+    color: black;
+    width: 130px;
+}
+
+.button{
+    display: flex;
+    width: 100%;
+    height: auto;
+}
+
+.button button{
+    flex: 1;
+    cursor: pointer;
+    padding: 10px 15px; /* 10 is for top and bottom, 15 is for left and right */
+    font-size: 16px;
+    font-weight: 400;
+    background-color: #1e2130;
+    color: white;
+    border: none; 
+    margin-bottom: 8px;
+}
+
+.button button:first-child{
+    margin-right: 8px;
+}
+
+.dataContainer{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+    width: 100%;
+    /* background-color: gray; */
+}
+
+.dataTitle{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.dashboard-left-side{
+    background-color: #1e2130;
+    padding: 0 20px;
+    padding-bottom: 20px;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.dashboard-net-balance{
+    margin-bottom: 30px;
+}
+
+.outputBox{
+    background-color: rgba(255, 255, 255, .05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border: solid #eeeee7;
+    color: #f8d44c;
+    height: auto;
+    padding: 20px 0;
+}
+
+.netBalanceOutput{
+    font-size: 80px;
+    font-weight: 700;
+}
+
+.statusOutput{
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.dashboard-right-side{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.section4{ /* consists of the daily spending trend and budge v actual */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.daily-spending-trend{
+    padding: 0 20px;
+    padding-bottom: 20px;
+    flex: 1;
+    margin-right: 10px;
+    background-color: #1e2130;
+}
+
+.budget-vs-actual-spending{
+    padding: 0 20px;
+    padding-bottom: 20px;
+    flex: 1;
+    background-color: #1e2130;
+}
+
+.section5{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1e2130;
+    padding: 0 20px;
+    padding-bottom: 20px;
+}
+
+.section4, .section5 {
+    flex: 1; /* Flex grow to take up available space in dataContainer2 equally */
+    /* padding: 20px; */
+}
+
+.dashboard-left-side, .dashboard-right-side {
+    align-items: stretch; /* Align items to stretch to fill the container */
+    flex-grow: 1; /* Allow the containers to grow as needed */
+}
