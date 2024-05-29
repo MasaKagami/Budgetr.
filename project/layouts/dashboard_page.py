@@ -22,14 +22,16 @@ def dashboard_page(transactions_df):
                     multi=False,
                     value=current_year()-1, # Initial value (last year)
                     placeholder="Select Year",
-                    className='dashboard-year-input'),
+                    className='dashboard-year-input',
+                ),
                 dcc.Dropdown(
                     id="slct_month",
                     options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                     multi=False,
                     value=current_month(), # Initial value
                     placeholder="Select Month",
-                    className='dashboard-month-input'),
+                    className='dashboard-month-input',
+                ),
             ], className='dashboard-date-input'),
 
             html.Div([
