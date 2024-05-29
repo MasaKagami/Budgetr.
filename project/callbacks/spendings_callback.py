@@ -62,7 +62,7 @@ def spendings_callback(app):
         selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
         # Load the latest budgets DB
-        monthly_budgets_df = load_local_monthly_budgets
+        monthly_budgets_df = load_local_monthly_budgets()
         categorical_budgets_df = load_local_categorical_budgets()
         
         monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]

@@ -1,29 +1,41 @@
 from dash import Dash, dcc, html, Input, Output
 
-# layouts
+# Layouts
 from layouts.dashboard_page import dashboard_page
 from layouts.spendings_page import spendings_page
 from layouts.welcome_page import welcome_page
 from layouts.sign_in_page import sign_in_page
 from layouts.sign_up_page import sign_up_page
 
-# callbacks
+# Callbacks
 from callbacks.dashboard_callback import dashboard_callback
 from callbacks.spendings_callback import spendings_callback
 from callbacks.sidebar_callback import sidebar_callback
-import load_data as ld
+from callbacks.authentication_callback import authentication_callback
+from load_data import load_remote_database, load_local_database, print_dataframes
 
 app = Dash(__name__, suppress_callback_exceptions=True)
-app.title = 'myfinanceplanner'
+app.title = 'Budgetr.'
 
-# Load the data from the remote database
-transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = ld.load_remote_database()
-ld.print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
+# Use remote database or local database for user authentication and input forms
+USE_REMOTE_DB = False
+
+# Load data from the database
+if USE_REMOTE_DB:
+    transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_remote_database()
+else:
+    transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
+print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
 
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar
 
 app.layout = html.Div([
+    # Ensures the store is always present in the layout to redirect the user after login or signup
+    dcc.Location(id='url', refresh=False),
+    dcc.Store(id='login_result'),
+    dcc.Store(id='signup_result'),
+    
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
         rel='stylesheet'
@@ -70,6 +82,8 @@ def display_page(pathname):
         return sign_in_page()
     elif pathname == '/sign-up':
         return sign_up_page()
+    elif pathname == '/logout':
+        return welcome_page()
     else:
         return "404 Page Not Found"
     
@@ -90,6 +104,7 @@ def toggle_sidebar_visibility(pathname):
 # ------------------------------------------------------------------------------
 # Callbacks for every page
 
+authentication_callback(app, use_remote_db=USE_REMOTE_DB)
 sidebar_callback(app)
 dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df)
 spendings_callback(app)

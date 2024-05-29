@@ -2,14 +2,20 @@ from sqlalchemy import create_engine
 import pandas as pd
 from datetime import datetime
 
-# Connection setup
-DATABASE_URL = "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
+# Path to the remote database
+def database_url():
+    return "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
 
+# Path to the local database
+def local_database_url():
+    return '../localdb/users.csv'
+
+# Create an SQLAlchemy engine instance
 def create_engine_instance():
-    return create_engine(DATABASE_URL)
+    return create_engine(database_url())
 
 def load_remote_database():
-    engine = create_engine_instance() # Creating an SQLAlchemy engine
+    engine = create_engine_instance()
 
     transactions_df = load_transactions(engine)
     monthly_budgets_df = load_monthly_budgets(engine)
