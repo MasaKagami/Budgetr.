@@ -8,6 +8,7 @@ from layouts.sign_in_page import sign_in_page
 from layouts.sign_up_page import sign_up_page
 
 # Callbacks
+from callbacks.navbar_callback import navbar_callback
 from callbacks.dashboard_callback import dashboard_callback
 from callbacks.spendings_callback import spendings_callback
 from callbacks.sidebar_callback import sidebar_callback
@@ -102,10 +103,25 @@ def toggle_sidebar_visibility(pathname):
         return {'display': 'flex'}  # Show sidebar as a flexbox on all other pages
 
 # ------------------------------------------------------------------------------
+# Callback for navbar
+
+@app.callback(
+    Output('navbar', 'style'),
+    [Input('url', 'pathname')]
+)
+def toggle_navbar_visibility(pathname):
+    if pathname == '/' or pathname == '/sign-in' or pathname == '/sign-up':
+        return {'display': 'flex'}  # Show navbar on welcome, sign-in, and sign-up pages
+    else:
+        return {'display': 'none'}  # Show navbar as a flexbox on all other pages
+
+
+# ------------------------------------------------------------------------------
 # Callbacks for every page
 
 authentication_callback(app, use_remote_db=USE_REMOTE_DB)
 sidebar_callback(app)
+navbar_callback(app)
 dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df)
 spendings_callback(app)
 
