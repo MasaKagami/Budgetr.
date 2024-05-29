@@ -61,6 +61,12 @@ html, body{
     color: white;
 }
 
+.navbar-tabs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 /* --------------------MAIN CONTENT SECTION-------------------- */
 
 .welcome-content-background{
@@ -192,7 +198,7 @@ html, body{
     color: #151a28;
     background-color: rgb(9, 180, 9);
     border: 2px solid rgb(9, 180, 9);
-    width: 14rem;
+    width: 10rem;
     font-weight: 600;
 }
 
