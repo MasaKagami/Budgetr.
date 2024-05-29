@@ -72,7 +72,3 @@ def authentication_callback(app, use_remote_db=False):
             return '/sign-in'
         elif signup_result == 'failure':
             return '/sign-up'
-        else:
-            return '/'
-    # ------------------------------------------------------------------------------
-    
