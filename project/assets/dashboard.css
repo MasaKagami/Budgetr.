@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
+    justify-content: space-between;
     margin-right: 20px;
     height: auto;
 }
@@ -67,9 +67,10 @@
 
 .dashboard-net-balance{
     background-color: #1e2130;
-    padding: 20px;
+    padding: 40px 20px;
     margin-bottom: 20px;
     border-radius: 10px;
+    justify-content: space-between;
 }
 
 .net-outputBox{
@@ -81,7 +82,7 @@
     border: solid #eeeee7;
     color: #f8d44c;
     height: auto;
-    margin-bottom:20px;
+    margin-bottom:30px;
 }
 
 .status-outputBox{

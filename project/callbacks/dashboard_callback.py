@@ -247,7 +247,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
                 tickmode='array',
                 tickvals=list(range(1, max_day + 1, 1)),  # Tick every day
                 tickfont=dict(
-                    size=8,
+                    size=7,
                     color="#eeeee4"
                 ),
                 title_font=dict(
