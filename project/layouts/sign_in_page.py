@@ -2,11 +2,13 @@ from dash import html, dcc
 
 def sign_in_page():
     return html.Div([
-        html.H2("Login"),
+        html.H2(
+                "Login",
+                style={'text-align': 'center'}),
         dcc.Input(
-                id='login_username', 
+                id='login_email', 
                 type='text', 
-                placeholder='Username', 
+                placeholder='Email Address', 
                 style={'width': '200px', 'margin': '10px auto', 'display': 'block'}),
         dcc.Input(
                 id='login_password', 
@@ -21,6 +23,9 @@ def sign_in_page():
         html.Div(
                 id='login_status', 
                 style={'text-align': 'center', 'color': 'red'}),
+        # html.Div(
+        #         id='login_result', 
+        #         style={'display': 'none'}), # Hidden div to store the result of the login attempt
         dcc.Link(
                 'Sign Up', 
                 href='/sign-up',

@@ -6,9 +6,14 @@ def sign_up_page():
             "Sign Up", 
             style={'text-align': 'center'}),
         dcc.Input(
-            id='signup_username', 
+            id='signup_name', 
             type='text', 
-            placeholder='Username', 
+            placeholder='Name',
+            style={'width': '200px', 'margin': '10px auto', 'display': 'block'}),
+        dcc.Input(
+            id='signup_email', 
+            type='text', 
+            placeholder='Email Address', 
             style={'width': '200px', 'margin': '10px auto', 'display': 'block'}),
         dcc.Input(
             id='signup_password', 
@@ -28,6 +33,9 @@ def sign_up_page():
         html.Div(
             id='signup_status', 
             style={'text-align': 'center', 'color': 'red'}),
+        # html.Div(
+        #     id='signup_result', 
+        #     style={'display': 'none'}), # Hidden div to store the result of the signup attempt
         dcc.Link(
             'Login', 
             href='/sign-in', 
