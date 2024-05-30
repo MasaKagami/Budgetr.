@@ -30,7 +30,7 @@ def sign_up_page():
 
                 html.Div([
                     html.Button('Register', className='text'),
-                    dcc.Link('already a member? ', href='/sign-in', className='sign-up-bottom-text')
+                    dcc.Link('already a budgetr? ', href='/sign-in', className='sign-up-bottom-text')
                 ], className='sign-up-bottom')
             ], className='sign-up')
         ], className='sign-up-container'),
