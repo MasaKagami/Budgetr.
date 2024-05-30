@@ -30,7 +30,7 @@ html, body{
 /* -----------------------------------WELCOME PAGE----------------------------------- */
 .sign-in-background{
     width: 100vw;
-    background-color: rgb(70, 139, 204);
+    background-color: #1e2130;
 }
 
 .welcome{
@@ -73,7 +73,7 @@ html, body{
 /* --------------------MAIN CONTENT SECTION-------------------- */
 
 .welcome-content-background{
-    background-color: rgb(70, 139, 204);
+    background-color: #1e2130;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -226,11 +226,19 @@ html, body{
     background-color: rgb(9, 180, 9);
     border: 2px solid rgb(9, 180, 9);
     width: 14rem;
-    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, 
+    box-shadow: 
+
+    rgba(0, 128, 128, 0.4) 5px 5px, 
+    rgba(0, 128, 128, 0.3) 10px 10px, 
+    rgba(0, 128, 128, 0.2) 15px 15px, 
+    rgba(0, 128, 128, 0.1) 20px 20px, 
+    rgba(0, 128, 128, 0.05) 25px 25px;
+/*     
+    rgba(240, 46, 170, 0.4) 5px 5px, 
     rgba(240, 46, 170, 0.3) 10px 10px, 
     rgba(240, 46, 170, 0.2) 15px 15px, 
     rgba(240, 46, 170, 0.1) 20px 20px, 
-    rgba(240, 46, 170, 0.05) 25px 25px;
+    rgba(240, 46, 170, 0.05) 25px 25px; */
 }
 
 

@@ -18,7 +18,7 @@ def welcome_page():
                     html.P("Gain control over your expenses. Discover clear, visual insights into your spending to help you budget smarter and save more.", className='welcome-paragraph'),
                     dcc.Link("Start Today", href='/sign-up', className='sign-up-btn-big')                          
                 ], className='welcome-text'),
-                html.Img(src= '/assets/wallet.png', className='welcome-image')
+                html.Img(src= '/assets/lightbulb.png', className='welcome-image')
             ], className= "welcome-content")
         ], className='welcome-content-background'),
 
