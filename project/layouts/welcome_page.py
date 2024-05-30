@@ -16,7 +16,7 @@ def welcome_page():
                 html.Div([
                     html.H1("Visualize Your Finances", className='welcome-slogan'),
                     html.P("Gain control over your expenses. Discover clear, visual insights into your spending to help you budget smarter and save more.", className='welcome-paragraph'),
-                    dcc.Link("Start Today", href='/sign-up', className='sign-up-btn')                          
+                    dcc.Link("Start Today", href='/sign-up', className='sign-up-btn-big')                          
                 ], className='welcome-text'),
                 html.Img(src= '/assets/wallet.png', className='welcome-image')
             ], className= "welcome-content")
@@ -38,7 +38,7 @@ def welcome_page():
                         ], className='links-container')
                     ], className='creator-profile'),
                     html.Div([
-                        html.Img(src='/path_to_partner_image.jpg', className='creator-image'),
+                        html.Img(src='assets/shyam.png', className='creator-image'),
                         html.H3('Shyam Desai'),
                         html.P('Software Engineering Student @ McGill University'),
                         html.Div([
