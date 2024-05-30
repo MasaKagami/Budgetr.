@@ -1,4 +1,5 @@
 from dash import Dash, dcc, html, Input, Output
+from flask import Flask, session, redirect
 
 # Layouts
 from layouts.dashboard_page import dashboard_page
@@ -17,6 +18,10 @@ from load_data import load_remote_database, load_local_database, print_dataframe
 app = Dash(__name__, suppress_callback_exceptions=True)
 app.title = 'Budgetr.'
 
+# Configure server-side session
+server = app.server
+server.secret_key = 'supersecretkey'
+
 # Use remote database or local database for user authentication and input forms
 USE_REMOTE_DB = False
 
@@ -31,10 +36,9 @@ print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, c
 # Main App layout with Sidebar
 
 app.layout = html.Div([
-    # Ensures the store is always present in the layout to redirect the user after login or signup
     dcc.Location(id='url', refresh=False),
-    dcc.Store(id='login_result'),
-    dcc.Store(id='signup_result'),
+    dcc.Store(id='login_result',storage_type='session'),
+    dcc.Store(id='signup_result',storage_type='session'),
     
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
@@ -72,18 +76,22 @@ app.layout = html.Div([
 )
 
 def display_page(pathname):
-    if pathname == '/dashboard':
-        return dashboard_page(transactions_df)
-    elif pathname == '/record':
-        return spendings_page(categories_df, categorical_budgets_df)
-    elif pathname == '/':
+    if pathname == '/':
         return welcome_page()
     elif pathname == '/sign-in':
         return sign_in_page()
     elif pathname == '/sign-up':
         return sign_up_page()
+    elif pathname == '/dashboard' and session.get('logged_in'):
+        return dashboard_page(transactions_df)
+    elif pathname == '/record' and session.get('logged_in'):
+        return spendings_page(categories_df, categorical_budgets_df)
+    elif pathname == '/settings' and session.get('logged_in'):
+        # Placeholder for the settings page
+        return "Settings Page (under construction)"
     elif pathname == '/logout':
-        return welcome_page()
+        session.clear()
+        return welcome_page() # Redirect to welcome page after logout
     else:
         return "404 Page Not Found"
     

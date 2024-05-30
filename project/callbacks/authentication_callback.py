@@ -1,4 +1,5 @@
 from dash import Input, Output, State
+from flask import session
 from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user
 
 # use-remote-db is a flag to determine whether to use the remote database or the local database
@@ -13,17 +14,23 @@ def authentication_callback(app, use_remote_db=False):
     
     def login_user(n_clicks, email, password):
         if n_clicks > 0:
+            print('Logging in...')
+            print(email, password)
+
             if email and password:
+                # Validate the user credentials
                 if use_remote_db:
-                    if validate_remote_user(email, password):
-                        return 'Login successful', 'success'
-                    else:
-                        return 'Invalid email or password', 'failure'
+                    userid = validate_remote_user(email, password)
                 else:
-                    if validate_local_user(email, password):
-                        return 'Login successful', 'success'
-                    else:
-                        return 'Invalid email or password', 'failure'
+                    userid = validate_local_user(email, password)
+                
+                # If the user is valid, log them in
+                if userid:
+                    session['logged_in'] = True
+                    session['user_id'] = userid
+                    return 'Login successful', 'success'
+                else:
+                    return 'Invalid email or password', 'failure'
             return 'Please enter your email and password', 'failure'
         return '', None
     
@@ -42,7 +49,6 @@ def authentication_callback(app, use_remote_db=False):
     
     def signup_user(n_clicks, name, email, password, confirm_password):
         if n_clicks > 0:
-            print(f"Signup attempt with values: name={name}, email={email}, password={password}, confirm_password={confirm_password}")
             if password != confirm_password:
                 return 'Passwords do not match', 'failure'
             
@@ -51,8 +57,19 @@ def authentication_callback(app, use_remote_db=False):
                     create_remote_user(name, email, password)
                 else:
                     create_local_user(name, email, password)
-                return 'User created successfully', 'success'
-            print(f"Signup values missing: name={name}, email={email}, password={password}")
+                
+                # Log in the user automatically after successful signup
+                if use_remote_db:
+                    userid = validate_remote_user(email, password)
+                else:
+                    userid = validate_local_user(email, password)
+                
+                if userid:
+                    session['logged_in'] = True
+                    session['user_id'] = userid
+                    return 'User created successfully', 'success'
+                else:
+                    return 'Error during account creation', 'failure'
             return 'Please fill out all fields', 'failure'
         return '', None
     
@@ -68,7 +85,4 @@ def authentication_callback(app, use_remote_db=False):
     def redirect_user(login_result, signup_result):
         if login_result == 'success' or signup_result == 'success':
             return '/dashboard'
-        elif login_result == 'failure':
-            return '/sign-in'
-        elif signup_result == 'failure':
-            return '/sign-up'
+        return None
