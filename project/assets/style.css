@@ -44,6 +44,8 @@ html, body{
     display: flex;
     justify-content: center;
     align-items: center;
+    /* position:sticky; */
+    /* z-index: 9999; */
 }
 
 .welcome-nav{
@@ -53,6 +55,7 @@ html, body{
     flex-direction: row;
     justify-content: space-between;   
     align-items: center;
+    /* position:sticky; */
 }
 
 .welcome-logo{

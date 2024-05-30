@@ -17,25 +17,23 @@ def sign_in_page():
                 ], className= 'welcome-nav-background'),
         
                 html.Div([
-                        # html.Div(className='circle-one'),
-                        html.Div([
+                        # html.Div([
                                 html.Div([
                                         html.Img(src="/assets/login-illustration.png", className='sign-in-illustration', alt='illustration'),
                                         html.H1("Sign In", className='sign-in-title'),
                                         html.Div([
-                                        dcc.Input(type='text', placeholder='USERNAME'),
-                                        dcc.Input(type='password', placeholder='PASSWORD'),
-                                        html.Button('SUBMIT', className='opacity')
+                                                dcc.Input(type='text', placeholder='USERNAME'),
+                                                dcc.Input(type='password', placeholder='PASSWORD'),
+                                                html.Button('SUBMIT', className='opacity')
                                         ], className='sign-in-top'),
 
                                         html.Div([
-                                        dcc.Link('sign up', href='/sign-up'),
-                                        dcc.Link('forgot password', href='')
+                                                dcc.Link('sign up', href='/sign-up', className='bottom-text'),
+                                                dcc.Link('forgot password', href='', className='bottom-text')
                                         ], className='sign-in-bottom')
                                 ], className='sign-in')
 
-                        ], className='sign-in-form'),
-                        # html.Div(className='circle-two')
+                        # ], className='sign-in-form'),
                 ], className='sign-in-container'),
         
         ], className='sign-in-page')
