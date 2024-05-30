@@ -44,6 +44,8 @@ html, body{
     display: flex;
     justify-content: center;
     align-items: center;
+    /* position:sticky; */
+    /* z-index: 9999; */
 }
 
 .welcome-nav{
@@ -53,12 +55,19 @@ html, body{
     flex-direction: row;
     justify-content: space-between;   
     align-items: center;
+    /* position:sticky; */
 }
 
 .welcome-logo{
     width:100%;
     height:auto;
     color: white;
+}
+
+.navbar-tabs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 /* --------------------MAIN CONTENT SECTION-------------------- */
@@ -192,7 +201,7 @@ html, body{
     color: #151a28;
     background-color: rgb(9, 180, 9);
     border: 2px solid rgb(9, 180, 9);
-    width: 14rem;
+    width: 10rem;
     font-weight: 600;
 }
 
