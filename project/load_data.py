@@ -76,11 +76,11 @@ def load_local_users():
 # Print the dataframes
 
 def print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df):
-    # print('\nTRANSACTIONS DB\n', transactions_df[:5])
-    # print('CATEGORIES DB\n', categories_df[:5])
+    print('\nTRANSACTIONS DB\n', transactions_df[:5])
+    print('CATEGORIES DB\n', categories_df[:5])
     print('USERS DB\n', users_df[:5])
-    # print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
-    # print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
+    print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
+    print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
 # ------------------------------------------------------------------------------
 # Get the current month and year

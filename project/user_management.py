@@ -10,13 +10,20 @@ def hash_password(password):
 # Creates a new user in the local DB
 def create_local_user(name, email, password):
     users_df = pd.read_csv(local_database_url())
-    new_user = {'userid': users_df['userid'].max() + 1, 'name': name, 'email': email, 'password': hash_password(password)}
+
+    userid = users_df['userid'].max() + 1
+    new_user = {'userid': userid, 
+                'name': name, 
+                'email': email, 
+                'password': hash_password(password)}
     users_df = users_df.append(new_user, ignore_index=True)
     users_df.to_csv(local_database_url(), index=False)
 
+    return userid
+
 # Validates the user credentials in the local DB; Returns the user ID if valid
 def validate_local_user(email, password):
-    users_df = pd.read_csv('../localdb/users.csv')
+    users_df = pd.read_csv(local_database_url())
     user = users_df[(users_df['email'] == email) & (users_df['password'] == hash_password(password))]
     if not user.empty:
         return int(user.iloc[0]['userid'])  # Ensure this is a standard Python integer
@@ -27,6 +34,8 @@ def create_remote_user(name, email, password):
     engine = create_engine_instance()
     with engine.connect() as conn:
         conn.execute(text('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)'), {'name': name, 'email': email, 'password': hash_password(password)})
+        result = conn.execute(text('SELECT userid FROM users WHERE email=:email'), {'email': email}).fetchone()
+        return result[0] if result else None # Return the user ID if the user was created successfully
 
 # Validates the user credentials in the remote PSQL database; Returns the user ID if valid
 def validate_remote_user(email, password):

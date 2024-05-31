@@ -6,16 +6,15 @@ from user_management import create_local_user, validate_local_user, create_remot
 def authentication_callback(app, use_remote_db=False):
     @app.callback(
         Output('login_status', 'children'),
-        Output('login_result', 'data'), # Store the result in an intermediate data store used in another callback to redirect the user
+        Output('temp_login_url', 'data'), # Store the redirect url in an intermediate data store
         [Input('login_button', 'n_clicks')],
         [State('login_email', 'value'), 
          State('login_password', 'value')]
     )
     
     def login_user(n_clicks, email, password):
-        if n_clicks > 0:
-            print('Logging in...')
-            print(email, password)
+        if n_clicks and n_clicks > 0:
+            print('Logging in...', email)
 
             if email and password:
                 # Validate the user credentials
@@ -25,13 +24,14 @@ def authentication_callback(app, use_remote_db=False):
                     userid = validate_local_user(email, password)
                 
                 # If the user is valid, log them in
-                if userid:
+                if userid is not None:
                     session['logged_in'] = True
                     session['user_id'] = userid
-                    return 'Login successful', 'success'
+                    return 'Login successful', '/dashboard'
                 else:
-                    return 'Invalid email or password', 'failure'
-            return 'Please enter your email and password', 'failure'
+                    return 'Invalid email or password', None
+            return 'Please enter your email and password', None
+        # return '', None
         return '', None
     
     # ------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ def authentication_callback(app, use_remote_db=False):
 
     @app.callback(
         Output('signup_status', 'children'),
-        Output('signup_result', 'data'), # Store the result in an intermediate data store used in another callback to redirect the user
+        Output('temp_signup_url', 'data'), # Store the redirect url in an intermediate data store
         [Input('signup_button', 'n_clicks')],
         [State('signup_name', 'value'), 
          State('signup_email', 'value'), 
@@ -48,41 +48,46 @@ def authentication_callback(app, use_remote_db=False):
     )
     
     def signup_user(n_clicks, name, email, password, confirm_password):
-        if n_clicks > 0:
+        if n_clicks and n_clicks > 0:
+            print("Signing up...", name, email)
+
             if password != confirm_password:
-                return 'Passwords do not match', 'failure'
+                return 'Passwords do not match', None
             
             if name and email and password:
+                # Create the new user
                 if use_remote_db:
-                    create_remote_user(name, email, password)
+                    userid = create_remote_user(name, email, password)
                 else:
-                    create_local_user(name, email, password)
+                    userid = create_local_user(name, email, password)
                 
                 # Log in the user automatically after successful signup
-                if use_remote_db:
-                    userid = validate_remote_user(email, password)
-                else:
-                    userid = validate_local_user(email, password)
+                # if use_remote_db:
+                #     userid = validate_remote_user(email, password)
+                # else:
+                #     userid = validate_local_user(email, password)
                 
-                if userid:
+                # Log in the user automatically after successful signup
+                if userid is not None:
                     session['logged_in'] = True
                     session['user_id'] = userid
-                    return 'User created successfully', 'success'
+                    return 'User created successfully', '/dashboard'
                 else:
-                    return 'Error during account creation', 'failure'
-            return 'Please fill out all fields', 'failure'
+                    return 'Error during account creation', None
+            return 'Please fill out all fields', None
         return '', None
     
     # ------------------------------------------------------------------------------
-    # Callback to redirect the user after login or signup
+    # Callback to redirect the user after login or signup using the intermediate data stores
     
     @app.callback(
         Output('url', 'pathname'),
-        [Input('login_result', 'data'), 
-         Input('signup_result', 'data')]
+        Input('temp_login_url', 'data'),
+        Input('temp_signup_url', 'data')
     )
-    
-    def redirect_user(login_result, signup_result):
-        if login_result == 'success' or signup_result == 'success':
-            return '/dashboard'
-        return None
+    def redirect_user(temp_login_url, temp_signup_url):
+        if temp_login_url:
+            return temp_login_url
+        elif temp_signup_url:
+            return temp_signup_url
+        return

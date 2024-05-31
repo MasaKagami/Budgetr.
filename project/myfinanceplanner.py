@@ -1,5 +1,6 @@
 from dash import Dash, dcc, html, Input, Output
-from flask import Flask, session, redirect
+from flask import Flask, session, redirect, request
+from os import urandom
 
 # Layouts
 from layouts.dashboard_page import dashboard_page
@@ -15,12 +16,13 @@ from callbacks.sidebar_callback import sidebar_callback
 from callbacks.authentication_callback import authentication_callback
 from load_data import load_remote_database, load_local_database, print_dataframes
 
-app = Dash(__name__, suppress_callback_exceptions=True)
-app.title = 'Budgetr.'
+# Initialize Flask server
+server = Flask(__name__)
+server.secret_key = urandom(24) # Generate a secret key for the session
 
-# Configure server-side session
-server = app.server
-server.secret_key = 'supersecretkey'
+# Initialize Dash app
+app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
+app.title = 'Budgetr.'
 
 # Use remote database or local database for user authentication and input forms
 USE_REMOTE_DB = False
@@ -30,15 +32,16 @@ if USE_REMOTE_DB:
     transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_remote_database()
 else:
     transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
-print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
+# print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
+# print("USERS DB\n", users_df[:5])
 
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar
 
 app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    dcc.Store(id='login_result',storage_type='session'),
-    dcc.Store(id='signup_result',storage_type='session'),
+    # Temporary storage for the login and signup redirect URLs
+    dcc.Store(id='temp_login_url'),
+    dcc.Store(id='temp_signup_url'),
     
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
@@ -67,7 +70,6 @@ app.layout = html.Div([
 
 ], className='background'),
 
-
 # ------------------------------------------------------------------------------
 # Callback to toggle between pages from the sidebar
 @app.callback(
@@ -78,24 +80,39 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/':
         return welcome_page()
+    
     elif pathname == '/sign-in':
         return sign_in_page()
+    
     elif pathname == '/sign-up':
         return sign_up_page()
-    elif pathname == '/dashboard' and session.get('logged_in'):
-        return dashboard_page(transactions_df)
-    elif pathname == '/record' and session.get('logged_in'):
-        return spendings_page(categories_df, categorical_budgets_df)
-    elif pathname == '/settings' and session.get('logged_in'):
-        # Placeholder for the settings page
-        return "Settings Page (under construction)"
+    
+    elif pathname == '/dashboard':
+        if session.get('logged_in'):
+            return dashboard_page(transactions_df)
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+        
+    elif pathname == '/record':
+        if session.get('logged_in'):
+            return spendings_page(categories_df, categorical_budgets_df)
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+        
+    elif pathname == '/settings':
+        if session.get('logged_in'):
+            return "Settings Page (under construction)"
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+        
     elif pathname == '/logout':
         session.clear()
-        return welcome_page() # Redirect to welcome page after logout
+        print("User logged out")
+        return dcc.Location(href='/', id='redirect') # Redirect to the welcome page after logging out
+    
     else:
         return "404 Page Not Found"
     
-
 # ------------------------------------------------------------------------------
 # Callback for sidebar
 
