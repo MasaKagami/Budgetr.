@@ -236,9 +236,9 @@
 
 .sign-in-illustration {
     position: absolute;
-    top: -14%;
-    right: -2px;
-    width: 50%;
+    top: -10%;
+    right: -25px;
+    width: 55%;
 }
 
 .sign-in-title{
@@ -274,7 +274,7 @@
     font-weight: 500;
     letter-spacing: 0.8px;
     font-size: 15px;
-    backdrop-filter: blur(15px);
+    /* backdrop-filter: blur(15px); */
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
