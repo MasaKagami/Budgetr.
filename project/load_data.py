@@ -7,7 +7,7 @@ def database_url():
     return "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
 
 # Path to the local database
-def local_database_url():
+def local_users_url():
     return '../localdb/users.csv'
 
 # Create an SQLAlchemy engine instance

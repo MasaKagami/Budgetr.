@@ -33,9 +33,6 @@ def sign_up_page():
         html.Div(
             id='signup_status', 
             style={'text-align': 'center', 'color': 'red'}),
-        # dcc.Store(
-        #         id='signup_result', 
-        #         storage_type='session'), # Hidden div to store the result of the login attempt
         dcc.Link(
             'Login', 
             href='/sign-in', 

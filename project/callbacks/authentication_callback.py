@@ -1,4 +1,4 @@
-from dash import Input, Output, State
+from dash import Input, Output, State, no_update
 from flask import session
 from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user
 
@@ -22,6 +22,8 @@ def authentication_callback(app, use_remote_db=False):
                     userid = validate_remote_user(email, password)
                 else:
                     userid = validate_local_user(email, password)
+
+                print('UserID:', userid)
                 
                 # If the user is valid, log them in
                 if userid is not None:
@@ -31,7 +33,6 @@ def authentication_callback(app, use_remote_db=False):
                 else:
                     return 'Invalid email or password', None
             return 'Please enter your email and password', None
-        # return '', None
         return '', None
     
     # ------------------------------------------------------------------------------
@@ -60,12 +61,8 @@ def authentication_callback(app, use_remote_db=False):
                     userid = create_remote_user(name, email, password)
                 else:
                     userid = create_local_user(name, email, password)
-                
-                # Log in the user automatically after successful signup
-                # if use_remote_db:
-                #     userid = validate_remote_user(email, password)
-                # else:
-                #     userid = validate_local_user(email, password)
+
+                print('UserID:', userid)
                 
                 # Log in the user automatically after successful signup
                 if userid is not None:
@@ -90,4 +87,4 @@ def authentication_callback(app, use_remote_db=False):
             return temp_login_url
         elif temp_signup_url:
             return temp_signup_url
-        return
+        return no_update # Don't redirect if the intermediate data stores are empty
