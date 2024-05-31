@@ -1,6 +1,6 @@
 from dash import Output, Input, State
 import pandas as pd
-from load_data import load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets
+from load_data import load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets, userid
 
 def spendings_callback(app):
     # Callback for adding transactions
@@ -22,7 +22,7 @@ def spendings_callback(app):
             # Add the new transaction to the DataFrame
             new_transaction = {
                 'transactionid': transactions_df['transactionid'].max() + 1, # Increment the transaction ID
-                'userid': 1, # Hardcoded for now
+                'userid': userid(),
                 'date': date + ' 00:00:00',
                 'categoryname': category,
                 'amount': amount, 
@@ -117,7 +117,7 @@ def spendings_callback(app):
             else:
                 new_monthly_budget = {
                     'budgetid': monthly_budgets_df['budgetid'].max() + 1,
-                    'userid': 1,  # Hardcoded for now
+                    'userid': userid(),
                     'totalbudget': total_budget,
                     'budgetmonth': selected_date
                 }
