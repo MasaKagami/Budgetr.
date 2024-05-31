@@ -23,6 +23,14 @@ def welcome_page():
         ], className='welcome-content-background'),
 
         html.Div([
+            html.H1("How it works"),
+            html.Div([
+                html.Img(),
+                html.P('blah blah blah')
+            ], className='welcome-instruction-content')
+        ], className='welcome-instruction'),
+
+        html.Div([
             html.Div([
                 html.H2("About The Creators"),
                 html.P("After meeting in Software Engineering Practice, a pivotal course at McGill University, Masa and Shyam quickly discovered their shared passion for technology and innovation. This connection sparked not only a dynamic classroom collaboration but also inspired them to tackle summer projects together, blending their skills to create impactful solutions."),

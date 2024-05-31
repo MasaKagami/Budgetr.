@@ -28,7 +28,7 @@ def sign_in_page():
 
                                 html.Div([
                                         dcc.Link('sign up', href='/sign-up', className='sign-in-bottom-text'),
-                                        dcc.Link('forgot password', href='', className='sign-in-bottom-text')
+                                        dcc.Link('forgot password?', href='', className='sign-in-bottom-text')
                                 ], className='sign-in-bottom')
                         ], className='sign-in')
                 ], className='sign-in-container'),

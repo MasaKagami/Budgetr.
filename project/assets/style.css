@@ -116,6 +116,19 @@ html, body{
     width: 200px;
 }
 
+/* --------------------INSTRUCTION SECTION-------------------- */
+
+.welcome-instruction{
+    width: 100%;
+    height: auto;
+    padding: 2rem;
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 /* --------------------ABOUT SECTION-------------------- */
 
 
