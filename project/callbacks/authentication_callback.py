@@ -6,7 +6,7 @@ from user_management import create_local_user, validate_local_user, create_remot
 def authentication_callback(app, use_remote_db=False):
     @app.callback(
         Output('login_status', 'children'),
-        Output('temp_login_url', 'data'), # Store the redirect url in an intermediate data store
+        Output('login_redirect_url', 'children'), # Store the redirect url in a hidden div
         [Input('login_button', 'n_clicks')],
         [State('login_email', 'value'), 
          State('login_password', 'value')]
@@ -31,8 +31,8 @@ def authentication_callback(app, use_remote_db=False):
                     session['user_id'] = userid
                     return 'Login successful', '/dashboard'
                 else:
-                    return 'Invalid email or password', None
-            return 'Please enter your email and password', None
+                    return 'Invalid email or password', no_update
+            return 'Please enter your email and password', no_update
         return '', None
     
     # ------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ def authentication_callback(app, use_remote_db=False):
 
     @app.callback(
         Output('signup_status', 'children'),
-        Output('temp_signup_url', 'data'), # Store the redirect url in an intermediate data store
+        Output('signup_redirect_url', 'children'), # Store the redirect url in a hidden div
         [Input('signup_button', 'n_clicks')],
         [State('signup_name', 'value'), 
          State('signup_email', 'value'), 
@@ -70,8 +70,8 @@ def authentication_callback(app, use_remote_db=False):
                     session['user_id'] = userid
                     return 'User created successfully', '/dashboard'
                 else:
-                    return 'Error during account creation', None
-            return 'Please fill out all fields', None
+                    return 'Error during account creation', no_update
+            return 'Please fill out all fields', no_update
         return '', None
     
     # ------------------------------------------------------------------------------
@@ -79,12 +79,14 @@ def authentication_callback(app, use_remote_db=False):
     
     @app.callback(
         Output('url', 'pathname'),
-        Input('temp_login_url', 'data'),
-        Input('temp_signup_url', 'data')
+        [Input('login_redirect_url', 'children'),
+         Input('signup_redirect_url', 'children')]
     )
+    
     def redirect_user(temp_login_url, temp_signup_url):
         if temp_login_url:
             return temp_login_url
         elif temp_signup_url:
             return temp_signup_url
-        return no_update # Don't redirect if the intermediate data stores are empty
+        
+        return no_update  # Don't redirect if the intermediate data stores are empty

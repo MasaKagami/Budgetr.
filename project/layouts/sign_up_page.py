@@ -2,6 +2,10 @@ from dash import html, dcc
 
 def sign_up_page():
     return html.Div([
+        # Hidden div to store the redirect url
+        html.Div(id='login_redirect_url', style={'display': 'none'}),
+        html.Div(id='signup_redirect_url', style={'display': 'none'}),
+
         html.H2(
             "Sign Up", 
             style={'text-align': 'center'}),
