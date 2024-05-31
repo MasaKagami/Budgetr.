@@ -38,7 +38,7 @@ print("USERS DB\n", users_df[:5])
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar
 
-app.layout = html.Div([    
+app.layout = html.Div([
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
         rel='stylesheet'

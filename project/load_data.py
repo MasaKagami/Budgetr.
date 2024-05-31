@@ -1,6 +1,13 @@
 from sqlalchemy import create_engine
 import pandas as pd
 from datetime import datetime
+from flask import session
+
+def userid():
+    return session.get('user_id')
+
+# ------------------------------------------------------------------------------
+# Database URLs
 
 # Path to the remote database
 def database_url():
@@ -9,6 +16,9 @@ def database_url():
 # Path to the local database
 def local_users_url():
     return '../localdb/users.csv'
+
+# ------------------------------------------------------------------------------
+# Load all the data from the databases
 
 # Create an SQLAlchemy engine instance
 def create_engine_instance():
@@ -37,7 +47,7 @@ def load_local_database():
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 # ------------------------------------------------------------------------------
-# Load the data from the remote database
+# Load specific data from the remote database
 
 def load_transactions(engine):
     return pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
@@ -55,7 +65,7 @@ def load_users(engine):
     return pd.read_sql("SELECT * FROM Users;", engine)
 
 # ------------------------------------------------------------------------------
-# Load the data from the local database
+# Load specific data from the local database
 
 def load_local_transactions():
     return pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
