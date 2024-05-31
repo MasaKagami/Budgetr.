@@ -1,5 +1,5 @@
 from dash import Dash, dcc, html, Input, Output
-from flask import Flask, session, redirect, request
+from flask import Flask, session
 from os import urandom
 
 # Layouts
@@ -25,7 +25,7 @@ app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppres
 app.title = 'Budgetr.'
 
 # Use remote database or local database for user authentication and input forms
-USE_REMOTE_DB = False
+USE_REMOTE_DB = True
 
 # Load data from the database
 if USE_REMOTE_DB:
