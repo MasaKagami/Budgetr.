@@ -1,0 +1,91 @@
+.spendings-page{
+    /* background-color: #1e2130; */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    text-align: left;
+    width: 100%;
+    height: auto;
+    padding: 2rem;
+    color: white;
+}
+
+.spendings-add-transaction{
+    padding: 2rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 50rem;
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;    
+    height: auto;
+    /* background-color: gray; */
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+}
+
+.spendings-add-transaction H1{
+    opacity: .8;
+}
+
+.spendings-input{
+    box-sizing: border-box;
+    display: flex;
+    padding: 0px 14.5px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    /* max-width: 30rem; */
+    /* background-color: pink; */
+    margin-bottom: 5px;
+    border: none;
+    border-bottom: rgb(194, 194, 194) solid 2px;
+    color: white;
+    outline: none;
+}
+
+.spendings-input h2{
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: .8px;
+}
+
+.DateInput, .DateInput_1 {
+    width: auto;
+    height: auto;
+    font-size: 14px;
+    background-color: #1e2130;
+    border: none;
+    color: white; 
+    padding: 0px;
+    border-radius: 4px;
+    margin:0;
+}
+
+.DateInput__input--focused {
+    border-color: #007bff; /* Blue border when focused */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); /* Slight glow effect */
+}
+
+
+/* Calendar popup styling */
+.CalendarDay {
+    border: none; /* Remove default borders */
+    color: #333333; /* Standard text color */
+    background-color: #eeeeee; /* Light grey background */
+}
+
+.CalendarDay__selected, .CalendarDay__selected:hover {
+    background-color: #007bff; /* Blue background for selected day */
+    color: white; /* White text for selected day */
+}
+
+.CalendarDay__hovered_span, .CalendarDay__hovered_span:hover {
+    background-color: #eaf2fd; /* Very light blue for days in span */
+    color: #333333; /* Dark text on light background */
+}
+
+.CalendarDay__selected_span {
+    background-color: #ade2fb; /* Lighter blue for range between selected days */
+    color: #333333; /* Dark text for readability */
+}

@@ -5,7 +5,7 @@
     flex-direction: row;
     flex-grow:1;
     height: auto;
-    background-color: #0d0f16;
+    background-color: #1e2130;
     color: white;
     padding: 40px;
     overflow:hidden;
@@ -34,7 +34,7 @@
     flex-direction: row;
     align-items: center;
     width: auto;
-    background-color: #1e2130;
+    background-color: #151a28;
     border-radius: 10px;
     margin-bottom: 20px;
 }
@@ -115,7 +115,7 @@
 /* --------------------NET BALANCE-------------------- */
 
 .dashboard-net-balance{
-    background-color: #1e2130;
+    background-color: #151a28;
     padding: 40px 20px;
     margin-bottom: 20px;
     border-radius: 10px;
@@ -135,7 +135,7 @@
 }
 
 .status-outputBox{
-    background-color: rgba(255, 255, 255, .05);
+    background-color: #ffffff0d;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -158,7 +158,7 @@
 /* --------------------CATEGORIZATION-------------------- */
 
 .dashboard-categorization{
-    background-color: #1e2130;
+    background-color: #151a28;
     padding: 20px;
     border-radius: 10px;
 }
@@ -189,7 +189,7 @@
     padding: 20px;
     flex: 1;
     margin-right: 20px;
-    background-color: #1e2130;
+    background-color: #151a28;
     border-radius: 10px;
 }
 
@@ -197,7 +197,7 @@
     padding: 20px;
     padding-bottom: 20px;
     flex: 1;
-    background-color: #1e2130;
+    background-color: #151a28;
     border-radius: 10px;
 }
 
@@ -207,7 +207,7 @@
     display: flex;
     flex-direction: column;
     height: auto;
-    background-color: #1e2130;
+    background-color: #151a28;
     padding: 20px;
     border-radius: 10px;
 }

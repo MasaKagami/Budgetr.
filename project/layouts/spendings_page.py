@@ -4,34 +4,60 @@ from load_data import current_month, current_year, monthsToInt
 
 def spendings_page(categories_df, categorical_budgets_df):
     return html.Div(id='spendings_page', children=[
-        html.H2("Add a New Transaction", style={'text-align': 'center'}),
-        dcc.DatePickerSingle(
-            id='input_date',
-            date=pd.Timestamp.now().strftime('%Y-%m-%d'),
-            display_format='YYYY-MM-DD',
-            style={'width': '150px', 'margin': '10px auto', 'display': 'block'}
-        ),
-        dcc.Input(
-            id='input_amount',
-            type='number',
-            min=0,
-            placeholder='Amount',
-            style={'width': '150px', 'margin': '10px auto', 'display': 'block'}
-        ),
-        dcc.Dropdown(
-            id='input_category',
-            options=[{'label': category, 'value': category} for category in categories_df['name']],
-            placeholder='Select Category',
-            style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
-        ),
-        dcc.Input(
-            id='input_description',
-            type='text',
-            placeholder='Description',
-            style={'width': '40%', 'margin': '10px auto', 'display': 'block'}
-        ),
-        html.Button('Add Transaction', id='submit_transaction', n_clicks=0, style={'width': '150px', 'margin': '10px auto', 'display': 'block'}),
-        html.Div(id='transaction_status', style={'text-align': 'center'}),  # Display the status of the transaction   
+        html.Div([
+            html.H1("Add a New Transaction"),
+            html.Div([    
+                html.H2('select date'),
+                dcc.DatePickerSingle(
+                    id='input_date',
+                    date=pd.Timestamp.now().strftime('%Y-%m-%d'),
+                    display_format='YYYY-MM-DD',
+                ),
+            ],className='spendings-input'),
+            html.Div([    
+                html.H2('input amount'),
+                dcc.Input(
+                    id='input_amount',
+                    type='number',
+                    min=0,
+                    placeholder='Amount',
+                ),
+            ],className='spendings-input'),
+            html.Div([    
+                html.H2('select category'),
+                dcc.Dropdown(
+                    id='input_category',
+                    options=[{'label': category, 'value': category} for category in categories_df['name']],
+                    placeholder='Select Category',
+                ),
+            ],className='spendings-input'),
+            html.Div([    
+                html.H2('enter description'),
+                dcc.Input(
+                    id='input_description',
+                    type='text',
+                    placeholder='Description',
+                ),
+            ],className='spendings-input'),
+
+
+            html.Button('Add Transaction', id='submit_transaction', n_clicks=0),
+            html.Div(id='transaction_status'),  # Display the status of the transaction   
+        ], className= 'spendings-add-transaction'),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         html.H2("Manage Budget", style={'text-align': 'center'}),
         html.Div(id='budget_month_selector', children=[
@@ -93,4 +119,4 @@ def spendings_page(categories_df, categorical_budgets_df):
 
         # Hidden div to store update triggers
         html.Div(id='update_trigger', style={'display': 'none'})
-    ], className='spendingsContainer') # spendingsContainer doesn't exist in the CSS file yet
+    ], className='spendings-page')

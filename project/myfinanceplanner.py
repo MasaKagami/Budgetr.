@@ -105,7 +105,7 @@ def display_page(pathname):
         session.clear()
         print("User logged out")
         return dcc.Location(href='/', id='redirect') # Redirect to the welcome page after logging out
-    
+
     else:
         return "404 Page Not Found"
     
