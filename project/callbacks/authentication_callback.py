@@ -51,11 +51,11 @@ def authentication_callback(app, use_remote_db=False):
     def signup_user(n_clicks, name, email, password, confirm_password):
         if n_clicks and n_clicks > 0:
             print("Signing up...", name, email)
-
-            if password != confirm_password:
-                return 'Passwords do not match', None
             
-            if name and email and password:
+            if name and email and password and confirm_password:
+                if password != confirm_password:
+                    return 'Passwords do not match', None
+            
                 # Create the new user
                 if use_remote_db:
                     userid = create_remote_user(name, email, password)

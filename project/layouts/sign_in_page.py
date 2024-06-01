@@ -25,9 +25,10 @@ def sign_in_page():
                                 html.Img(src="/assets/rocket.png", className='sign-in-illustration', alt='illustration'),
                                 html.H1("Sign In", className='sign-in-title'),
                                 html.Div([
-                                        dcc.Input(type='text', placeholder='Username'),
-                                        dcc.Input(type='password', placeholder='Password'),
-                                        html.Button('Submit', className='opacity')
+                                        dcc.Input(id='login_email', type='text', placeholder='Username'),
+                                        dcc.Input(id='login_password', type='password', placeholder='Password'),
+                                        html.Button('Submit', id='login_button', className='opacity'),
+                                        html.Div(id='login_status', style={'text-align': 'center', 'color': 'red'})
                                 ], className='sign-in-top'),
 
                                 html.Div([
