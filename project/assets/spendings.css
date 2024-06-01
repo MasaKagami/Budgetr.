@@ -15,7 +15,9 @@
     display: flex;
     flex-direction: row;
     margin-bottom:2rem;
+    width: 100%;
 }
+
 
 /* -----------------------------------ADD TRANSACTION----------------------------------- */
 
@@ -170,7 +172,97 @@
     box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
 }
 
-.spendings-manage{
+.spendings-manage-option{
+    margin:0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+    /* text-align: right; */
+    /* border-radius: 10px; */
+    /* border: #0f3460 2px solid; */
+}
+
+.spendings-manage-option h2{
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.spendings-manage-option input{
+    display: block;
+    box-sizing: border-box;
+    padding: 10px;
+    width: 15rem;
+    margin: .5rem 0;
+    color: #c7c7c7;
+    outline: none;
+    background-color: #9191911f;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    font-size: 15px;
+    text-align: right;
+}
+
+.spendings-manage-option::placeholder{
+    color: #c7c7c7;
+}
+
+
+.spendings-manage-option .Select-control {
+    color: #c7c7c7;
+    background-color: #9191911f !important;
+    border: none !important;
+    width: 15rem !important;
+    text-align: left;
+}
+
+/* Styling for the placeholder and the value when not selected */
+.spendings-manage-option .Select-placeholder,
+.spendings-manage-option .Select-value,
+.spendings-manage-option .Select-input {
+    color: #c7c7c7 !important;
+}
+
+/* Styling for text when an option is selected */
+.spendings-manage-option .Select-value-label,
+.spendings-manage-option .Select-control .Select-value,
+.spendings-manage-option .Select-single > .Select-control .Select-value {
+    color: #c7c7c7 !important;
+}
+
+/* Ensure the dropdown menu matches the styling */
+.spendings-manage-option .Select-menu-outer {
+    background-color: #1e2130;
+    color: #c7c7c7 !important;
+}
+
+/* -----------------------------------BOTTOM HALF----------------------------------- */
+
+/* -----------------------------------BUDGET OVERVIEW----------------------------------- */
+
+.spendings-botton{
+    display: flex;
+    flex-direction: row;
+    margin-bottom:2rem;
+    width: 100%;
+}
+
+.spendings-budget-overview{
+    padding: 2rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 50rem;
     display: flex;
     flex-direction: column;
+    align-items:flex-start;    
+    height: auto;
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    margin-right: 2rem;
 }
+
