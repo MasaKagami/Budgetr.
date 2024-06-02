@@ -75,7 +75,7 @@ def spendings_callback(app):
         else:
             total_budget = int(monthly_budget_row['totalbudget'].values[0])
 
-        budget_overview = f"Total Budget for {selected_date.strftime('%Y-%m')}: ${total_budget}"
+        budget_overview = f"Current Budget for {selected_date.strftime('%Y-%m')}: ${total_budget}"
 
         # Display the allocated budget for each category
         budget_table_data = categorical_budgets_df.to_dict('records')
@@ -89,9 +89,9 @@ def spendings_callback(app):
 
         # Customize the display message based on the budget surplus/deficit
         if unallocated_budget < 0:
-            unallocated_budget_display = f"Exceeding Monthly Budget by ${-unallocated_budget}"
+            unallocated_budget_display = f"Exceeding current monthly budget by ${-unallocated_budget}"
         elif unallocated_budget > 0:
-            unallocated_budget_display = f"Remaining Monthly Budget of ${unallocated_budget}"
+            unallocated_budget_display = f"Remaining monthly budget of ${unallocated_budget}"
         else:
             unallocated_budget_display = f"${total_budget} Budget Fully Allocated"
 
