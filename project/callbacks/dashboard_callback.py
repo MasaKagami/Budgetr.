@@ -1,3 +1,4 @@
+from enum import auto
 from dash import html, Input, Output
 import pandas as pd
 import plotly.express as px
@@ -139,7 +140,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
             insidetextorientation='radial',  # Better orientation for text inside
             textfont=dict(
                 color='#eeeee4',
-                size=12
+                size=10
             )
         )
 
@@ -147,11 +148,10 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             margin=dict(l=0, r=0, t=0, b=0),
-            height=350,
             legend=dict(
                 font=dict(
                     color="#eeeee4",
-                    size=11
+                    size=10
                 )
             )
         )
@@ -269,7 +269,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
                 x=0.5,
                 font=dict(
                     color="#eeeee4",
-                    size=12
+                    size=10
                 )
             )
         )
@@ -315,14 +315,14 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
                 x=0.5,
                 font=dict(
                     color="#eeeee4",
-                    size=12
+                    size=10
                 )
             ),
             xaxis=dict(
                 title_font=dict(color="#eeeee4"),  # Color for the X-axis title
                 tickfont=dict(
                     color="#eeeee4",
-                    size=11
+                    size=10
                     ),  # Color for the X-axis ticks
                 showgrid=True,  # Determines whether or not grid lines are drawn
                 gridcolor='rgba(0,0,0,0)'  # Color of grid lines
