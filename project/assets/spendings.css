@@ -431,9 +431,9 @@
     padding: 10px;
     width: 15rem;
     /* margin: 10rem 0; */
-    color: black;
+    color: white;
     outline: none;
-    background-color: white;
+    background-color: #9191911f;
     border: none;
     border-radius: 5px;
     font-weight: 500;
@@ -448,7 +448,16 @@
     font-weight: 500
 }
 
-.spendings-bottom-bottom button{
+.spendings-buttom-bottom-btn{
+    width: 100%;
+    display: flex;
+    /* background-color: pink; */
+    margin-top: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.spendings-buttom-bottom-btn button{
     box-sizing: border-box;
     background-color: #0f3460;
     color: white;

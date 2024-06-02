@@ -51,30 +51,32 @@ def spendings_page(categories_df, categorical_budgets_df):
                 html.H1("Manage Monthly Budget"),
             
                 html.Div([
-                    html.H2("select month:"),
+                    html.H2("month"),
                     dcc.Dropdown(id="slct_budget_month",
                                 options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                                 multi=False,
-                                value=current_month() # Initial value
+                                value=current_month(), # Initial value
+                                placeholder='select month'
                                 )
                 ], className='spendings-manage-option'),
 
                 html.Div([
-                    html.H2("select year:"),
+                    html.H2("year"),
                     dcc.Dropdown(id="slct_budget_year",
                                 options=[{'label': year, 'value': year} for year in range(2000, current_year() + 1)],
                                 multi=False,
-                                value=current_year() # Initial value
+                                value=current_year(), # Initial value
+                                placeholder='select year'
                                 )
                 ], className='spendings-manage-option'),
                 
                 html.Div([
-                    html.H2("enter budget:"),
+                    html.H2("budget"),
                     dcc.Input(
                         id='input_total_budget',
                         type='number',
                         min=0,
-                        placeholder='enter budget',
+                        placeholder='enter budget'
                     )
                 ], className='spendings-manage-option'),                    
 
@@ -110,25 +112,26 @@ def spendings_page(categories_df, categorical_budgets_df):
                 html.H1('Set Categorical Budget'),
                 html.Div([
                     html.Div([
-                        html.H2('select category:'),
+                        html.H2('category'),
                         dcc.Dropdown(
                             id='budget_category_dropdown',
                             options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
-                            placeholder='select',
+                            placeholder='select category',
                         ),
                     ], className='spendings-bottom-top'),
                     html.Div([
+                        html.H2('budget'),
                         dcc.Input(
                             id='budget_category_input',
                             type='number',
                             min=0,
-                            placeholder='Enter Budget',
-                        ),
-                        html.Button('SET', id='submit_category_budget', n_clicks=0)
-                    
+                            placeholder='enter Budget',
+                        ),                    
                     ], className='spendings-bottom-bottom'), 
-
                 ], className='spendings-bottom-body'),
+                html.Div([
+                    html.Button('SET', id='submit_category_budget', n_clicks=0)
+                ], className='spendings-buttom-bottom-btn'),
                 html.Div(id='category_budget_status', className= 'spendings-category-message')
             ], className='spendings-bottom-right')
         ], className='spendings-bottom'),
