@@ -2,6 +2,11 @@ from dash import html, dcc
 
 def sign_up_page():
     return html.Div([
+        # Hidden div to store the redirect url
+        html.Div(id='login_status', style={'display': 'none'}),
+        html.Div(id='signout_status', style={'display': 'none'}),
+        html.Div(id='delete_status', style={'display': 'none'}),
+
         html.Div([
             html.Div([
                 dcc.Link(
@@ -22,14 +27,15 @@ def sign_up_page():
                 html.Img(src="/assets/heart.png", className='sign-up-illustration', alt='illustration'),
                 html.H1("Sign Up", className='sign-up-title'),
                 html.Div([
-                    dcc.Input(type='text', placeholder='Your name'),
-                    dcc.Input(type='text', placeholder='Your email'),
-                    dcc.Input(type='password', placeholder='Password'),
-                    dcc.Input(type='password', placeholder='Re-enter your password'),
+                    dcc.Input(id='signup_name', type='text', placeholder='Your name'),
+                    dcc.Input(id='signup_email', type='text', placeholder='Your email'),
+                    dcc.Input(id='signup_password', type='password', placeholder='Password'),
+                    dcc.Input(id='signup_confirm_password', type='password', placeholder='Re-enter your password'),
+                    html.Div(id='signup_status',style={'text-align': 'center', 'color': 'red'}),
                 ], className='sign-up-top'),
 
                 html.Div([
-                    html.Button('Register', className='text'),
+                    html.Button('Register', id='signup_button', className='text'),
                     dcc.Link('already a budgetr? ', href='/sign-in', className='sign-up-bottom-text')
                 ], className='sign-up-bottom')
             ], className='sign-up')

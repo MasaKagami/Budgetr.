@@ -2,6 +2,7 @@ from enum import auto
 from dash import html, Input, Output
 import pandas as pd
 import plotly.express as px
+from load_data import userid
 
 def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df):
     @app.callback(
@@ -16,10 +17,15 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
     )
 
     def update_graph(selected_year, selected_month):
-        # Filters to only include rows where the year and month match the input year and month
+        # Filters to only include rows where the year and month match the input year and month for the logged-in user
         # Boolean indexing: [ ] filters rows based on a condition
-        filtered_df = transactions_df[(transactions_df['date'].dt.year == selected_year) &
+        filtered_df = transactions_df[(transactions_df['userid'] == userid()) &
+                                    (transactions_df['date'].dt.year == selected_year) &
                                     (transactions_df['date'].dt.month == selected_month)]
+
+        # Ensure the dataframe is not empty
+        if filtered_df.empty:
+            return 'No transactions found', '', {}, {}, {}, []
 
         # total spent in a month
         total_spent = filtered_df['amount'].sum()
@@ -29,10 +35,14 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
 
         # .iloc[0] retrieves the first value from the resulting series
         monthly_budget = monthly_budgets_df[
+            (monthly_budgets_df['userid'] == userid()) &
             (monthly_budgets_df['budgetmonth'].dt.year == selected_year) &
             (monthly_budgets_df['budgetmonth'].dt.month == selected_month)
         ]['totalbudget'].iloc[0]
         # TODO: Handle the case where there is monthly budget available for the selected month (currently throws callback errors)
+
+        # Filter categorical budgets for the logged-in user
+        user_categorical_budgets_df = categorical_budgets_df[categorical_budgets_df['userid'] == userid()]
 
         net_balance = monthly_budget - total_spent
         print("Net Balance:", net_balance)  # Debugging statement
@@ -45,10 +55,10 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
 
         expense_categorization_fig = update_expense_categorization_graph(filtered_df)
         daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budget)
-        budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, categorical_budgets_df)
+        budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, user_categorical_budgets_df)
         
         transactions_table_data = filtered_df[['date_display', 'categoryname', 'amount', 'description']].to_dict('records')
-        
+
         # same order as in the output call-back
         return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig, transactions_table_data
 

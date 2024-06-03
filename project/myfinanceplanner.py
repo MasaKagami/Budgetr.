@@ -1,4 +1,8 @@
 from dash import Dash, dcc, html, Input, Output
+from flask import Flask, session
+from datetime import timedelta
+from os import urandom
+import logging
 
 # Layouts
 from layouts.dashboard_page import dashboard_page
@@ -6,35 +10,56 @@ from layouts.spendings_page import spendings_page
 from layouts.welcome_page import welcome_page
 from layouts.sign_in_page import sign_in_page
 from layouts.sign_up_page import sign_up_page
+from layouts.settings_page import settings_page
 
 # Callbacks
 from callbacks.dashboard_callback import dashboard_callback
 from callbacks.spendings_callback import spendings_callback
 from callbacks.sidebar_callback import sidebar_callback
 from callbacks.authentication_callback import authentication_callback
+from callbacks.settings_callback import settings_callback
 from load_data import load_remote_database, load_local_database, print_dataframes
 
-app = Dash(__name__, suppress_callback_exceptions=True)
+# Initialize Flask server
+server = Flask(__name__)
+server.secret_key = urandom(24) # Generate a secret key for the session
+
+# Session configurations
+server.config['SESSION_PERMANENT'] = True  # Make sessions permanent
+server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session lifetime
+
+# Set up logging
+# logging.basicConfig(level=logging.DEBUG)
+
+# @server.before_request
+# def before_request():
+#     logging.debug(f"Session data before request: {dict(session)}")
+
+# @server.after_request
+# def after_request(response):
+#     logging.debug(f"Session data after request: {dict(session)}")
+#     return response
+
+# Initialize Dash app
+app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
 app.title = 'Budgetr.'
 
 # Use remote database or local database for user authentication and input forms
-USE_REMOTE_DB = False
+USE_REMOTE_DB = True
 
 # Load data from the database
 if USE_REMOTE_DB:
     transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_remote_database()
 else:
     transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
-print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
+# print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df)
+print("USERS DB\n", users_df[:5])
 
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar
 
 app.layout = html.Div([
-    # Ensures the store is always present in the layout to redirect the user after login or signup
-    dcc.Location(id='url', refresh=False),
-    dcc.Store(id='login_result'),
-    dcc.Store(id='signup_result'),
+    dcc.Store(id='local-store', storage_type='session'),  # 'session' storage type allows data to persist across pages and until browser is closed
     
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',
@@ -63,33 +88,49 @@ app.layout = html.Div([
 
 ], className='background'),
 
-
 # ------------------------------------------------------------------------------
 # Callback to toggle between pages from the sidebar
 @app.callback(
     Output('page-content', 'children'),
-    [Input('url', 'pathname')]
+    [Input('url', 'pathname'),
+     Input('local-store', 'data')]
 )
 
-def display_page(pathname):
-    if pathname == '/dashboard':
-        return dashboard_page(transactions_df)
-    elif pathname == '/record':
-        return spendings_page(categories_df, categorical_budgets_df)
-    elif pathname == '/':
+def display_page(pathname, session_data):
+    if pathname == '/':
         return welcome_page()
+    
     elif pathname == '/sign-in':
         return sign_in_page()
+    
     elif pathname == '/sign-up':
         return sign_up_page()
+    
+    elif pathname == '/dashboard':
+        if session_data and session_data.get('logged_in'):
+            return dashboard_page(transactions_df)
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+        
+    elif pathname == '/record':
+        if session_data and session_data.get('logged_in'):
+            return spendings_page(categories_df, categorical_budgets_df)
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+        
+    elif pathname == '/settings':
+        if session_data and session_data.get('logged_in'):
+            return settings_page()
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+        
     elif pathname == '/logout':
-        return "404 Page Not Found"
+        print("User logged out")
+        return dcc.Location(href='/', id='redirect') # Redirect to the welcome page after logging out
 
-        # return welcome_page()
     else:
         return "404 Page Not Found"
     
-
 # ------------------------------------------------------------------------------
 # Callback for sidebar
 
@@ -98,7 +139,7 @@ def display_page(pathname):
     [Input('url', 'pathname')]
 )
 def toggle_sidebar_visibility(pathname):
-    if pathname == '/' or pathname == '/sign-in' or pathname == '/sign-up':
+    if pathname in ['/', '/sign-in', '/sign-up']:
         return {'display': 'none'}  # Hide sidebar on welcome, sign-in, and sign-up pages
     else:
         return {'display': 'flex'}  # Show sidebar as a flexbox on all other pages
@@ -110,6 +151,7 @@ authentication_callback(app, use_remote_db=USE_REMOTE_DB)
 sidebar_callback(app)
 dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df)
 spendings_callback(app)
+settings_callback(app, use_remote_db=USE_REMOTE_DB)
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':

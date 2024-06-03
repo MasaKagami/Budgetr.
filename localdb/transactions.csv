@@ -205,3 +205,4 @@ transactionid,userid,date,categoryname,amount,description
 204,1,2024-05-24 00:00:00,Housing,1000.0,Rent May'24
 205,1,2024-05-24 00:00:00,Food,250.0,Reunion Dinner Party
 206,1,2024-02-01 00:00:00,Transportation,20.0,bts
+207,1,2024-06-01 00:00:00,Food,4.5,Frostbite ice cream

@@ -1,6 +1,6 @@
 from dash import Output, Input, State
 import pandas as pd
-from load_data import load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets
+from load_data import load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets, userid
 
 def spendings_callback(app):
     # Callback for adding transactions
@@ -22,7 +22,7 @@ def spendings_callback(app):
             # Add the new transaction to the DataFrame
             new_transaction = {
                 'transactionid': transactions_df['transactionid'].max() + 1, # Increment the transaction ID
-                'userid': 1, # Hardcoded for now
+                'userid': userid(),
                 'date': date + ' 00:00:00',
                 'categoryname': category,
                 'amount': amount, 
@@ -61,9 +61,13 @@ def spendings_callback(app):
         # Convert the selected month and year to a datetime object
         selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
-        # Load the latest budgets DB
+        # Load the latest budgets DB for the logged in user
         monthly_budgets_df = load_local_monthly_budgets()
+        monthly_budgets_df = monthly_budgets_df[monthly_budgets_df['userid'] == userid()]
+        print(monthly_budgets_df)
+        
         categorical_budgets_df = load_local_categorical_budgets()
+        categorical_budgets_df = categorical_budgets_df[categorical_budgets_df['userid'] == userid()]
         
         monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]
         if monthly_budget_row.empty:
@@ -75,6 +79,9 @@ def spendings_callback(app):
 
         # Display the allocated budget for each category
         budget_table_data = categorical_budgets_df.to_dict('records')
+
+        if categorical_budgets_df.empty:
+            budget_table_data = [{'categoryname': 'No categories found', 'categorybudget': 0}]
 
         # Calculate the unallocated budget
         allocated_budget = categorical_budgets_df['categorybudget'].sum()
@@ -112,12 +119,12 @@ def spendings_callback(app):
             monthly_budgets_df = load_local_monthly_budgets()
 
             # Update or insert the monthly budget
-            if selected_date in monthly_budgets_df['budgetmonth'].values:
+            if selected_date in monthly_budgets_df['budgetmonth'].values and monthly_budgets_df['userid'].values[0] == userid():
                 monthly_budgets_df.loc[monthly_budgets_df['budgetmonth'] == selected_date, 'totalbudget'] = total_budget
             else:
                 new_monthly_budget = {
                     'budgetid': monthly_budgets_df['budgetid'].max() + 1,
-                    'userid': 1,  # Hardcoded for now
+                    'userid': userid(),
                     'totalbudget': total_budget,
                     'budgetmonth': selected_date
                 }
@@ -145,7 +152,16 @@ def spendings_callback(app):
                 categorical_budgets_df = load_local_categorical_budgets()
 
                 # Update the selected category's budget
-                categorical_budgets_df.loc[categorical_budgets_df['categoryname'] == selected_category, 'categorybudget'] = new_category_budget
+                if selected_category in categorical_budgets_df['categoryname'].values and categorical_budgets_df['userid'].values[0] == userid():
+                    categorical_budgets_df.loc[categorical_budgets_df['categoryname'] == selected_category, 'categorybudget'] = new_category_budget
+                else:
+                    new_category_budget_row = {
+                        'catbudgetid': categorical_budgets_df['catbudgetid'].max() + 1,
+                        'userid': userid(),
+                        'categoryname': selected_category,
+                        'categorybudget': new_category_budget
+                    }
+                    categorical_budgets_df.loc[len(categorical_budgets_df)] = new_category_budget_row
 
                 # Save the updated DataFrame to the CSV file
                 categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)

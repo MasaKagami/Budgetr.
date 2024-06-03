@@ -1,14 +1,24 @@
 from sqlalchemy import create_engine
 import pandas as pd
 from datetime import datetime
+from flask import session
+
+def userid():
+    return session.get('user_id')
+
+# ------------------------------------------------------------------------------
+# Database URLs
 
 # Path to the remote database
 def database_url():
     return "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
 
 # Path to the local database
-def local_database_url():
+def local_users_url():
     return '../localdb/users.csv'
+
+# ------------------------------------------------------------------------------
+# Load all the data from the databases
 
 # Create an SQLAlchemy engine instance
 def create_engine_instance():
@@ -37,7 +47,7 @@ def load_local_database():
     return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 # ------------------------------------------------------------------------------
-# Load the data from the remote database
+# Load specific data from the remote database
 
 def load_transactions(engine):
     return pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
@@ -55,7 +65,7 @@ def load_users(engine):
     return pd.read_sql("SELECT * FROM Users;", engine)
 
 # ------------------------------------------------------------------------------
-# Load the data from the local database
+# Load specific data from the local database
 
 def load_local_transactions():
     return pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
@@ -76,11 +86,11 @@ def load_local_users():
 # Print the dataframes
 
 def print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df):
-    # print('\nTRANSACTIONS DB\n', transactions_df[:5])
-    # print('CATEGORIES DB\n', categories_df[:5])
+    print('\nTRANSACTIONS DB\n', transactions_df[:5])
+    print('CATEGORIES DB\n', categories_df[:5])
     print('USERS DB\n', users_df[:5])
-    # print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
-    # print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
+    print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
+    print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
 # ------------------------------------------------------------------------------
 # Get the current month and year
