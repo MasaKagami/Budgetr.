@@ -1,8 +1,7 @@
 from dash import Output, Input, State
 from flask import session
 from sqlalchemy import text
-import pandas as pd
-from user_management import hash_password, validate_local_user, validate_remote_user
+from user_management import hash_password, validate_local_user, validate_remote_user, local_users_url
 from load_data import create_engine_instance, load_local_users
 
 def settings_callback(app, use_remote_db=False):
@@ -12,10 +11,12 @@ def settings_callback(app, use_remote_db=False):
         [State('profile_name', 'value'), 
          State('profile_email', 'value')]
     )
+
     def update_profile(n_clicks, name, email):
         if n_clicks and n_clicks > 0:
             if name and email:
                 userid = session.get('user_id')
+                
                 if userid:
                     # Update the user profile
                     if use_remote_db:
@@ -37,6 +38,7 @@ def settings_callback(app, use_remote_db=False):
         [State('new_password', 'value'), 
          State('confirm_new_password', 'value')]
     )
+
     def update_password(n_clicks, new_password, confirm_new_password):
         if n_clicks and n_clicks > 0:
             if new_password and confirm_new_password:
@@ -62,6 +64,7 @@ def settings_callback(app, use_remote_db=False):
         Output('confirm_delete_section', 'style'),
         [Input('delete_account_button', 'n_clicks')]
     )
+
     def show_confirm_delete(n_clicks):
         if n_clicks and n_clicks > 0:
             return {'display': 'block'}
@@ -75,6 +78,7 @@ def settings_callback(app, use_remote_db=False):
         [Input('confirm_delete_button', 'n_clicks')],
         [State('confirm_password', 'value')]
     )
+    
     def delete_account(n_clicks, password):
         if n_clicks and n_clicks > 0:
             if password:
@@ -107,9 +111,9 @@ def settings_callback(app, use_remote_db=False):
     # Update User Profile Functions
 
     def update_local_user_profile(userid, name, email):
-        users_df = pd.read_csv(load_local_users())
+        users_df = load_local_users()
         users_df.loc[users_df['userid'] == userid, ['name', 'email']] = [name, email]
-        users_df.to_csv(load_local_users(), index=False)
+        users_df.to_csv(local_users_url(), index=False)
 
     def update_remote_user_profile(userid, name, email):
         engine = create_engine_instance()
@@ -120,9 +124,9 @@ def settings_callback(app, use_remote_db=False):
     # Update User Password Functions
 
     def update_local_user_password(userid, password):
-        users_df = pd.read_csv(load_local_users())
+        users_df = load_local_users()
         users_df.loc[users_df['userid'] == userid, 'password'] = hash_password(password)
-        users_df.to_csv(load_local_users(), index=False)
+        users_df.to_csv(local_users_url(), index=False)
 
     def update_remote_user_password(userid, password):
         engine = create_engine_instance()
@@ -133,9 +137,9 @@ def settings_callback(app, use_remote_db=False):
     # Delete User Functions
 
     def delete_local_user(userid):
-        users_df = pd.read_csv(load_local_users())
+        users_df = load_local_users()
         users_df = users_df[users_df['userid'] != userid]
-        users_df.to_csv(load_local_users(), index=False)
+        users_df.to_csv(local_users_url(), index=False)
 
     def delete_remote_user(userid):
         engine = create_engine_instance()
