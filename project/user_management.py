@@ -1,8 +1,7 @@
 import hashlib
 import pandas as pd
-
 from sqlalchemy import text
-from load_data import create_engine_instance, local_users_url
+from load_data import create_engine_instance, local_users_url, load_local_users
 
 # Encrypts the password using SHA256
 def hash_password(password):
@@ -55,3 +54,16 @@ def validate_local_user(email, password):
     if not user.empty:
         return int(user.iloc[0]['userid'])  # Ensure this is a standard Python integer
     return None
+
+# ------------------------------------------------------------------------------
+# Delete User Function
+
+def delete_local_user(userid):
+    users_df = pd.read_csv(load_local_users())
+    users_df = users_df[users_df['userid'] != userid]
+    users_df.to_csv(load_local_users(), index=False)
+
+def delete_remote_user(userid):
+    engine = create_engine_instance()
+    with engine.begin() as conn:
+        conn.execute(text('DELETE FROM users WHERE userid=:userid'), {'userid': userid})
