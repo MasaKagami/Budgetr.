@@ -29,16 +29,16 @@ server.config['SESSION_PERMANENT'] = True  # Make sessions permanent
 server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session lifetime
 
 # Set up logging
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
-@server.before_request
-def before_request():
-    logging.debug(f"Session data before request: {dict(session)}")
+# @server.before_request
+# def before_request():
+#     logging.debug(f"Session data before request: {dict(session)}")
 
-@server.after_request
-def after_request(response):
-    logging.debug(f"Session data after request: {dict(session)}")
-    return response
+# @server.after_request
+# def after_request(response):
+#     logging.debug(f"Session data after request: {dict(session)}")
+#     return response
 
 # Initialize Dash app
 app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
