@@ -59,7 +59,7 @@ print("USERS DB\n", users_df[:5])
 # Main App layout with Sidebar
 
 app.layout = html.Div([
-    dcc.Store(id='local-store', storage_type='local'),  # Store data in browser's local storage
+    dcc.Store(id='local-store', storage_type='session'),  # 'session' storage type allows data to persist across pages and until browser is closed
     
     html.Link(
         href='https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap',

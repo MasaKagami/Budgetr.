@@ -96,7 +96,6 @@ def authentication_callback(app, use_remote_db=False):
     )
     
     def redirect_user(login_status, signup_status, signout_status, delete_status):
-        print(login_status, signup_status, signout_status)
         if login_status == 'Login successful':
             session_data = {
                 'logged_in': True, 
