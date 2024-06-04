@@ -49,7 +49,6 @@ def spendings_callback(app):
     # Update the budget overview when a new month is selected
     @app.callback(
         [Output('budget_overview', 'children'),
-        Output('input_total_budget', 'value'),
         Output('budget_table', 'data'),
         Output('unallocated_budget', 'children')],
         [Input('slct_budget_month', 'value'),
@@ -59,7 +58,10 @@ def spendings_callback(app):
 
     def display_budget_overview(selected_month, selected_year, _):
         # Convert the selected month and year to a datetime object
-        selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
+        if selected_month and selected_year:
+            selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
+        else:
+            return "", [], ""
 
         # Load the latest budgets DB for the logged in user
         monthly_budgets_df = load_local_monthly_budgets()
@@ -95,7 +97,7 @@ def spendings_callback(app):
         else:
             unallocated_budget_display = f"${total_budget} Budget Fully Allocated"
 
-        return budget_overview, total_budget, budget_table_data, unallocated_budget_display
+        return budget_overview, budget_table_data, unallocated_budget_display
 
     # ------------------------------------------------------------------------------
     # Update the total budget when a new total budget is submitted

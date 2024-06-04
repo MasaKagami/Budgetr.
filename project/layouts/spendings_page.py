@@ -1,6 +1,5 @@
 from dash import html, dcc, dash_table
-import pandas as pd
-from load_data import current_month, current_year, monthsToInt
+from load_data import current_year, monthsToInt
 
 def spendings_page(categories_df, categorical_budgets_df):
     return html.Div(id='spendings_page', children=[
@@ -54,7 +53,6 @@ def spendings_page(categories_df, categorical_budgets_df):
                     dcc.Dropdown(id="slct_budget_month",
                                 options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                                 multi=False,
-                                value=current_month(), # Initial value
                                 placeholder='select month'
                                 )
                 ], className='spendings-manage-option'),
@@ -64,7 +62,6 @@ def spendings_page(categories_df, categorical_budgets_df):
                     dcc.Dropdown(id="slct_budget_year",
                                 options=[{'label': year, 'value': year} for year in range(2000, current_year() + 1)],
                                 multi=False,
-                                value=current_year(), # Initial value
                                 placeholder='select year'
                                 )
                 ], className='spendings-manage-option'),
