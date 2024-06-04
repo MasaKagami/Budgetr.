@@ -120,9 +120,13 @@ def spendings_callback(app):
             # Load the latest budgets DB before updating
             monthly_budgets_df = load_local_monthly_budgets()
 
-            # Update or insert the monthly budget
-            if selected_date in monthly_budgets_df['budgetmonth'].values and monthly_budgets_df['userid'].values[0] == userid():
-                monthly_budgets_df.loc[monthly_budgets_df['budgetmonth'] == selected_date, 'totalbudget'] = total_budget
+            # Filter the dataframe for the current user and selected date
+            user_budget_df = monthly_budgets_df[(monthly_budgets_df['userid'] == userid()) 
+                                                & (monthly_budgets_df['budgetmonth'] == selected_date)]
+
+            if not user_budget_df.empty:
+                # Update the budget for the current user and selected month
+                monthly_budgets_df.loc[user_budget_df.index, 'totalbudget'] = total_budget
             else:
                 new_monthly_budget = {
                     'budgetid': monthly_budgets_df['budgetid'].max() + 1,
