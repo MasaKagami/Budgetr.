@@ -78,7 +78,7 @@ def spendings_page(categories_df, categorical_budgets_df):
 
 
                 html.Div([
-                    html.Div(id='budget_overview'),
+                    html.Div(id='monthly_budget_status'),
                     html.Button('UPDATE', id='submit_total_budget', n_clicks=0),
                 ], className='spendings-manage-confirm'),
                 html.Div(id='total_budget_status', className='spendings-budget-status-message')                
@@ -102,17 +102,17 @@ def spendings_page(categories_df, categorical_budgets_df):
                     ],
                     data=[]
                 ),
-                html.Div(id='unallocated_budget', className='spendings-budget-allocation')
+                html.Div(id='budget_overview_status', className='spendings-budget-allocation')
             ], className='spendings-budget-overview'),
             html.Div([
-                html.H1('Set Categorical Budget'),
+                html.H1('Manage Category Budget'),
                 html.Div([
                     html.Div([
                         html.H2('category'),
                         dcc.Dropdown(
                             id='budget_category_dropdown',
                             options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
-                            placeholder='select category',
+                            placeholder='select category'
                         ),
                     ], className='spendings-bottom-top'),
                     html.Div([
