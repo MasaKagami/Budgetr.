@@ -1,3 +1,4 @@
+from time import sleep
 from dash import Input, Output, State, no_update
 from flask import session
 from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user
@@ -94,16 +95,19 @@ def authentication_callback(app, use_remote_db=False):
     
     def redirect_user(login_status, signup_status, signout_status, delete_status):
         if login_status == 'Login successful':
+            sleep(2) # Add a delay to let the user see the login status
             return '/dashboard'
 
         elif signup_status == 'Account created successfully':
+            sleep(2) # Add a delay to let the user see the signup status
             return '/dashboard'
 
         elif signout_status == 'Logout successful':
             session.clear()
             return '/'
         
-        elif delete_status == 'Account deleted successfully':            
+        elif delete_status == 'Account deleted successfully':
+            sleep(2) # Add a delay to let the user see the delete status
             session.clear()
             return '/'
         

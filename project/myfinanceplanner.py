@@ -132,7 +132,7 @@ def display_page(pathname):
     [Input('url', 'pathname')]
 )
 def toggle_sidebar_visibility(pathname):
-    if session and session['logged_in'] and pathname in ['/dashboard', '/record', '/settings', '/support']:
+    if session and session['logged_in'] and pathname in ['/dashboard', '/record', '/settings', '/support', '/logout']:
         return {'display': 'flex'}  # Show sidebar in the app when logged in
     else:
         return {'display': 'none'}  # Hide sidebar when not logged in

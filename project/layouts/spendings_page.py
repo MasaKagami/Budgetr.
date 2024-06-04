@@ -11,7 +11,6 @@ def spendings_page(categories_df, categorical_budgets_df):
                     html.H2('select date'),
                     dcc.DatePickerSingle(
                         id='input_date',
-                        # date=pd.Timestamp.now().strftime('%Y-%m-%d'),
                         placeholder='YYYY-MM-DD',
                         display_format='YYYY-MM-DD',
                     ),
