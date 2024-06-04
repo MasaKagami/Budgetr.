@@ -9,7 +9,6 @@ catbudgetid,userid,categoryname,categorybudget
 8,1,Personal Care,60.0
 9,1,Education,100.0
 10,1,Miscellaneous,40.0
-11,4,Housing,200.0
 12,4,Transportation,200.0
-13,4,Housing,1500.0
+13,4,Housing,1425.0
 14,4,Food,375.0

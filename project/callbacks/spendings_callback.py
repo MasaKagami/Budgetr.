@@ -1,6 +1,6 @@
 from dash import Output, Input, State
 import pandas as pd
-from load_data import load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets, userid
+from load_data import load_local_categories, load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets, userid
 
 def spendings_callback(app):
     # Callback for adding transactions
@@ -57,39 +57,59 @@ def spendings_callback(app):
     )
 
     def display_budget_overview(selected_month, selected_year, _):
-        # Convert the selected month and year to a datetime object
-        if selected_month and selected_year:
-            selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
-        else:
-            return "", [], ""
-
         # Load the latest budgets DB for the logged in user
         monthly_budgets_df = load_local_monthly_budgets()
         monthly_budgets_df = monthly_budgets_df[monthly_budgets_df['userid'] == userid()]
-        print(monthly_budgets_df)
         
         categorical_budgets_df = load_local_categorical_budgets()
         categorical_budgets_df = categorical_budgets_df[categorical_budgets_df['userid'] == userid()]
         
-        monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]
-        if monthly_budget_row.empty:
-            total_budget = 0
-        else:
-            total_budget = int(monthly_budget_row['totalbudget'].values[0])
+        if selected_month and selected_year:
+            # Convert the selected month and year to a datetime object if valid selections
+            selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
-        budget_overview = f"Current Budget for {selected_date.strftime('%Y-%m')}: ${total_budget}"
+            # Filter the monthly budgets for the selected date
+            monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]
+
+            # Display the total budget for the selected month, if not found show 0
+            if monthly_budget_row.empty:
+                total_budget = 0
+            else:
+                total_budget = int(monthly_budget_row['totalbudget'].values[0])
+
+            # Display the budget overview message
+            budget_overview = f"Your current budget for {selected_date.strftime('%B %Y')} is ${total_budget}"
+
+            # Calculate the unallocated budget
+            allocated_budget = categorical_budgets_df['categorybudget'].sum()
+            unallocated_budget = int(total_budget - allocated_budget)
+        else:
+            # Display the last budget entry date if no month is selected
+            last_entry_date = monthly_budgets_df['budgetmonth'].max()
+
+            # If a budget entry is found, display the last entry month in the status message
+            if last_entry_date is not pd.NaT:
+                last_entry_month = last_entry_date.strftime('%B %Y')
+                budget_overview = f"Your last budget entry was in {last_entry_month}."
+            else:
+                budget_overview = "No past budget entries found."    
+
 
         # Display the allocated budget for each category
         budget_table_data = categorical_budgets_df.to_dict('records')
 
+        # If no data is found, load the categories and set the budget to 0
         if categorical_budgets_df.empty:
-            budget_table_data = [{'categoryname': 'No categories found', 'categorybudget': 0}]
+            categories_df = load_local_categories()
+            for categories in categories_df['name']:
+                budget_table_data.append({'categoryname': categories, 'categorybudget': 0})
 
-        # Calculate the unallocated budget
-        allocated_budget = categorical_budgets_df['categorybudget'].sum()
-        unallocated_budget = int(total_budget - allocated_budget)
+        # Hide the budget overview display message if no month is selected
+        if not(selected_month and selected_year):
+            unallocated_budget_display = ""
+            return budget_overview, budget_table_data, unallocated_budget_display
 
-        # Customize the display message based on the budget surplus/deficit
+        # Customize the budget overview display message based on the budget surplus/deficit
         if unallocated_budget < 0:
             unallocated_budget_display = f"Exceeding current monthly budget by ${-unallocated_budget}"
         elif unallocated_budget > 0:
