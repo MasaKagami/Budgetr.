@@ -1,7 +1,6 @@
-from dash import Dash, dcc, html, Input, Output, State
+from dash import Dash, dcc, html, Input, Output
 from flask import Flask, session
 from datetime import timedelta
-from os import urandom
 
 # Layouts
 from layouts.dashboard_page import dashboard_page
@@ -21,7 +20,7 @@ from load_data import load_database, print_dataframes, setup_logging
 
 # Initialize Flask server
 server = Flask(__name__)
-server.secret_key = urandom(24) # Generate a secret key for the session
+server.secret_key = 'b5a28e9627732aec641eaddb2f9e3cb954b14748d037232c441f95b5642dc9b9' # Randomly generated secret key; Don't use os.urandom(24) since it changes on every server restart
 
 # Session configurations
 server.config['SESSION_PERMANENT'] = True  # Make sessions permanent
@@ -38,7 +37,7 @@ setup_logging(server, LOGGING)
 
 transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_database(USE_REMOTE_DB)
 # print_dataframes(LOGGING, USE_REMOTE_DB)
-print("USERS DB\n", users_df[:5])
+print("USERS DB\n", users_df[:5])    
 
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar
@@ -78,11 +77,11 @@ app.layout = html.Div([
 @app.callback(
     Output('page-content', 'children'),
     [Input('url', 'pathname')],
-    [State('session', 'data')]
+    # [State('session', 'data')]
 )
 
-def display_page(pathname, session_data):
-    print("Session data: ", session_data)
+def display_page(pathname):
+    # print("Session Data: ", session_data)
 
     if pathname == '/':
         return welcome_page()

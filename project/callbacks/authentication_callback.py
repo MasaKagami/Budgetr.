@@ -1,6 +1,6 @@
 from dash import Input, Output, State, no_update
 from flask import session
-from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user, delete_local_user, delete_remote_user
+from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user
 
 # use-remote-db is a flag to determine whether to use the remote database or the local database
 def authentication_callback(app, use_remote_db=False):
@@ -56,10 +56,9 @@ def authentication_callback(app, use_remote_db=False):
             
                 # Create the new user
                 if use_remote_db:
-                    userid = create_remote_user(name, email, password)
+                    create_remote_user(name, email, password)
                 else:
-                    userid = create_local_user(name, email, password)
-                print('UserID:', userid)
+                    create_local_user(name, email, password)
                 
                 # Login the user automatically after signing up
                 login_user(1, email, password)
@@ -77,8 +76,7 @@ def authentication_callback(app, use_remote_db=False):
     
     def logout_user(n_clicks):
         if n_clicks and n_clicks > 0:
-            session.clear()
-            print("User logged out")
+            print("User successfully logged out")
             return 'Logout successful'
         
         return no_update  # No redirection if no logout action
@@ -88,36 +86,25 @@ def authentication_callback(app, use_remote_db=False):
 
     @app.callback(
         Output('url', 'pathname'),
-        Output('local-store', 'data'),
         [Input('login_status', 'children'),
          Input('signup_status', 'children'),
          Input('signout_status', 'children'),
-         Input('delete_status', 'children')]
+         Input('delete_status', 'children')],
     )
     
     def redirect_user(login_status, signup_status, signout_status, delete_status):
         if login_status == 'Login successful':
-            session_data = {
-                'logged_in': True, 
-                'user_id': session.get('user_id'),
-                'user_email': session.get('user_email')
-            }
-            return '/dashboard', session_data
+            return '/dashboard'
 
         elif signup_status == 'Account created successfully':
-            session_data = {
-                'logged_in': True, 
-                'user_id': session.get('user_id'),
-                'user_email': session.get('user_email')
-            }
-            return '/dashboard', session_data
+            return '/dashboard'
 
-        elif signout_status == 'Logout successful' or delete_status == 'Account deleted successfully':
-            session_data = {
-                'logged_in': False, 
-                'user_id': None,
-                'user_email': None
-            }
-            return '/', session_data
+        elif signout_status == 'Logout successful':
+            session.clear()
+            return '/'
         
-        return no_update, no_update  # Don't redirect if the user is not logging in or signing up
+        elif delete_status == 'Account deleted successfully':            
+            session.clear()
+            return '/'
+        
+        return no_update  # Don't redirect if the user is not logging in or signing up
