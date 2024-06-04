@@ -30,14 +30,13 @@ server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session l
 app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
 app.title = 'Budgetr.'
 
+USE_REMOTE_DB = True # Choose database for user authentication and spending records (for testing)
 LOGGING = False # Logging for database records and user sessions
-USE_REMOTE_DB = True # Pick databse for user authentication and spending records
 
 setup_logging(server, LOGGING)
 
 transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_database(USE_REMOTE_DB)
-# print_dataframes(LOGGING, USE_REMOTE_DB)
-print("USERS DB\n", users_df[:5])    
+print_dataframes(LOGGING, USE_REMOTE_DB)
 
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar

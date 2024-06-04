@@ -88,9 +88,9 @@ def spendings_callback(app):
             # If a budget entry is found, display the last entry month in the status message
             if last_entry_date is not pd.NaT:
                 last_entry_month = last_entry_date.strftime('%B %Y')
-                monthly_budget_status = f"Your last budget entry was in {last_entry_month}."
+                monthly_budget_status = f"Your last budget entry was in {last_entry_month}"
             else:
-                monthly_budget_status = "No past budget entries found."    
+                monthly_budget_status = "No past budget entries found"    
 
         # ------------------------------------------------------------------------------
         # Budget Overview

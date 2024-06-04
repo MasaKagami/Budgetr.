@@ -1,7 +1,7 @@
 from time import sleep
 from dash import Input, Output, State, no_update
 from flask import session
-from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user
+from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user, email_exists_local, email_exists_remote, delete_local_user, delete_remote_user
 
 # use-remote-db is a flag to determine whether to use the remote database or the local database
 def authentication_callback(app, use_remote_db=False):
@@ -57,13 +57,17 @@ def authentication_callback(app, use_remote_db=False):
             
                 # Create the new user
                 if use_remote_db:
+                    if email_exists_remote(email):
+                        return 'Email already exists'
                     create_remote_user(name, email, password)
                 else:
+                    if email_exists_local(email):
+                        return 'Email already exists'
                     create_local_user(name, email, password)
                 
                 # Login the user automatically after signing up
                 login_user(1, email, password)
-                return "Account created successfully"
+                return 'Account created successfully'
             return 'Please fill out all fields'
         return ''
     
