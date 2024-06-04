@@ -60,7 +60,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                 html.Div([
                     html.H2("year"),
                     dcc.Dropdown(id="slct_budget_year",
-                                options=[{'label': year, 'value': year} for year in range(2000, current_year() + 1)],
+                                options=[{'label': year, 'value': year} for year in range(2023 , (current_year()+1)+1)],
                                 multi=False,
                                 placeholder='select year'
                                 )

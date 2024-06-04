@@ -157,9 +157,13 @@ def spendings_callback(app):
                 # Load the latest categorical budgets DB before updating
                 categorical_budgets_df = load_local_categorical_budgets()
 
-                # Update the selected category's budget
-                if selected_category in categorical_budgets_df['categoryname'].values and categorical_budgets_df['userid'].values[0] == userid():
-                    categorical_budgets_df.loc[categorical_budgets_df['categoryname'] == selected_category, 'categorybudget'] = new_category_budget
+                # Filter the dataframe for the user and selected category
+                user_category_df = categorical_budgets_df[(categorical_budgets_df['userid'] == userid()) 
+                                                          & (categorical_budgets_df['categoryname'] == selected_category)]
+
+                # Update the selected category's budget for the logged in user
+                if not user_category_df.empty:
+                    categorical_budgets_df.loc[user_category_df.index, 'categorybudget'] = new_category_budget
                 else:
                     new_category_budget_row = {
                         'catbudgetid': categorical_budgets_df['catbudgetid'].max() + 1,

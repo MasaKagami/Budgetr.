@@ -19,7 +19,7 @@ def dashboard_page(transactions_df):
                     dcc.Dropdown(
                         id="slct_year",
                         options=[
-                            {'label': str(year), 'value': year} for year in range(2000, current_year() + 1)
+                            {'label': str(year), 'value': year} for year in range(2023 , (current_year()+1)+1)
                         ],
                         multi=False,
                         value=current_year()-1, # Initial value (last year)
@@ -48,7 +48,7 @@ def dashboard_page(transactions_df):
             ], className= 'dashboard-net-balance'),
 
             html.Div([
-                html.H1("Expense Cateogrization"),
+                html.H1("Expense Categorization"),
                 dcc.Graph(id='expense_categorization_graph', figure={}),
             ], className= 'dashboard-categorization')
         ], className= 'dashboard-left-side'),
