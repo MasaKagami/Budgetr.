@@ -1,6 +1,5 @@
 from dash import html, dcc, dash_table
-import pandas as pd
-from load_data import current_month, current_year, monthsToInt
+from load_data import current_year, monthsToInt
 
 def spendings_page(categories_df, categorical_budgets_df):
     return html.Div(id='spendings_page', children=[
@@ -11,7 +10,6 @@ def spendings_page(categories_df, categorical_budgets_df):
                     html.H2('select date'),
                     dcc.DatePickerSingle(
                         id='input_date',
-                        # date=pd.Timestamp.now().strftime('%Y-%m-%d'),
                         placeholder='YYYY-MM-DD',
                         display_format='YYYY-MM-DD',
                     ),
@@ -55,7 +53,6 @@ def spendings_page(categories_df, categorical_budgets_df):
                     dcc.Dropdown(id="slct_budget_month",
                                 options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                                 multi=False,
-                                value=current_month(), # Initial value
                                 placeholder='select month'
                                 )
                 ], className='spendings-manage-option'),
@@ -63,9 +60,8 @@ def spendings_page(categories_df, categorical_budgets_df):
                 html.Div([
                     html.H2("year"),
                     dcc.Dropdown(id="slct_budget_year",
-                                options=[{'label': year, 'value': year} for year in range(2000, current_year() + 1)],
+                                options=[{'label': year, 'value': year} for year in range(2023 , (current_year()+1)+1)],
                                 multi=False,
-                                value=current_year(), # Initial value
                                 placeholder='select year'
                                 )
                 ], className='spendings-manage-option'),
@@ -82,7 +78,7 @@ def spendings_page(categories_df, categorical_budgets_df):
 
 
                 html.Div([
-                    html.Div(id='budget_overview'),
+                    html.Div(id='monthly_budget_status'),
                     html.Button('UPDATE', id='submit_total_budget', n_clicks=0),
                 ], className='spendings-manage-confirm'),
                 html.Div(id='total_budget_status', className='spendings-budget-status-message')                
@@ -106,17 +102,17 @@ def spendings_page(categories_df, categorical_budgets_df):
                     ],
                     data=[]
                 ),
-                html.Div(id='unallocated_budget', className='spendings-budget-allocation')
+                html.Div(id='budget_overview_status', className='spendings-budget-allocation')
             ], className='spendings-budget-overview'),
             html.Div([
-                html.H1('Set Categorical Budget'),
+                html.H1('Manage Category Budget'),
                 html.Div([
                     html.Div([
                         html.H2('category'),
                         dcc.Dropdown(
                             id='budget_category_dropdown',
                             options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
-                            placeholder='select category',
+                            placeholder='select category'
                         ),
                     ], className='spendings-bottom-top'),
                     html.Div([

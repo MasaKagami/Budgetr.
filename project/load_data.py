@@ -1,5 +1,6 @@
-from sqlalchemy import create_engine
+import logging
 import pandas as pd
+from sqlalchemy import create_engine
 from datetime import datetime
 from flask import session
 
@@ -23,6 +24,14 @@ def local_users_url():
 # Create an SQLAlchemy engine instance
 def create_engine_instance():
     return create_engine(database_url())
+
+def load_database(use_remote_db):
+    if use_remote_db:
+        transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_remote_database()
+    else:
+        transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
+
+    return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
 
 def load_remote_database():
     engine = create_engine_instance()
@@ -85,12 +94,15 @@ def load_local_users():
 # ------------------------------------------------------------------------------
 # Print the dataframes
 
-def print_dataframes(transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df):
-    print('\nTRANSACTIONS DB\n', transactions_df[:5])
-    print('CATEGORIES DB\n', categories_df[:5])
-    print('USERS DB\n', users_df[:5])
-    print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
-    print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
+def print_dataframes(enable_logging, use_remote_db):
+    if enable_logging:
+        transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_database(use_remote_db)
+
+        print('\nTRANSACTIONS DB\n', transactions_df[:5])
+        print('CATEGORIES DB\n', categories_df[:5])
+        print('USERS DB\n', users_df[:5])
+        print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
+        print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
 
 # ------------------------------------------------------------------------------
 # Get the current month and year
@@ -122,3 +134,18 @@ def monthsToInt():
 
 def IntToMonths():
     return {v: k for k, v in monthsToInt.items()}
+
+# ------------------------------------------------------------------------------
+# Set up user sessions logging
+
+def setup_logging(server, enable_logging):
+    if enable_logging:
+        logging.basicConfig(level=logging.DEBUG)
+
+        @server.after_request
+        def after_request(response):
+            logging.debug(f"Session data after request: {dict(session)}")
+            return response
+    
+    else:
+        logging.basicConfig(level=logging.CRITICAL)
