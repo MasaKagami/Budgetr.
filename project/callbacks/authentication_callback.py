@@ -29,7 +29,7 @@ def authentication_callback(app, use_remote_db=False):
                     session['logged_in'] = True
                     session['user_id'] = userid
                     session['user_email'] = email
-                    return 'Login successful'
+                    return 'Login successful!'
                 else:
                     return 'Invalid email or password'
             return 'Please enter your email and password'

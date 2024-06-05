@@ -1,0 +1,65 @@
+.settings-page{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    text-align: left;
+    width: calc(100vw-260px);
+    height: auto;
+    padding: 2rem;
+    color: white;
+}
+
+.settings-page h1{
+    opacity: 0.8;
+}
+
+.settings-profile{
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    margin:0;
+}
+
+.settings-profile label{
+    margin-right: 1rem;
+}
+
+.settings-profile-input{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#profile_name,
+#profile_email{
+    /* width: 100%; */
+    outline: none;
+}
+
+.settings-profile button{
+    margin-top: 1rem;
+    border: none;
+    border-radius: 5px;
+    padding: 1rem 0;
+}
+
+/* .settings-profile input{
+    width: 10rem;
+    border: none;
+    outline: none;
+} */
+
+.settings{
+    width: auto;
+    height: auto;
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin:0;
+    padding:2rem;
+}
+
+.settings h1{
+    margin:0;
+}

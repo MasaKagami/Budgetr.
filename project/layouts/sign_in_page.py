@@ -29,7 +29,7 @@ def sign_in_page():
                                         dcc.Input(id='login_email', type='text', placeholder='Username'),
                                         dcc.Input(id='login_password', type='password', placeholder='Password'),
                                         html.Button('Submit', id='login_button', className='opacity'),
-                                        html.Div(id='login_status', style={'text-align': 'center', 'color': 'red'})
+                                        html.Div(id='login_status')
                                 ], className='sign-in-top'),
 
                                 html.Div([

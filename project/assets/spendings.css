@@ -50,7 +50,7 @@
     margin-bottom: 5px;
     border: none;
     border-bottom: rgb(194, 194, 194) solid 2px;
-    color: #c7c7c7;
+    color: white;
     outline: none;
     font-size: 15px;
     font-weight: 500;
@@ -202,7 +202,7 @@
 .spendings-manage-option h2{
     font-size: 15px;
     font-weight: 500;
-    color: #c7c7c7;
+    color: white;
 }
 
 .spendings-manage-option input{
