@@ -9,6 +9,7 @@ from layouts.welcome_page import welcome_page
 from layouts.sign_in_page import sign_in_page
 from layouts.sign_up_page import sign_up_page
 from layouts.settings_page import settings_page
+from layouts.support_page import support_page
 
 # Callbacks
 from callbacks.dashboard_callback import dashboard_callback
@@ -16,6 +17,7 @@ from callbacks.spendings_callback import spendings_callback
 from callbacks.sidebar_callback import sidebar_callback
 from callbacks.authentication_callback import authentication_callback
 from callbacks.settings_callback import settings_callback
+from callbacks.support_callback import support_callback
 from load_data import load_database, print_dataframes, setup_logging
 
 # Initialize Flask server
@@ -112,7 +114,13 @@ def display_page(pathname):
             return settings_page()
         else:
             return dcc.Location(href='/sign-in', id='redirect')
-        
+    
+    elif pathname == '/support':
+        if session and session['logged_in']:
+            return support_page()
+        else:
+            return dcc.Location(href='/sign-in', id='redirect')
+
     elif pathname == '/logout':
         session.clear()
         print("User logged out")
@@ -142,6 +150,7 @@ sidebar_callback(app)
 dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df)
 spendings_callback(app)
 settings_callback(app, use_remote_db=USE_REMOTE_DB)
+support_callback(app)
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
