@@ -15,22 +15,25 @@
 }
 
 .settings-page h2{
-    margin:1rem 0;
+    margin:2rem 0 1rem 0;
 }
 
-.settings-profile{
+.settings-profile,
+.settings-password{
     display: flex;
     flex-direction: column;
     width: 100%;
     margin:0;
-    max-width: 20rem;
+    max-width: 27rem;
 }
 
-.settings-profile label{
+.settings-profile label,
+.settings-password label{
     margin-right: 1rem;
 }
 
-.settings-profile-input{
+.settings-profile-input,
+.settings-password-input{
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -39,7 +42,9 @@
 }
 
 #profile_name,
-#profile_email{
+#profile_email,
+#new_password,
+#confirm_new_password{
     /* width: 100%; */
     outline: none;
     border: none;
@@ -48,7 +53,8 @@
     margin-bottom:.5rem;
 }
 
-.settings-profile button{
+.settings-profile button,
+.settings-password button{
     margin-top: .5rem;
     box-sizing: border-box;
     background-color: #0f3460;
@@ -74,11 +80,12 @@
     -o-transition: all 0.1s ease-in-out;
 }
 
-/* .settings-profile input{
-    width: 10rem;
+.settings-profile input,
+.settings-password input{
+    width: 12rem;
     border: none;
     outline: none;
-} */
+}
 
 .settings{
     width: auto;
@@ -92,4 +99,16 @@
 
 .settings h1{
     margin:0;
+}
+
+.settings-delete button{
+    border:none;
+    outline: none;
+    padding: 13px;
+    border-radius: 2px;
+    background-color: #ad0001;
+    width: 20rem;
+    color: white;
+    font-size: .8rem;
+    font-weight: 700;
 }

@@ -23,17 +23,22 @@ def settings_page():
 
                 html.Div(id='update_profile_status')
             ], className= 'settings-profile'),
+            
             html.Div([
                 html.H2("Change Password"),
                 html.Div([
-                    html.Label("New Password"),
+                    html.Label("New Password: "),
                     dcc.Input(type='password', id='new_password', required=True),
-                    html.Label("Confirm New Password"),
+                ], className='settings-password-input'),
+                html.Div([
+                    html.Label("Confirm New Password: "),
                     dcc.Input(type='password', id='confirm_new_password', required=True),
-                    html.Button("Update Password", id='update_password_button')
-                ]),
+                ], className='settings-password-input'),
+                html.Button("Update Password", id='update_password_button'),
+
                 html.Div(id='update_password_status')
-            ]),
+            ], className='settings-password'),
+
             html.Div([
                 html.H2("Delete Account"),
                 html.Button("Delete Account", id='delete_account_button'),
@@ -43,7 +48,7 @@ def settings_page():
                     html.Button("Confirm Delete", id='confirm_delete_button')
                 ]),
                 html.Div(id='delete_status')
-            ])            
+            ], className='settings-delete')            
         ], className='settings')
 
     ], className='settings-page')
