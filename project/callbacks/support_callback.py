@@ -20,8 +20,8 @@ def support_callback(app):
                 return 'Please fill out all fields'
 
             myEmail = 'help.masakagami@gmail.com'
-            myPassword = 'masaand$teph100'
-            smtp_server = 'smtp-mail.outlook.com'
+            myPassword = 'wdobatbvhemlxjuj'
+            smtp_server = 'smtp.gmail.com'
             smtp_port = 587
 
             supportEmail_Shyam = 'shyam.desai@mail.mcgill.ca'
