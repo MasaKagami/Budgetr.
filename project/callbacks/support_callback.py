@@ -6,8 +6,8 @@ from email.mime.multipart import MIMEMultipart
 def support_callback(app):
         
     @app.callback(
-        Output('output-state', 'children'),
-        Input('send-button', 'n_clicks'),
+        Output('support-status', 'children'),
+        Input('support-send-button', 'n_clicks'),
         State('name-input', 'value'),
         State('email-input', 'value'),
         State('message-input', 'value')
@@ -15,25 +15,66 @@ def support_callback(app):
 
     def send_email(n_clicks, name, email, message):
         if n_clicks > 0:
+            if not (name or email or message): # Switch these to AND when message 'None' fixed
+                print(f"Received: n_clicks={n_clicks}, name={name}, email={email}, message='{message}'")
+                return 'Please fill out all fields'
+
             myEmail = 'email@masakagami.com'
             myPassword = 'masaand$teph100'
             smtp_server = 'smtp.office365.com'
             smtp_port = 587
 
-            msg = MIMEMultipart()
-            msg['From'] = myEmail
-            msg['To'] = email
-            msg['Subject'] = "Support Request from: " + name
+            supportEmail_Shyam = 'shyam.desai@mail.mcgill.ca'
+            supportEmail_Masa = 'email@masakagami.com'
 
-            body = "Name: {}\nEmail: {}\nMessage: {}".format(name, email, message)
-            msg.attach(MIMEText(body, 'plain'))
+            # Email to support team
+            support_msg = MIMEMultipart()
+            support_msg['From'] = myEmail
+            support_msg['To'] = supportEmail_Masa
+            support_msg['Subject'] = f"Support Request from: {name}"
+
+            support_body = f"""
+            Support Request Details:
+            ------------------------
+            Name: {name}
+            Email: {email}
+
+            Message:
+            {message}
+            """
+            support_msg.attach(MIMEText(support_body, 'plain'))
+
+            # Email to user
+            user_msg = MIMEMultipart()
+            user_msg['From'] = myEmail
+            user_msg['To'] = email
+            user_msg['Subject'] = "Thank you for contacting Budgetr Support"
+
+            user_body = f"""
+            Dear {name},
+
+            Thank you for reaching out to Budgetr support. We have received your message and will get back to you as soon as possible.
+
+            Here is a copy of your message:
+            -------------------------------
+
+            {message}
+
+            Best regards,
+            The Budgetr Support Team
+            """
+            user_msg.attach(MIMEText(user_body, 'plain'))
             
             try:
                 server = smtplib.SMTP(smtp_server, smtp_port)
                 server.starttls()
                 server.login(myEmail, myPassword)
-                text = msg.as_string()
-                server.sendmail(myEmail, email, text)
+
+                # Send support email to the creators and thank you email to the user
+                server.sendmail(myEmail, supportEmail_Shyam, support_msg.as_string())
+                server.sendmail(myEmail, supportEmail_Masa, support_msg.as_string())
+                server.sendmail(myEmail, email, user_msg.as_string())
+
                 server.quit()
                 return 'Email sent successfully'
             except Exception as e:
