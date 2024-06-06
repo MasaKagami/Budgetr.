@@ -97,3 +97,9 @@
     font-size:.9rem;
 }
 
+.suppport-art{
+    position: absolute;
+    top: 1%;
+    right: 460px;
+    width: 15%;
+}
