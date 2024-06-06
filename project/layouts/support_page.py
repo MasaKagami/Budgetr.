@@ -20,13 +20,13 @@ def support_page():
                         placeholder='your email'
                     ),
                 ], className='support-user'),
-                html.H2('Message to Creator'),
+                html.H2('Message to Creators'),
                 html.Textarea(
                     id='message-input',
                     placeholder='Enter your message here'
                 ),
                 html.Img(src="/assets/question.png", alt='question mark', className='suppport-art'),
-                html.Button('SEND', id='send-button', n_clicks=0),
+                html.Button('SEND', id='support-send-button', n_clicks=0),
                 html.Div(id='support-status')
             ], className='support-page-container')
         ], className='support-page')
