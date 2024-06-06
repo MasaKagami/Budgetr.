@@ -98,7 +98,7 @@ def authentication_callback(app, use_remote_db=False):
     )
     
     def redirect_user(login_status, signup_status, signout_status, delete_status):
-        if login_status == 'Login successful':
+        if login_status == 'Login successful!':
             sleep(2) # Add a delay to let the user see the login status
             return '/dashboard'
 
