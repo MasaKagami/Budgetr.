@@ -4,6 +4,7 @@ def support_page():
     return html.Div([
         html.Div([
             html.H1('Contact Form'),
+            html.P('Please fill out the form below to contact us. We will get back to you as soon as possible'),
             html.Div([    
                 html.Div([
                     html.H2('Name'),
@@ -22,7 +23,7 @@ def support_page():
                 html.H2('Message to Creator'),
                 html.Textarea(
                     id='message-input',
-                    placeholder='Enter your message here...',
+                    placeholder='Enter your message here'
                 ),
                 html.Button('SEND', id='send-button', n_clicks=0),
                 html.Div(id='support-status')

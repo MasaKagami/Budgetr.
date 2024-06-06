@@ -5,7 +5,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .support-page-container{
@@ -31,7 +30,7 @@
     padding: 3rem 6rem 6rem 6rem;
     color: black;
     background-color: #f1f4fb;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    border: 1px solid hsla(0, 0%, 65%, 0.1);
     box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
     margin:2rem;
 }
@@ -39,6 +38,14 @@
 .support-page h1{
     margin:0;
     padding: 0 0 1rem 0;
+    font-weight: 800;
+}
+
+.support-page P{
+    max-width: calc(21vw);
+    margin-bottom: 2rem;
+    font-weight: 500;
+    opacity: .9;
 }
 
 .support-user{
@@ -48,10 +55,12 @@
 }
 
 .support-user h2,
-.support-page h2{
+.support-page h2,
+.support-page-container h2{
     font-size: 1rem;
     font-weight: 600;
     margin:0;
+    margin-bottom:0.1rem;
     color: black;
 }
 .support-user input{
@@ -77,11 +86,14 @@
     margin:0;
     border: 2px #c7c7c7 solid;
     padding: .5rem;
+    font-family: 'Roboto', sans-serif;
 }
 
 .support-page button{
     width: 18vw;
-    margin-top:1rem;
+    margin: 2rem 0 1rem 0;
     padding:13px;
+    font-weight: 700;
+    font-size:.9rem;
 }
 

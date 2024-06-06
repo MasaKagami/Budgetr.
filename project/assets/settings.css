@@ -1,21 +1,46 @@
 .settings-page{
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     box-sizing: border-box;
-    text-align: left;
     width: calc(100vw-260px);
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.settings{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
     height: auto;
-    padding: 2rem;
-    color: white;
-}
-
-.settings-page h1{
-    opacity: 0.8;
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
     margin:0;
+    padding: 3rem 6rem 6rem 6rem;
+    background-color: #f1f4fb;
+    color: black;
 }
 
-.settings-page h2{
-    margin:2rem 0 1rem 0;
+.settings h1{
+    margin:0;
+    padding: 0 0 2rem 0;
+    font-weight: 800;
+}
+
+.settings h2{
+    margin:0 0 1rem 0;
+}
+
+
+.settings-container{
+    display: flex;
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.2);
 }
 
 .settings-profile,
@@ -24,6 +49,7 @@
     flex-direction: column;
     width: 100%;
     margin:0;
+    margin-right:1rem;
     max-width: 27rem;
 }
 
@@ -38,19 +64,6 @@
     width: 100%;
     justify-content: space-between;
     align-items: center;
-
-}
-
-#profile_name,
-#profile_email,
-#new_password,
-#confirm_new_password{
-    /* width: 100%; */
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom:.5rem;
 }
 
 .settings-profile button,
@@ -66,40 +79,56 @@
     font-size: 14px;
     letter-spacing: 1.5px;
     font-weight: 600;
-    width: 12rem;
+    width: 100%;
     cursor: pointer;
     transition: all 0.1s ease-in-out;
     border: none;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
 }
 
-.settings-profile input,
-.settings-password input{
-    width: 12rem;
-    border: none;
+#profile_name,
+#profile_email,
+#new_password,
+#confirm_new_password{
+    /* width: 100%; */
     outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom:.5rem;
 }
 
-.settings{
+.settings-border-lines{
+    margin: 0 .5rem;
+    height:100%;
+    border-left: 2px gray solid;
+    background-color: pink;
+}
+
+/* .support{
+    width: calc(100vw-260px);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.support-page{
     width: auto;
     height: auto;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    border-radius:10px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 6rem 6rem 6rem;
+    color: black;
+    background-color: #f1f4fb;
+    border: 1px solid hsla(0, 0%, 65%, 0.1);
     box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    margin:0;
-    padding:2rem;
-}
-
-.settings h1{
-    margin:0;
-}
+    margin:2rem;
+} */
 
 .settings-delete button{
     border:none;

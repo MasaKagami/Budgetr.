@@ -36,6 +36,7 @@ html, body{
 .welcome{
     width: 100vw;
     height: auto;
+    overflow: hidden;
 }
 
 .welcome-nav-background{
@@ -44,18 +45,15 @@ html, body{
     display: flex;
     justify-content: center;
     align-items: center;
-    /* position:sticky; */
-    /* z-index: 9999; */
 }
 
 .welcome-nav{
     width: 100%;
-    max-width: 80rem;
+    max-width: 66vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;   
     align-items: center;
-    /* position:sticky; */
 }
 
 .welcome-logo{
@@ -86,7 +84,7 @@ html, body{
 .welcome-content{
     height: auto;
     width: 100%;
-    max-width: 80rem;
+    max-width: 66vw;
     display: flex;
     flex-direction: row;
     align-items:center;
@@ -143,7 +141,7 @@ html, body{
 
 .welcome-about {
     width: 100%;
-    max-width: 80rem;
+    max-width: 66vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
