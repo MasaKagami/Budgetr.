@@ -123,13 +123,46 @@
 
 .settings-art{
     position: absolute;
-    top: 11%;
-    right: 170px;
-    width: 15%;
+    top: 8%;
+    right: 140px;
+    width: 18%;
 }
 
 .settings P{
     margin-bottom: 2rem;
     font-weight: 500;
     opacity: .9;
+}
+
+#delete_status{
+    font-weight: 500;
+    opacity: .9;
+}
+
+.settings-confirm-delete{
+    width: 100%;
+    height: 100%;
+     display: flex;
+    justify-content: center;
+    display: flex;
+    /* flex-direction: column; */
+    /* justify-content: space-between; */
+}
+
+#confirm_password{
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    border: 2px #c7c7c7 solid;
+    border-radius: 5px;
+    padding: .5rem;
+    margin-bottom:1rem;
+}
+
+.settings-confirm-delete h3{
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom:0.1rem;
+    color: black;
 }

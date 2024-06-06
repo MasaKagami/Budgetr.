@@ -39,11 +39,11 @@ def settings_page():
                 html.Div([
                     html.H2("Delete Account"),
                     html.Button("Delete Account", id='delete_account_button'),
-                    html.Div(id='confirm_delete_section', style={'display': 'none'}, children=[
+                    html.Div([
                         html.H3("Enter Password to Confirm"),
                         dcc.Input(type='password', id='confirm_password', required=True),
                         html.Button("Confirm Delete", id='confirm_delete_button')
-                    ]),
+                    ], className='settings-confirm-delete', id='confirm_delete_section', style={'display': 'none'}),
                     html.Div(id='delete_status'),
                     html.Img(src="/assets/exclamation.png", alt='exclamation mark', className='settings-art')
                 ], className='settings-delete')
