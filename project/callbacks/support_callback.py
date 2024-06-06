@@ -19,9 +19,9 @@ def support_callback(app):
                 print(f"Received: n_clicks={n_clicks}, name={name}, email={email}, message='{message}'")
                 return 'Please fill out all fields'
 
-            myEmail = 'email@masakagami.com'
+            myEmail = 'help.masakagami@gmail.com'
             myPassword = 'masaand$teph100'
-            smtp_server = 'smtp.office365.com'
+            smtp_server = 'smtp-mail.outlook.com'
             smtp_port = 587
 
             supportEmail_Shyam = 'shyam.desai@mail.mcgill.ca'
