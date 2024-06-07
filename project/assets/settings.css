@@ -36,6 +36,7 @@
     flex-direction: column;
     width: 18vw;
     margin:0 1rem;
+    box-sizing: border-box;
 }
 
 .settings-delete{

@@ -1,116 +1,180 @@
 .spendings-page{
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     box-sizing: border-box;
-    text-align: left;
-    width: 100%;
+    width: calc(100vw-260px);
+    align-self: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.spendings{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
     height: auto;
-    padding: 2rem;
-    color: white;
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    padding: 3rem 6rem 6rem 6rem;
+    background-color: #f1f4fb;
+    color: black;
+    border-radius: 10px;
 }
 
-.spendings-page H1{
-    margin: 0rem 0rem 1rem 0rem;
-    font-size: 1.8em;
+
+.spendings h1{
+    margin:0;
+    padding: 0 0 .5rem 0;
+    font-weight: 800;
 }
 
+.spendings h2{
+    margin:0 0 2rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.spendings h3{
+    font-size: 1rem;
+    font-weight: 500;
+    margin:0;
+    margin-bottom:0.1rem;
+    color: black;
+}
 /* -----------------------------------TOP HALF----------------------------------- */
 
-.spendings-top{
+.spendings-top,
+.spendings-bottom{
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     margin-bottom:1.5rem;
-    width: 100%;
+    width: auto;
+    height:auto;
+    background-color: white;
+    padding:3rem;
+    color: black;
+    border-radius: 5px;
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
 }
-
 
 /* -----------------------------------ADD TRANSACTION----------------------------------- */
 
-.spendings-add-transaction{
-    padding: 2rem 2rem 1rem 2rem;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 50rem;
+.spendings-add-transaction,
+.spendings-manage-budget,
+.spendings-budget-overview,
+.spendings-bottom-right{
+    margin:0 1rem;
+    box-sizing: border-box;
+    width: auto;
     display: flex;
     flex-direction: column;
     align-items:flex-start;    
     height: auto;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-    margin: 0 1.5rem 0 0;
 }
 
-.spendings-input{
+.spendings-input,
+.spendings-manage-option,
+.spendings-bottom-bottom{
     box-sizing: border-box;
     display: flex;
-    padding: 0px 14.5px;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    margin-bottom: 5px;
+    width: 18vw;
     border: none;
-    border-bottom: rgb(194, 194, 194) solid 2px;
-    color: white;
     outline: none;
-    font-size: 15px;
-    font-weight: 500;
+    margin-bottom: 1rem;
 }
 
-.spendings-input h2{
+#input_date .DateInput{
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 12rem;
+    padding:0;
+    height: auto;
+    font-size: 14px;
     font-weight: 500;
-    font-size: 15px;
-    letter-spacing: .8px;
-}
-
-#input_date{
-    border: none;
-    background-color: #1e2130;
-    margin: 0;
+    font-family: 'Roboto', sans-serif;
     outline: none;
+    border-radius: 5px;
 }
 
-.spendings-page h1{
-    opacity: 0.8;
-    margin:0.5rem 0;
-    font-size: 1.5rem;
+#input_date .DateInput input::-webkit-input-placeholder {
+    color: #ccc;
+    font-size: 14px;
+    margin:0;
+    padding:0;
 }
 
+#input_date .DateInput_input{
+    border: 1px #c7c7c7 solid;
+    border-radius: 2px;
+    padding:0.25rem 0.5rem;
+    margin:0;
+}
+
+#monthly_budget_status{
+    margin-top:1rem;
+}
 /* --------------------INPUT FIELD-------------------- */
 
-.spendings-input input{
-    background-color: #1e2130;
-    color: #c7c7c7;
-    border: none;
+#input_amount,
+#input_description,
+#input_total_budget
+#budget_category_input{
+    width: 12rem;
     outline: none;
-    width: 70%;
-    height: auto;
-    text-align: right;
+    border: 2px #c7c7c7 solid;
+    border-radius: 5px;
+    padding: .5rem;
+    box-sizing: border-box;
 }
 
-.spendings-input input::placeholder{
+.spendings-input input::placeholder,
+.spendings-manage-option input::placeholder{
     color: #c7c7c7;
 }
 
 /* --------------------DROP DOWN-------------------- */
-
-.spendings-input .Select-control {
-    color: #c7c7c7;
-    background-color: #1e2130 !important;
-    border: 1px rgba(43, 47, 66, 0.8) solid !important;
-    width: 10rem !important;
+.spendings-manage-option .Select-control,
+.spendings-input .Select-control,
+.spendings-bottom-top .Select-control{
+    color: black;
+    /* background-color: #1e2130 !important; */
+    border: 2px #c7c7c7 solid !important;
+    width: 12rem !important;
     text-align: left;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 /* Styling for the placeholder and the value when not selected */
+.spendings-manage-option .Select-placeholder,
+.spendings-manage-option .Select-value,
+.spendings-manage-option .Select-input,
+.spendings-bottom-top .Select-placeholder,
+.spendings-bottom-top .Select-value,
+.spendings-bottom-top .Select-input,
 .spendings-input .Select-placeholder,
 .spendings-input .Select-value,
-.spendings-input .Select-input {
+.spendings-input .Select-input{
     color: #c7c7c7 !important;
 }
 
 /* Styling for text when an option is selected */
+.spendings-manage-option .Select-value-label,
+.spendings-manage-option .Select-control .Select-value,
+.spendings-manage-option .Select-single > .Select-control .Select-value,
+
+.spendings-bottom-top .Select-value-label,
+.spendings-bottom-top .Select-control .Select-value,
+.spendings-bottom-top .Select-single > .Select-control .Select-value,
+
 .spendings-input .Select-value-label,
 .spendings-input .Select-control .Select-value,
 .spendings-input .Select-single > .Select-control .Select-value {
@@ -118,149 +182,38 @@
 }
 
 /* Ensure the dropdown menu matches the styling */
+.spendings-manage-option .Select-menu-outer,
+.spendings-bottom-top .Select-menu-outer,
+
 .spendings-input .Select-menu-outer {
-    background-color: #1e2130;
+    /* background-color: #1e2130; */
     color: #c7c7c7 !important;
 }
 
 /* --------------------Date Picker Single-------------------- */
 
-.spendings-input .DateInput, .DateInput_input {
-    background-color: #1e2130 !important; 
-    color: #c7c7c7 !important;
-    border: none !important; 
-    outline: none !important;
-    font-size: 14px;
-    font-weight: 500;
-    width: auto;
-    margin: 0;
-    padding: 5px;
-}
-
-.spendings-input .DateInput_input:focus {
-    border-color: #3498db !important; 
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5) !important;
-}
-
-.spendings-input .DateInput_input:hover {
-    border-color: #1e2130 !important;
-}
-
-.spendings-add-transaction button{
+.spendings-add-transaction button,
+.spendings-manage-budget button{
+    margin: 1rem 0 0 0;
     box-sizing: border-box;
-    background-color: #0f3460;
-    color: white;
+    color: black;
     display: block;
     padding: 13px;
-    border-radius: 5px;
+    border-radius: 3px;
     outline: none;
-    font-size: 14px;
+    font-size: .8rem;
     letter-spacing: 1.5px;
-    font-weight: 600;
+    font-weight: 700;
     width: 100%;
     cursor: pointer;
-    margin:1rem 0 0 0;
-    /* margin-bottom: 2rem; */
     transition: all 0.1s ease-in-out;
-    border: none;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
+    border: solid 1px black;
 }
 
 /* -----------------------------------MANAGE BUDGET----------------------------------- */
 
-.spendings-manage-budget{
-    padding: 2rem;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 50rem;
-    display: flex;
-    flex-direction: column;
-    align-items:flex-start;    
-    height: auto;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-}
-
-.spendings-manage-option{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.spendings-manage-option h2{
-    font-size: 15px;
-    font-weight: 500;
-    color: white;
-}
-
-.spendings-manage-option input{
-    display: block;
-    box-sizing: border-box;
-    padding: 10px;
-    width: 15rem;
-    /* margin: 10rem 0; */
-    color: #c7c7c7;
-    outline: none;
-    background-color: #9191911f;
-    border: none;
-    border-radius: 5px;
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    font-size: 14px;
-    text-align: right;
-}
-
-.spendings-manage-option::placeholder{
-    color: #c7c7c7;
-}
-
-
-.spendings-manage-option .Select-control {
-    color: #c7c7c7;
-    background-color: #9191911f !important;
-    border: none !important;
-    width: 15rem !important;
-    text-align: left;
-    font-size: 14px;
-    font-weight: 500;
-    /* margin: 0; */
-    /* padding: 5px; */
-}
-
-/* Styling for the placeholder and the value when not selected */
-.spendings-manage-option .Select-placeholder,
-.spendings-manage-option .Select-value,
-.spendings-manage-option .Select-input {
-    color: #c7c7c7 !important;
-}
-
-/* Styling for text when an option is selected */
-.spendings-manage-option .Select-value-label,
-.spendings-manage-option .Select-control .Select-value,
-.spendings-manage-option .Select-single > .Select-control .Select-value {
-    color: #c7c7c7 !important;
-}
-
-/* Ensure the dropdown menu matches the styling */
-.spendings-manage-option .Select-menu-outer {
-    background-color: #1e2130;
-    color: #c7c7c7 !important;
-}
-
 .spendings-manage-confirm{
-    margin-top: 1rem;
+    margin:0;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -271,65 +224,21 @@
     font-weight: 600;
     color: white;
 }
-
-.spendings-manage-confirm button{
-    margin: 0;
-    box-sizing: border-box;
-    background-color: #0f3460;
-    color: white;
-    display: block;
-    padding: 13px;
-    border-radius: 5px;
-    outline: none;
-    font-size: 14px;
-    letter-spacing: 1.5px;
-    font-weight: 600;
-    width: 12rem;
-    cursor: pointer;
-    transition: all 0.1s ease-in-out;
-    border: none;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
-}
 /* -----------------------------------BOTTOM HALF----------------------------------- */
 
 /* -----------------------------------BUDGET OVERVIEW----------------------------------- */
 
-.spendings-bottom{
-    display: flex;
-    flex-direction: row;
-    /* margin-bottom:2rem; */
-    width: 100%;
-    height: auto;
-}
-
-.spendings-budget-overview{
-    padding: 2rem;
-    border-radius: 5px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items:flex-start;    
-    height: auto;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-    margin-right: 1.5rem;
-}
-
 #budget_table {
-    width: 100%;
+    width: 18vw;
+    box-sizing: border-box;
     height: auto;
-    color: white;
+    color: black;
+    margin:0;
+    padding:0;
 }
 
 #budget_table th{
-    background-color: #1e2130;
+    /* background-color: #1e2130; */
     text-align: left;
     font-size: 14px;
     font-weight: 600;
@@ -337,7 +246,7 @@
 }
 
 #budget_table td{
-    background-color: #1e2130;
+    /* background-color: #1e2130; */
     padding: 5px;
 }
 
@@ -351,19 +260,6 @@
     /* margin-bottom: 1rem; */
 }
 
-
-.spendings-bottom-right{
-    display:flex;
-    flex-direction: column;
-    padding: 2rem;
-    border-radius: 5px;
-    width: 100%;
-    align-items: flex-start;
-    height: auto;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-}
-
 .spendings-bottom-body{
     width: 100%;
     height: auto;
@@ -371,87 +267,16 @@
     flex-direction: column;
 }
 .spendings-bottom-top{
-    /* background-color: pink; */
     width: 100%;
     height: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.spendings-bottom-bottom{
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.spendings-bottom-body h2{
-    font-weight: 500;
-    font-size: 15px;
-    letter-spacing: .8px;
-}
-
-.spendings-bottom-body .Select-control {
-    color: #c7c7c7;
-    background-color: #9191911f !important;
-    border: none !important;
-    width: 15rem !important;
-    text-align: left;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 1rem;
-}
-
-/* Styling for the placeholder and the value when not selected */
-.spendings-bottom-body .Select-placeholder,
-.spendings-bottom-body .Select-value,
-.spendings-bottom-body .Select-input {
-    color: #c7c7c7 !important;
-}
-
-/* Styling for text when an option is selected */
-.spendings-bottom-body .Select-value-label,
-.spendings-bottom-body .Select-control .Select-value,
-.spendings-bottom-body .Select-single > .Select-control .Select-value {
-    color: #c7c7c7 !important;
-}
-
-/* Ensure the dropdown menu matches the styling */
-.spendings-bottom-body .Select-menu-outer {
-    background-color: #1e2130;
-    color: #c7c7c7 !important;
-}
-
-.spendings-bottom-body input{
-    display: block;
-    box-sizing: border-box;
-    padding: 10px;
-    width: 15rem;
-    /* margin: 10rem 0; */
-    color: white;
-    outline: none;
-    background-color: #9191911f;
-    border: none;
-    border-radius: 5px;
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    font-size: 14px;
-    text-align: right;
-}
-
-.spendings-bottom-body input::placeholder{
-    color: #afaeae;
-    font-size: 14px;
-    font-weight: 500
 }
 
 .spendings-buttom-bottom-btn{
     width: 100%;
     display: flex;
-    /* background-color: pink; */
     margin-top: 1rem;
     align-items: center;
     justify-content: flex-end;
@@ -489,13 +314,13 @@
 }
 
 .spendings-transaction-status-message{
-    margin-top: 1rem;
+    margin:0;
     font-size: 15px;
     font-size: 500;   
 }
 
 .spendings-budget-status-message{
-    margin-top: 1rem;
+    margin:0;
     font-size: 15px;
     font-size: 500;   
 }
