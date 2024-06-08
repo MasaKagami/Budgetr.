@@ -67,12 +67,13 @@ ALTER TABLE Users
 ADD CONSTRAINT userid_unique UNIQUE (UserID);
 
 ALTER TABLE MonthlyBudgets
-ADD CONSTRAINT budgetid_unique UNIQUE (budgetid_unique);
+ADD CONSTRAINT budgetid_unique UNIQUE (BudgetID);
 
-ALTER TABLE Users
-ADD CONSTRAINT userid_unique UNIQUE (UserID);
+ALTER TABLE CategoricalBudgets
+ADD CONSTRAINT catbudgetid_unique UNIQUE (CatBudgetID);
 
-
+ALTER TABLE Transactions
+ADD CONSTRAINT transactionid_unique UNIQUE (transactionid);
 
 
 
