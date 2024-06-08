@@ -1,0 +1,419 @@
+.spendings-page{
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: calc(100vw-260px);
+    align-self: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.spendings{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    border: 1px solid hsla(0, 0%, 65%, 0.158);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin:0;
+    padding: 3rem 6rem 6rem 6rem;
+    background-color: #f1f4fb;
+    color: black;
+}
+
+.spendings-container{
+    display: flex;
+    background: white;
+    border-radius: 5px;
+    padding:3rem 2rem 2rem 2rem;
+    box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* -----------------------------------TEXT STYLES----------------------------------- */
+
+.spendings P{
+    margin-bottom: 2rem;
+    font-weight: 500;
+    opacity: .9;
+}
+
+.spendings h1{
+    margin:0;
+    padding: 0 0 .5rem 0;
+    font-weight: 800;
+}
+
+.spendings h2{
+    margin:0 0 2rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.spendings h3{
+    font-size: 1rem;
+    font-weight: 500;
+    margin:0;
+    margin-bottom:0.1rem;
+    color: black;
+}
+
+/* -----------------------------------ADD TRANSACTION----------------------------------- */
+
+.spendings-section{
+    margin:0 1rem;
+    box-sizing: border-box;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;    
+    height: auto;
+}
+
+.spendings-input-container{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 14vw;
+    border: none;
+    outline: none;
+    margin-bottom: 1rem;
+}
+
+#input_date .DateInput{
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 10rem;
+    padding:0;
+    height: auto;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    border-radius: 5px;
+}
+
+#input_date .DateInput input::-webkit-input-placeholder {
+    color: #ccc;
+    font-size: 14px;
+    margin:0;
+    padding:0;
+}
+
+#input_date .DateInput_input{
+    border: 1px #c7c7c7 solid;
+    border-radius: 2px;
+    padding:0.25rem 0.5rem;
+    margin:0;
+}
+
+#monthly_budget_status{
+    margin-top:1rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.spendings-art{
+    position: absolute;
+    top: 1%;
+    right: 140px;
+    width: 12%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+
+
+
+
+
+
+#input_amount,
+#input_description,
+#input_total_budget
+#budget_category_input{
+    width: 10rem;
+    outline: none;
+    border: 2px #c7c7c7 solid;
+    border-radius: 5px;
+    padding: .5rem;
+    box-sizing: border-box;
+}
+
+.spendings-input input::placeholder,
+.spendings-manage-option input::placeholder{
+    color: #c7c7c7;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.spendings .Select-control{
+    color: black;
+    border: 2px #c7c7c7 solid !important;
+    width: 10rem !important;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.spendings .Select-placeholder,
+.spendings .Select-value,
+.spendings .Select-input{
+    color: #c7c7c7 !important;
+}
+
+.spendings .Select-value-label,
+.spendings .Select-control .Select-value,
+.spendings .Select-single > .Select-control .Select-value{
+    color: #c7c7c7 !important;
+}
+
+.spendings .Select-menu-outer,
+.spendings .Select-menu-outer,
+
+.spendings .Select-menu-outer {
+    color: #c7c7c7 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.spendings-add-transaction button,
+.spendings-manage-budget button{
+    margin: 1rem 0 0 0;
+    box-sizing: border-box;
+    color: black;
+    display: block;
+    padding: 13px;
+    border-radius: 3px;
+    outline: none;
+    font-size: .8rem;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    border: solid 1px black;
+}
+
+
+
+
+
+
+
+
+
+
+
+.spendings-manage-confirm{
+    margin:0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#budget_table {
+    width: 14vw;
+    box-sizing: border-box;
+    height: auto;
+    color: black;
+    margin:0;
+    padding:0;
+}
+
+#budget_table th{
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px;
+}
+
+#budget_table td{
+    padding: 5px;
+}
+
+.spendings-budget-allocation{
+    margin-top: 1rem;
+    width: 100%;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.spendings-bottom-body{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+.spendings-bottom-top{
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.spendings-buttom-bottom-btn{
+    width: 100%;
+    display: flex;
+    margin-top: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.spendings-buttom-bottom-btn button{
+    box-sizing: border-box;
+    background-color: #0f3460;
+    color: white;
+    display: block;
+    padding: 13px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    width: 12rem;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    border: none;
+}
+
+.spendings-category-message{
+    margin-top: 1rem;
+    font-size: 15px;
+    font-size: 500;
+}
+
+.spendings-transaction-status-message{
+    margin:0;
+    font-size: 15px;
+    font-size: 500;   
+}
+
+.spendings-budget-status-message{
+    margin:0;
+    font-size: 15px;
+    font-size: 500;   
+}
+
+
+
+
+
+
+
+
+
+
+ */

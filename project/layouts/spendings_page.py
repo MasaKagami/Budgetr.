@@ -16,7 +16,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                             placeholder='YYYY-MM-DD',
                             display_format='YYYY-MM-DD',
                         ),
-                    ],className='spendings-input'),
+                    ],className='spendings-input-container'),
                     html.Div([    
                         html.H3('Amount'),
                         dcc.Input(
@@ -25,7 +25,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                             min=0,
                             placeholder='enter amount',
                         ),
-                    ],className='spendings-input'),
+                    ],className='spendings-input-container'),
                     html.Div([    
                         html.H3('Category'),
                         dcc.Dropdown(
@@ -33,7 +33,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                             options=[{'label': category, 'value': category} for category in categories_df['name']],
                             placeholder='select category',
                         ),
-                    ],className='spendings-input'),
+                    ],className='spendings-input-container'),
                     html.Div([    
                         html.H3('Description'),
                         dcc.Input(
@@ -41,15 +41,17 @@ def spendings_page(categories_df, categorical_budgets_df):
                             type='text',
                             placeholder='enter description',
                         ),
-                    ],className='spendings-input'),
+                    ],className='spendings-input-container'),
 
                     html.Button('ADD', id='submit_transaction', n_clicks=0),
                     html.Div(id='transaction_status', className='spendings-transaction-status-message'),  # Display the status of the transaction   
-                ], className= 'spendings-add-transaction'),
+                ], className= 'spendings-section'),
                 
-                html.Div(className= 'settings-border-lines'),
+                html.Div(className= 'spendings-border-lines'),
+                
+                
                 html.Div([
-                    html.H2("Manage Monthly Budget"),
+                    html.H2("Monthly Budget"),
                 
                     html.Div([
                         html.H3("Month"),
@@ -58,7 +60,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                                     multi=False,
                                     placeholder='select month'
                                     )
-                    ], className='spendings-manage-option'),
+                    ], className='spendings-input-container'),
 
                     html.Div([
                         html.H3("Year"),
@@ -67,7 +69,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                                     multi=False,
                                     placeholder='select year'
                                     )
-                    ], className='spendings-manage-option'),
+                    ], className='spendings-input-container'),
                     
                     html.Div([
                         html.H3("Budget"),
@@ -77,18 +79,16 @@ def spendings_page(categories_df, categorical_budgets_df):
                             min=0,
                             placeholder='enter budget'
                         )
-                    ], className='spendings-manage-option'),                    
+                    ], className='spendings-input-container'),                    
                     html.Div(id='total_budget_status', className='spendings-budget-status-message'),
-                    html.Div([
-                        html.Button('UPDATE', id='submit_total_budget', n_clicks=0),
-                    ], className='spendings-manage-confirm'),
+                    html.Button('UPDATE', id='submit_total_budget', n_clicks=0),
                     html.Div(id='monthly_budget_status'),
-                ], className= 'spendings-manage-budget'),
+                ], className= 'spendings-section'),
 
-                html.Div(className= 'settings-border-lines'),
+                html.Div(className= 'spendings-border-lines'),
                 
                 html.Div([
-                    html.H2('Manage Category Budget'),
+                    html.H2('Category Budget'),
                     html.Div([
                         html.H3('category'),
                         dcc.Dropdown(
@@ -96,7 +96,7 @@ def spendings_page(categories_df, categorical_budgets_df):
                             options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
                             placeholder='select category'
                         ),
-                    ], className='spendings-input-category'), 
+                    ], className='spendings-input-container'), 
                     html.Div([    
                             html.H3('budget'),
                             dcc.Input(
@@ -105,15 +105,13 @@ def spendings_page(categories_df, categorical_budgets_df):
                                 min=0,
                                 placeholder='enter Budget',
                             ),                    
-                    ], className='spendings-input-category'),
+                    ], className='spendings-input-container'),
 
-                    html.Div([
-                        html.Button('SET', id='submit_category_budget', n_clicks=0)
-                    ], className='spendings-buttom-bottom-btn'),
+                    html.Button('SET', id='submit_category_budget', n_clicks=0),
                     html.Div(id='category_budget_status', className= 'spendings-category-message')
-                ], className='spendings-bottom-right'),
+                ], className='spendings-section'),
                 
-                html.Div(className= 'settings-border-lines'),
+                html.Div(className= 'spendings-border-lines'),
                 
                 html.Div([
                     html.H2('Budget Overview'),
@@ -126,13 +124,13 @@ def spendings_page(categories_df, categorical_budgets_df):
                         data=[]
                     ),
                     html.Div(id='budget_overview_status', className='spendings-budget-allocation')
-                ], className='spendings-budget-overview'),
+                ], className='spendings-table'),
 
-            # Hidden div to store update triggers
+                # Hidden div to store update triggers
                 html.Div(id='update_trigger', style={'display': 'none'}),
                 html.Img(src="/assets/pencil.png", alt='question mark', className='spendings-art'),
             ], className= 'spendings-container'),    
 
-        ], className='spendings')
+        ], className='spendings-page')
 
-    ], className='spendings-page')
+    ], className='spendings')

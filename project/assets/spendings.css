@@ -1,35 +1,45 @@
-.spendings-page{
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-sizing: border-box;
-    width: calc(100vw-260px);
-    align-self: center;
-    justify-content: center;
-    height: 100vh;
-}
-
 .spendings{
+    width: calc(100vw-260px);
+    height: 100vh;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.spendings-page{
     width: auto;
     height: auto;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    margin:0;
+    border-radius:10px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
     padding: 3rem 6rem 6rem 6rem;
-    background-color: #f1f4fb;
     color: black;
+    background-color: #f1f4fb;
+    border: 1px solid hsla(0, 0%, 65%, 0.1);
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    margin:2rem;
 }
+
+.support-page-container{
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
 
 .spendings-container{
     display: flex;
     background: white;
     border-radius: 5px;
-    padding:3rem 2rem 2rem 2rem;
+    padding:2rem;
     box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -63,22 +73,40 @@
 
 /* -----------------------------------ADD TRANSACTION----------------------------------- */
 
-.spendings-add-transaction,
-.spendings-manage-budget,
-.spendings-budget-overview,
-.spendings-bottom-right{
-    margin:0 1rem;
+.spendings-table{
+    margin: 0rem;
+    box-sizing: border-box;
+    width: 14vw;
+    height: auto;
+}
+
+#budget_table th{
+    text-align: left;
+    font-size: .8rem;
+    font-weight: 600;
+    padding: 2px;
+}
+
+#budget_table td{
+    font-size: .7rem;
+    padding: 2px;
+}
+
+.spendings-table h2{
+    margin-bottom: 1rem;
+}
+
+.spendings-section{
+    margin:0rem;
     box-sizing: border-box;
     width: auto;
     display: flex;
     flex-direction: column;
-    align-items:flex-start;    
+    align-items:flex-start;
     height: auto;
 }
 
-.spendings-input,
-.spendings-manage-option,
-.spendings-input-category{
+.spendings-input-container{
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -89,15 +117,55 @@
     margin-bottom: 1rem;
 }
 
+.spendings-input-container input{
+    box-sizing: border-box;
+    width: 8vw;
+    border-radius: 5px;
+    padding: .5rem;
+    outline: none;
+    border: 2px #c7c7c7 solid;
+    margin:0;
+    font-size:.8rem;
+}
+
+.spendings-input-container input::placeholder{
+    color: #c7c7c7;
+}
+
+.spendings-section button{
+    box-sizing: border-box;
+    width: 100%;
+    /* margin: 2rem 0 1rem 0; */
+    padding:13px;
+    font-weight: 700;
+    font-size:.9rem;
+}
+
+.spendings-input-container .Select-control{
+    width: 8vw;
+    box-sizing: border-box;
+    border: 2px #c7c7c7 solid;
+    height: auto;
+    border-radius: 5px;
+    font-size:.8rem;
+    color:#c7c7c7;
+}
+
+.spendings-input-container .Select-placeholder {
+    font-size:.8rem;
+    color:#c7c7c7;
+}
+
+
 #input_date .DateInput{
     border-radius: 5px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: 10rem;
+    width: 8vw;
     padding:0;
     height: auto;
-    font-size: 14px;
+    font-size:.8rem;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
     outline: none;
@@ -106,7 +174,7 @@
 
 #input_date .DateInput input::-webkit-input-placeholder {
     color: #ccc;
-    font-size: 14px;
+    font-size:.8rem;
     margin:0;
     padding:0;
 }
@@ -118,198 +186,21 @@
     margin:0;
 }
 
-#monthly_budget_status{
-    margin-top:1rem;
-}
-/* --------------------INPUT FIELD-------------------- */
-
-#input_amount,
-#input_description,
-#input_total_budget
-#budget_category_input{
-    width: 10rem;
-    outline: none;
-    border: 2px #c7c7c7 solid;
-    border-radius: 5px;
-    padding: .5rem;
-    box-sizing: border-box;
-}
-
-.spendings-input input::placeholder,
-.spendings-manage-option input::placeholder{
-    color: #c7c7c7;
-}
-
-/* --------------------DROP DOWN-------------------- */
-.spendings .Select-control{
-    color: black;
-    /* background-color: #1e2130 !important; */
-    border: 2px #c7c7c7 solid !important;
-    width: 10rem !important;
-    text-align: left;
-    font-size: 14px;
-    font-weight: 400;
-}
-
-/* Styling for the placeholder and the value when not selected */
-.spendings .Select-placeholder,
-.spendings .Select-value,
-.spendings .Select-input{
-    color: #c7c7c7 !important;
-}
-
-/* Styling for text when an option is selected */
-.spendings .Select-value-label,
-.spendings .Select-control .Select-value,
-.spendings .Select-single > .Select-control .Select-value{
-    color: #c7c7c7 !important;
-}
-
-/* Ensure the dropdown menu matches the styling */
-.spendings .Select-menu-outer,
-.spendings .Select-menu-outer,
-
-.spendings .Select-menu-outer {
-    /* background-color: #1e2130; */
-    color: #c7c7c7 !important;
-}
-
-/* --------------------Date Picker Single-------------------- */
-
-.spendings-add-transaction button,
-.spendings-manage-budget button{
-    margin: 1rem 0 0 0;
-    box-sizing: border-box;
-    color: black;
-    display: block;
-    padding: 13px;
-    border-radius: 3px;
-    outline: none;
-    font-size: .8rem;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.1s ease-in-out;
-    border: solid 1px black;
-}
-
-/* -----------------------------------MANAGE BUDGET----------------------------------- */
-
-.spendings-manage-confirm{
-    margin:0;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    /* background-color: #0f3460; */
-    font-size: 16px;
-    font-weight: 600;
-    color: white;
-}
-/* -----------------------------------BOTTOM HALF----------------------------------- */
-
-/* -----------------------------------BUDGET OVERVIEW----------------------------------- */
-
-#budget_table {
-    width: 14vw;
-    box-sizing: border-box;
-    height: auto;
-    color: black;
-    margin:0;
-    padding:0;
-}
-
-#budget_table th{
-    /* background-color: #1e2130; */
-    text-align: left;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 5px;
-}
-
-#budget_table td{
-    /* background-color: #1e2130; */
-    padding: 5px;
-}
-
-.spendings-budget-allocation{
-    margin-top: 1rem;
-    /* background-color: white; */
-    width: 100%;
-    text-align: right;
-    font-size: 14px;
-    font-weight: 600;
-    /* margin-bottom: 1rem; */
-}
-
-.spendings-bottom-body{
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-}
-.spendings-bottom-top{
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.spendings-buttom-bottom-btn{
-    width: 100%;
-    display: flex;
-    margin-top: 1rem;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.spendings-buttom-bottom-btn button{
-    box-sizing: border-box;
-    background-color: #0f3460;
-    color: white;
-    display: block;
-    padding: 13px;
-    border-radius: 5px;
-    outline: none;
-    font-size: 14px;
-    letter-spacing: 1.5px;
-    font-weight: 600;
-    width: 12rem;
-    cursor: pointer;
-    transition: all 0.1s ease-in-out;
-    border: none;
-}
-
-.spendings-category-message{
-    margin-top: 1rem;
-    font-size: 15px;
-    font-size: 500;
-}
-
-.spendings-transaction-status-message{
-    margin:0;
-    font-size: 15px;
-    font-size: 500;   
-}
-
-.spendings-budget-status-message{
-    margin:0;
-    font-size: 15px;
-    font-size: 500;   
+#transaction_status,
+#monthly_budget_status,
+#total_budget_status,
+#category_budget_status{
+    margin-top: .9rem;
+    font-size: .9rem;
 }
 
 
-
-
-
-
-
-
-
-
+.spendings-border-lines{
+    margin: 0 1.5rem;
+    height:auto;
+    border-left: 1px rgba(0,0,0,.2) solid;
+    z-index: 9999999999999999999;
+}
 
 
 
