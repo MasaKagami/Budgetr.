@@ -63,6 +63,20 @@ CREATE TABLE Transactions
     FOREIGN KEY (CategoryName) REFERENCES Categories (Name)
 );
 
+ALTER TABLE Users
+ADD CONSTRAINT userid_unique UNIQUE (UserID);
+
+ALTER TABLE MonthlyBudgets
+ADD CONSTRAINT budgetid_unique UNIQUE (budgetid_unique);
+
+ALTER TABLE Users
+ADD CONSTRAINT userid_unique UNIQUE (UserID);
+
+
+
+
+
+
 -- Insert a user
 INSERT INTO Users (Name, Email, Password) VALUES
     ('Masa Kagami', 'masa.kagami@gmail.com', 'test123');
