@@ -57,7 +57,7 @@ app.layout = html.Div([
             className='logo-link'
         ),
         dcc.Link('Dashboard', href='/dashboard', className='tab', id='tab-dashboard'),
-        dcc.Link('Record Spendings', href='/record', className='tab', id='tab-record'),
+        dcc.Link('Manage Finance', href='/record', className='tab', id='tab-record'),
         dcc.Link('Settings', href='/settings', className='tab', id='tab-settings'),
         dcc.Link('Support', href='/support', className='tab', id='tab-support'),
         dcc.Link('Logout', href='/logout', className='tab', id='tab-logout')
