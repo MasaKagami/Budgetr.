@@ -18,12 +18,28 @@
     height: auto;
     border: 1px solid hsla(0, 0%, 65%, 0.158);
     box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin:0;
     padding: 3rem 6rem 6rem 6rem;
     background-color: #f1f4fb;
     color: black;
-    border-radius: 10px;
 }
 
+.spendings-container{
+    display: flex;
+    background: white;
+    border-radius: 5px;
+    padding:3rem 2rem 2rem 2rem;
+    box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* -----------------------------------TEXT STYLES----------------------------------- */
+
+.spendings P{
+    margin-bottom: 2rem;
+    font-weight: 500;
+    opacity: .9;
+}
 
 .spendings h1{
     margin:0;
@@ -44,22 +60,6 @@
     margin-bottom:0.1rem;
     color: black;
 }
-/* -----------------------------------TOP HALF----------------------------------- */
-
-.spendings-top,
-.spendings-bottom{
-    display: flex;
-    justify-content: center;
-    margin-bottom:1.5rem;
-    width: auto;
-    height:auto;
-    background-color: white;
-    padding:3rem;
-    color: black;
-    border-radius: 5px;
-    border: 1px solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-}
 
 /* -----------------------------------ADD TRANSACTION----------------------------------- */
 
@@ -78,12 +78,12 @@
 
 .spendings-input,
 .spendings-manage-option,
-.spendings-bottom-bottom{
+.spendings-input-category{
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 18vw;
+    width: 14vw;
     border: none;
     outline: none;
     margin-bottom: 1rem;
@@ -94,7 +94,7 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: 12rem;
+    width: 10rem;
     padding:0;
     height: auto;
     font-size: 14px;
@@ -127,7 +127,7 @@
 #input_description,
 #input_total_budget
 #budget_category_input{
-    width: 12rem;
+    width: 10rem;
     outline: none;
     border: 2px #c7c7c7 solid;
     border-radius: 5px;
@@ -141,51 +141,35 @@
 }
 
 /* --------------------DROP DOWN-------------------- */
-.spendings-manage-option .Select-control,
-.spendings-input .Select-control,
-.spendings-bottom-top .Select-control{
+.spendings .Select-control{
     color: black;
     /* background-color: #1e2130 !important; */
     border: 2px #c7c7c7 solid !important;
-    width: 12rem !important;
+    width: 10rem !important;
     text-align: left;
     font-size: 14px;
     font-weight: 400;
 }
 
 /* Styling for the placeholder and the value when not selected */
-.spendings-manage-option .Select-placeholder,
-.spendings-manage-option .Select-value,
-.spendings-manage-option .Select-input,
-.spendings-bottom-top .Select-placeholder,
-.spendings-bottom-top .Select-value,
-.spendings-bottom-top .Select-input,
-.spendings-input .Select-placeholder,
-.spendings-input .Select-value,
-.spendings-input .Select-input{
+.spendings .Select-placeholder,
+.spendings .Select-value,
+.spendings .Select-input{
     color: #c7c7c7 !important;
 }
 
 /* Styling for text when an option is selected */
-.spendings-manage-option .Select-value-label,
-.spendings-manage-option .Select-control .Select-value,
-.spendings-manage-option .Select-single > .Select-control .Select-value,
-
-.spendings-bottom-top .Select-value-label,
-.spendings-bottom-top .Select-control .Select-value,
-.spendings-bottom-top .Select-single > .Select-control .Select-value,
-
-.spendings-input .Select-value-label,
-.spendings-input .Select-control .Select-value,
-.spendings-input .Select-single > .Select-control .Select-value {
+.spendings .Select-value-label,
+.spendings .Select-control .Select-value,
+.spendings .Select-single > .Select-control .Select-value{
     color: #c7c7c7 !important;
 }
 
 /* Ensure the dropdown menu matches the styling */
-.spendings-manage-option .Select-menu-outer,
-.spendings-bottom-top .Select-menu-outer,
+.spendings .Select-menu-outer,
+.spendings .Select-menu-outer,
 
-.spendings-input .Select-menu-outer {
+.spendings .Select-menu-outer {
     /* background-color: #1e2130; */
     color: #c7c7c7 !important;
 }
@@ -229,7 +213,7 @@
 /* -----------------------------------BUDGET OVERVIEW----------------------------------- */
 
 #budget_table {
-    width: 18vw;
+    width: 14vw;
     box-sizing: border-box;
     height: auto;
     color: black;
@@ -297,14 +281,6 @@
     cursor: pointer;
     transition: all 0.1s ease-in-out;
     border: none;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
 }
 
 .spendings-category-message{
@@ -323,4 +299,24 @@
     margin:0;
     font-size: 15px;
     font-size: 500;   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.spendings-art{
+    position: absolute;
+    top: 1%;
+    right: 140px;
+    width: 12%;
 }
