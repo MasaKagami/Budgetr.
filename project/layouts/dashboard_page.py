@@ -1,9 +1,10 @@
 from dash import html, dcc, dash_table
 import pandas as pd
-from load_data import current_month, current_year, monthsToInt
-from datetime import date
+from load_data import current_month, current_year, monthsToInt, load_transactions
 
-def dashboard_page(transactions_df):
+def dashboard_page():
+    transactions_df = load_transactions()
+
     # Prepare the transactions data by converting the date to a datetime object
     transactions_df['date'] = pd.to_datetime(transactions_df['date'])
     transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')

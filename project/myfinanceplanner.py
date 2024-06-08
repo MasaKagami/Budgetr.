@@ -18,7 +18,7 @@ from callbacks.sidebar_callback import sidebar_callback
 from callbacks.authentication_callback import authentication_callback
 from callbacks.settings_callback import settings_callback
 from callbacks.support_callback import support_callback
-from load_data import load_database, print_dataframes, setup_logging
+from load_data import setup_logging
 
 # Initialize Flask server
 server = Flask(__name__)
@@ -36,9 +36,6 @@ USE_REMOTE_DB = True # Choose database for user authentication and spending reco
 LOGGING = False # Logging for database records and user sessions
 
 setup_logging(server, LOGGING)
-
-transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_database(USE_REMOTE_DB)
-print_dataframes(LOGGING, USE_REMOTE_DB)
 
 # ------------------------------------------------------------------------------
 # Main App layout with Sidebar
@@ -76,12 +73,9 @@ app.layout = html.Div([
 @app.callback(
     Output('page-content', 'children'),
     [Input('url', 'pathname')],
-    # [State('session', 'data')]
 )
 
 def display_page(pathname):
-    # print("Session Data: ", session_data)
-
     if pathname == '/':
         return welcome_page()
     
@@ -99,13 +93,13 @@ def display_page(pathname):
     
     elif pathname == '/dashboard':
         if session and session['logged_in']:
-            return dashboard_page(transactions_df)
+            return dashboard_page()
         else:
             return dcc.Location(href='/sign-in', id='redirect')
         
     elif pathname == '/record':
         if session and session['logged_in']:
-            return spendings_page(categories_df, categorical_budgets_df)
+            return spendings_page()
         else:
             return dcc.Location(href='/sign-in', id='redirect')
         
@@ -147,8 +141,8 @@ def toggle_sidebar_visibility(pathname):
 
 authentication_callback(app, use_remote_db=USE_REMOTE_DB)
 sidebar_callback(app)
-dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df)
-spendings_callback(app)
+dashboard_callback(app, use_remote_db=USE_REMOTE_DB)
+spendings_callback(app, use_remote_db=USE_REMOTE_DB)
 settings_callback(app, use_remote_db=USE_REMOTE_DB)
 support_callback(app)
 

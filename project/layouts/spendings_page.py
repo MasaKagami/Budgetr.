@@ -1,7 +1,10 @@
 from dash import html, dcc, dash_table
-from load_data import current_year, monthsToInt
+from load_data import current_year, monthsToInt, load_categories, load_categorical_budgets
 
-def spendings_page(categories_df, categorical_budgets_df):
+def spendings_page():
+    categories_df = load_categories()
+    categorical_budgets_df = load_categorical_budgets()
+
     return html.Div(id='spendings_page', children=[
         html.Div([
             html.Div([

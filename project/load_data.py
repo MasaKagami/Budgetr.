@@ -1,8 +1,10 @@
 import logging
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import MetaData, Table, create_engine
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from datetime import datetime
 from flask import session
+import numpy as np
 
 def userid():
     return session.get('user_id')
@@ -27,51 +29,58 @@ def create_engine_instance():
 
 def load_database(use_remote_db):
     if use_remote_db:
-        transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_remote_database()
+        transactions_df, monthly_budgets_df, categorical_budgets_df = load_remote_database()
     else:
-        transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
+        transactions_df, monthly_budgets_df, categorical_budgets_df = load_local_database()
 
-    return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
+    return transactions_df, monthly_budgets_df, categorical_budgets_df
 
 def load_remote_database():
-    engine = create_engine_instance()
+    transactions_df = load_transactions()
+    monthly_budgets_df = load_monthly_budgets()
+    categorical_budgets_df = load_categorical_budgets()
 
-    transactions_df = load_transactions(engine)
-    monthly_budgets_df = load_monthly_budgets(engine)
-    categorical_budgets_df = load_categorical_budgets(engine)
-    categories_df = load_categories(engine)
-    users_df = load_users(engine)
-    
-    engine.dispose() # Close the connection
-
-    return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
+    return transactions_df, monthly_budgets_df, categorical_budgets_df
 
 def load_local_database():
     transactions_df = load_local_transactions()
-    categories_df = load_local_categories()
-    users_df = load_local_users()
     monthly_budgets_df = load_local_monthly_budgets()
     categorical_budgets_df = load_local_categorical_budgets()
 
-    return transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df
+    return transactions_df, monthly_budgets_df, categorical_budgets_df
 
 # ------------------------------------------------------------------------------
 # Load specific data from the remote database
 
-def load_transactions(engine):
-    return pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
+def load_transactions():
+    engine = create_engine_instance()
+    df = pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
+    engine.dispose()
+    return df
 
-def load_monthly_budgets(engine):
-    return pd.read_sql("SELECT * FROM MonthlyBudgets;", engine, parse_dates=['budgetmonth'])
+def load_monthly_budgets():
+    engine = create_engine_instance()
+    df = pd.read_sql("SELECT * FROM MonthlyBudgets;", engine, parse_dates=['budgetmonth'])
+    engine.dispose()
+    return df
 
-def load_categorical_budgets(engine):
-    return pd.read_sql("SELECT * FROM CategoricalBudgets;", engine)
+def load_categorical_budgets():
+    engine = create_engine_instance()
+    df = pd.read_sql("SELECT * FROM CategoricalBudgets;", engine)
+    engine.dispose()
+    return df
 
-def load_categories(engine):
-    return pd.read_sql("SELECT * FROM Categories;", engine)
+def load_categories():
+    engine = create_engine_instance()
+    df = pd.read_sql("SELECT * FROM Categories;", engine)
+    engine.dispose()
+    return df
 
-def load_users(engine):
-    return pd.read_sql("SELECT * FROM Users;", engine)
+def load_users():
+    engine = create_engine_instance()
+    df = pd.read_sql("SELECT * FROM Users;", engine)
+    engine.dispose()
+    return df
 
 # ------------------------------------------------------------------------------
 # Load specific data from the local database
@@ -92,17 +101,85 @@ def load_local_users():
     return pd.read_csv('../localdb/users.csv')
 
 # ------------------------------------------------------------------------------
+# Save data to the local database
+
+def save_local_transactions(transactions_df):
+    transactions_df.to_csv('../localdb/transactions.csv', index=False)
+
+def save_local_monthly_budgets(monthly_budgets_df):
+    monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
+
+def save_local_categorical_budgets(categorical_budgets_df):
+    categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
+
+def save_local_categories(categories_df):
+    categories_df.to_csv('../localdb/categories.csv', index=False)
+
+def save_local_users(users_df):
+    users_df.to_csv('../localdb/users.csv', index=False)
+
+# ------------------------------------------------------------------------------
+# Save data to the remote database
+
+def convert_to_native_types(transaction):
+    for key, value in transaction.items():
+        if isinstance(value, (pd.Timestamp,)):
+            transaction[key] = str(value)
+        elif isinstance(value, (np.integer, np.int64)):
+            transaction[key] = int(value)
+    return transaction
+
+def save_transactions(new_transaction):
+    engine = create_engine_instance()
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    transactions_table = Table('Transactions', metadata, autoload_with=engine)
+    
+    new_transaction = convert_to_native_types(new_transaction)
+    
+    stmt = pg_insert(transactions_table).values(new_transaction)
+    upsert_stmt = stmt.on_conflict_do_update(
+        index_elements=['transactionid'],
+        set_={c.key: c for c in stmt.excluded if c.key not in ['transactionid']}
+    )
+    
+    with engine.begin() as conn:
+        conn.execute(upsert_stmt)
+    
+    engine.dispose()
+
+def save_monthly_budgets(monthly_budgets_df):
+    engine = create_engine_instance()
+    monthly_budgets_df.to_sql('MonthlyBudgets', engine, if_exists='replace', index=False)
+    engine.dispose()
+
+def save_categorical_budgets(categorical_budgets_df):
+    engine = create_engine_instance()
+    categorical_budgets_df.to_sql('CategoricalBudgets', engine, if_exists='replace', index=False)
+    engine.dispose()
+
+def save_categories(categories_df):
+    engine = create_engine_instance()
+    categories_df.to_sql('Categories', engine, if_exists='replace', index=False)
+    engine.dispose()
+
+def save_users(users_df):
+    engine = create_engine_instance()
+    users_df.to_sql('Users', engine, if_exists='replace', index=False)
+    engine.dispose()
+
+# ------------------------------------------------------------------------------
 # Print the dataframes
 
 def print_dataframes(enable_logging, use_remote_db):
     if enable_logging:
         transactions_df, categories_df, users_df, monthly_budgets_df, categorical_budgets_df = load_database(use_remote_db)
 
-        print('\nTRANSACTIONS DB\n', transactions_df[:5])
-        print('CATEGORIES DB\n', categories_df[:5])
-        print('USERS DB\n', users_df[:5])
-        print('MONTHLY BUDGETS DB\n', monthly_budgets_df[:5])
-        print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[:5])
+        print('\nTRANSACTIONS DB\n', transactions_df[-5:])
+        print('CATEGORIES DB\n', categories_df[-3:])
+        print('USERS DB\n', users_df[-3:])
+        print('MONTHLY BUDGETS DB\n', monthly_budgets_df[-5:])
+        print('CATEGORICAL BUDGETS DB\n', categorical_budgets_df[-5:])
 
 # ------------------------------------------------------------------------------
 # Get the current month and year

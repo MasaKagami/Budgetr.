@@ -2,9 +2,9 @@ from enum import auto
 from dash import html, Input, Output
 import pandas as pd
 import plotly.express as px
-from load_data import userid
+from load_data import userid, load_database
 
-def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_budgets_df):
+def dashboard_callback(app, use_remote_db=False):
     @app.callback(
         [Output('net-balance-output', 'children'), 
         Output('status-output', 'children'),
@@ -17,6 +17,9 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
     )
 
     def update_graph(selected_year, selected_month):
+        # Load data from the database
+        transactions_df, monthly_budgets_df, categorical_budgets_df = load_database(use_remote_db)
+
         # Filters to only include rows where the year and month match the input year and month for the logged-in user
         # Boolean indexing: [ ] filters rows based on a condition
         filtered_df = transactions_df[(transactions_df['userid'] == userid()) &
@@ -57,7 +60,7 @@ def dashboard_callback(app, transactions_df, monthly_budgets_df, categorical_bud
         daily_spending_trend_fig = update_daily_spending_trend_graph(filtered_df, monthly_budget)
         budget_vs_actual_spending_fig = update_budget_vs_actual_spending_graph(filtered_df, user_categorical_budgets_df)
         
-        transactions_table_data = filtered_df[['date_display', 'categoryname', 'amount', 'description']].to_dict('records')
+        transactions_table_data = filtered_df[['date', 'categoryname', 'amount', 'description']].to_dict('records')
 
         # same order as in the output call-back
         return net_balance_output, status_output, expense_categorization_fig, daily_spending_trend_fig, budget_vs_actual_spending_fig, transactions_table_data
