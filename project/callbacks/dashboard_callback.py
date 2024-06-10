@@ -194,6 +194,7 @@ def dashboard_callback(app, use_remote_db=False):
         print("daily_spending: ")
         print(daily_spending[:5])
 
+        over_spending = pd.DataFrame() # Initialize an empty DataFrame
         over_index = daily_spending[daily_spending['Status'] == 'Over'].index.min()
 
         # If there is an 'Over' index, create two segments: 'Under' and 'Over'

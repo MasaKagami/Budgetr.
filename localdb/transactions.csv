@@ -201,10 +201,10 @@ transactionid,userid,date,categoryname,amount,description
 200,1,2023-12-28 00:00:00,Miscellaneous,25.0,Gift for friend
 201,1,2023-12-30 00:00:00,Food,70.0,Grocery shopping
 202,1,2023-12-31 00:00:00,Healthcare,120.0,Doctor visit
-203,1,2024-05-21 00:00:00,Food,25.0,Tacos with Friends
-204,1,2024-05-24 00:00:00,Housing,1000.0,Rent May'24
+203,4,2024-05-21 00:00:00,Food,25.0,Tacos with Friends
+204,4,2024-05-24 00:00:00,Housing,1000.0,Rent May'24
 205,1,2024-05-24 00:00:00,Food,250.0,Reunion Dinner Party
 206,1,2024-02-01 00:00:00,Transportation,20.0,bts
-207,1,2024-06-01 00:00:00,Food,4.5,Frostbite ice cream
+207,4,2024-06-01 00:00:00,Food,4.5,Frostbite ice cream
 208,4,2024-06-04 00:00:00,Food,25.0,Lunch with colleagues
-209,1,2024-06-01 00:00:00,Housing,1000.0,Rent Jun'24
+209,4,2024-06-01 00:00:00,Housing,1000.0,Rent Jun'24

@@ -93,7 +93,7 @@ def display_page(pathname):
     
     elif pathname == '/dashboard':
         if session and session['logged_in']:
-            return dashboard_page()
+            return dashboard_page(use_remote_db=USE_REMOTE_DB)
         else:
             return dcc.Location(href='/sign-in', id='redirect')
         
