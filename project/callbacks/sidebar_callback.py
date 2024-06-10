@@ -1,7 +1,7 @@
 from dash import dcc, Input, Output
 from flask import session
 from layouts import dashboard_page, spendings_page, welcome_page, sign_in_page, sign_up_page, settings_page, support_page
-from load_data import cache
+from utils.load_data import cache
 
 def sidebar_callback(app, use_remote_db=False):
     # Callback to toggle between pages from the sidebar

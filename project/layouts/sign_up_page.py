@@ -24,7 +24,7 @@ def sign_up_page():
 
         html.Div([
             html.Div([
-                html.Img(src="/assets/heart.png", className='sign-up-illustration', alt='illustration'),
+                html.Img(src="/assets/images/heart.png", className='sign-up-illustration', alt='illustration'),
                 html.H1("Sign Up", className='sign-up-title'),
                 html.Div([
                     dcc.Input(id='signup_name', type='text', placeholder='Your name'),

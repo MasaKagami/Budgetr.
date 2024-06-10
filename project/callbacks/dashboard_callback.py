@@ -1,7 +1,7 @@
 from dash import html, Input, Output
 import pandas as pd
 import plotly.express as px
-from load_data import userid, load_database, cache
+from utils.load_data import userid, load_database, cache
 
 def dashboard_callback(app, use_remote_db=False):
     @app.callback(

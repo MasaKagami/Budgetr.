@@ -1,6 +1,6 @@
 from dash import html, dcc, dash_table
 import pandas as pd
-from load_data import current_month, current_year, monthsToInt, load_transactions, load_local_transactions
+from utils.load_data import current_month, current_year, monthsToInt, load_transactions, load_local_transactions
 
 def dashboard_page(use_remote_db=False):
     if use_remote_db:

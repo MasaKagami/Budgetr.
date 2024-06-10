@@ -1,7 +1,7 @@
 import hashlib
 import pandas as pd
 from sqlalchemy import text
-from load_data import local_users_url, load_local_users, global_engine
+from .load_data import local_users_url, load_local_users, global_engine
 
 # Encrypts the password using SHA256
 def hash_password(password):

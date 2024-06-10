@@ -1,8 +1,8 @@
 from dash import Output, Input, State
 from flask import session
 from sqlalchemy import text
-from user_management import hash_password, validate_local_user, validate_remote_user, local_users_url
-from load_data import global_engine, load_local_users
+from utils.user_management import hash_password, validate_local_user, validate_remote_user, local_users_url
+from utils.load_data import global_engine, load_local_users
 
 def settings_callback(app, use_remote_db=False):
     @app.callback(

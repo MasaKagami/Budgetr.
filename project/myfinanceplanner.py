@@ -1,8 +1,8 @@
 from dash import Dash, dcc, html
 from flask import Flask
 from datetime import timedelta
-from load_data import setup_logging, cache
-from register_callbacks import register_callbacks
+from utils.load_data import setup_logging, cache
+from utils.register_callbacks import register_callbacks
 
 # Initialize Flask server
 server = Flask(__name__)
@@ -18,6 +18,9 @@ cache.init_app(server)
 # Initialize Dash app
 app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
 app.title = 'Budgetr.'
+
+# Export the Flask server for WSGI server compatibility
+application = app.server
 
 # Flags for testing
 USE_REMOTE_DB = True # Choose database type

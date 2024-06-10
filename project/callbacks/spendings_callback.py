@@ -1,6 +1,6 @@
 from dash import Output, Input, State, no_update
 import pandas as pd
-from load_data import (get_max_id, load_categories, userid, load_local_categories, load_local_transactions, load_local_monthly_budgets, 
+from utils.load_data import (get_max_id, load_categories, userid, load_local_categories, load_local_transactions, load_local_monthly_budgets, 
                        load_local_categorical_budgets, load_monthly_budgets, 
                        load_categorical_budgets, save_transactions, save_local_transactions, 
                        save_monthly_budgets, save_local_monthly_budgets, save_categorical_budgets, 

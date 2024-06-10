@@ -1,7 +1,7 @@
 from time import sleep
 from dash import Input, Output, State, no_update
 from flask import session
-from user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user, email_exists_local, email_exists_remote
+from utils.user_management import create_local_user, validate_local_user, create_remote_user, validate_remote_user, email_exists_local, email_exists_remote
 
 # use-remote-db is a flag to determine whether to use the remote database or the local database
 def authentication_callback(app, use_remote_db=False):

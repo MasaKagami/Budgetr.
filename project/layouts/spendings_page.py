@@ -1,5 +1,5 @@
 from dash import html, dcc, dash_table
-from load_data import current_year, monthsToInt, load_categories, load_local_categories
+from utils.load_data import current_year, monthsToInt, load_categories, load_local_categories
 
 def spendings_page(use_remote_db=False):
     if use_remote_db:
