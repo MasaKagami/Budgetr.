@@ -1,7 +1,7 @@
 from dash import html, Input, Output
 import pandas as pd
 import plotly.express as px
-from load_data import userid, load_database
+from load_data import userid, load_database, cache
 
 def dashboard_callback(app, use_remote_db=False):
     @app.callback(
@@ -15,6 +15,7 @@ def dashboard_callback(app, use_remote_db=False):
         Input('slct_month', 'value')]
     )
 
+    @cache.memoize()
     def update_graph(selected_year, selected_month):
         # Load data from the database
         transactions_df, monthly_budgets_df, categorical_budgets_df = load_database(use_remote_db)

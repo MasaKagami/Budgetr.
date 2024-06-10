@@ -4,7 +4,7 @@ from load_data import (get_max_id, load_categories, userid, load_local_categorie
                        load_local_categorical_budgets, load_monthly_budgets, 
                        load_categorical_budgets, save_transactions, save_local_transactions, 
                        save_monthly_budgets, save_local_monthly_budgets, save_categorical_budgets, 
-                       save_local_categorical_budgets, update_categorical_budget, update_monthly_budget)
+                       save_local_categorical_budgets, update_categorical_budget, update_monthly_budget, cache)
 
 def spendings_callback(app, use_remote_db=False):
     # Callback for adding transactions
@@ -58,6 +58,7 @@ def spendings_callback(app, use_remote_db=False):
         Input('update_trigger', 'children')]
     )
 
+    @cache.memoize()
     def display_budget(selected_month, selected_year, _):
         # Load the latest budgets DB for the logged in user
         if use_remote_db:

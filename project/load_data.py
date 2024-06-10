@@ -6,6 +6,7 @@ from flask import session
 import numpy as np
 from flask_caching import Cache
 
+# Set up caching for the Flask server
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
 
 # ------------------------------------------------------------------------------

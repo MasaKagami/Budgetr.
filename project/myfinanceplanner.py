@@ -12,7 +12,7 @@ server.secret_key = 'b5a28e9627732aec641eaddb2f9e3cb954b14748d037232c441f95b5642
 server.config['SESSION_PERMANENT'] = True  # Make sessions permanent
 server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session lifetime
 
-# Setup caching for the Flask server
+# Initialize caching for the server
 cache.init_app(server)
 
 # Initialize Dash app
