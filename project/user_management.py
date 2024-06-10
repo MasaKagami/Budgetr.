@@ -1,7 +1,7 @@
 import hashlib
 import pandas as pd
 from sqlalchemy import text
-from load_data import create_engine_instance, local_users_url, load_local_users
+from load_data import local_users_url, load_local_users, global_engine
 
 # Encrypts the password using SHA256
 def hash_password(password):
@@ -12,16 +12,14 @@ def hash_password(password):
 
 # Creates a new user in the remote PostgreSQL database
 def create_remote_user(name, email, password):
-    engine = create_engine_instance()
-    with engine.begin() as conn:
+    with global_engine.begin() as conn:
         conn.execute(text('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)'), {'name': name, 'email': email, 'password': hash_password(password)})
         result = conn.execute(text('SELECT userid FROM users WHERE email=:email'), {'email': email}).fetchone()
         return result[0] if result else None # Return the user ID if the user was created successfully
 
 # Validates the user credentials in the remote PostgreSQL database
 def validate_remote_user(email, password):
-    engine = create_engine_instance()
-    with engine.connect() as conn:
+    with global_engine.connect() as conn:
         result = conn.execute(text('SELECT userid, password FROM users WHERE email=:email'), {'email': email}).fetchone()
         if result and result[1] == hash_password(password):
             return result[0]
@@ -29,15 +27,13 @@ def validate_remote_user(email, password):
 
 # Checks if an email exists in the remote PostgreSQL database during user registration
 def email_exists_remote(email):
-    engine = create_engine_instance()
-    with engine.connect() as conn:
+    with global_engine.connect() as conn:
         result = conn.execute(text('SELECT COUNT(*) FROM users WHERE email=:email'), {'email': email}).scalar()
     return result > 0
 
 # Deletes a user from the remote PostgreSQL database
 def delete_remote_user(userid):
-    engine = create_engine_instance()
-    with engine.begin() as conn:
+    with global_engine.begin() as conn:
         conn.execute(text('DELETE FROM users WHERE userid=:userid'), {'userid': userid})
 
 # ------------------------------------------------------------------------------

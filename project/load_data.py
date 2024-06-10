@@ -20,11 +20,12 @@ def local_users_url():
     return '../localdb/users.csv'
 
 # ------------------------------------------------------------------------------
-# Load all the data from the databases
+# Create a global engine instance
 
-# Create an SQLAlchemy engine instance
-def create_engine_instance():
-    return create_engine(database_url())
+global_engine = create_engine(database_url())
+
+# ------------------------------------------------------------------------------
+# Load all the data from the databases
 
 def load_database(use_remote_db):
     if use_remote_db:
@@ -52,33 +53,23 @@ def load_local_database():
 # Load specific data from the remote database
 
 def load_transactions():
-    engine = create_engine_instance()
-    df = pd.read_sql("SELECT * FROM Transactions;", engine, parse_dates=['date'])
-    engine.dispose()
+    df = pd.read_sql("SELECT * FROM Transactions;", global_engine, parse_dates=['date'])
     return df
 
 def load_monthly_budgets():
-    engine = create_engine_instance()
-    df = pd.read_sql("SELECT * FROM MonthlyBudgets;", engine, parse_dates=['budgetmonth'])
-    engine.dispose()
+    df = pd.read_sql("SELECT * FROM MonthlyBudgets;", global_engine, parse_dates=['budgetmonth'])
     return df
 
 def load_categorical_budgets():
-    engine = create_engine_instance()
-    df = pd.read_sql("SELECT * FROM CategoricalBudgets;", engine)
-    engine.dispose()
+    df = pd.read_sql("SELECT * FROM CategoricalBudgets;", global_engine)
     return df
 
 def load_categories():
-    engine = create_engine_instance()
-    df = pd.read_sql("SELECT * FROM Categories;", engine)
-    engine.dispose()
+    df = pd.read_sql("SELECT * FROM Categories;", global_engine)
     return df
 
 def load_users():
-    engine = create_engine_instance()
-    df = pd.read_sql("SELECT * FROM Users;", engine)
-    engine.dispose()
+    df = pd.read_sql("SELECT * FROM Users;", global_engine)
     return df
 
 # ------------------------------------------------------------------------------
@@ -118,7 +109,7 @@ def save_local_users(users_df):
     users_df.to_csv('../localdb/users.csv', index=False)
 
 # ------------------------------------------------------------------------------
-# Save data to the remote database
+# Save and update data to the remote database
 
 # Ensure all values are native Python types for insertion into the database
 def convert_to_native_types(data):
@@ -138,51 +129,44 @@ def convert_to_native_types(data):
     return data
 
 def save_transactions(new_transaction):
-    engine = create_engine_instance()
     metadata = MetaData()
-    metadata.reflect(bind=engine)
-    transactions_table = Table('transactions', metadata, autoload_with=engine) # Load the table schema from the database
+    metadata.reflect(bind=global_engine)
+    transactions_table = Table('transactions', metadata, autoload_with=global_engine) # Load the table schema from the database
     
     new_transaction = convert_to_native_types(new_transaction) # Ensure all values are native Python types
     stmt = transactions_table.insert().values(new_transaction) # Create an insert statement
     
     try:
-        with engine.connect() as conn:
+        with global_engine.connect() as conn:
             conn.begin()
             conn.execute(stmt)
             conn.commit()
             print("Transaction inserted successfully.")
     except Exception as e:
         print("Error inserting transaction:", e)
-    
-    engine.dispose()
 
 def save_monthly_budgets(new_monthly_budget):
-    engine = create_engine_instance()
     metadata = MetaData()
-    metadata.reflect(bind=engine)
-    monthly_budgets_table = Table('monthlybudgets', metadata, autoload_with=engine) # Load the table schema from the database
+    metadata.reflect(bind=global_engine)
+    monthly_budgets_table = Table('monthlybudgets', metadata, autoload_with=global_engine) # Load the table schema from the database
 
     # Create an insert statement
     new_monthly_budget = convert_to_native_types(new_monthly_budget)
     stmt = monthly_budgets_table.insert().values(new_monthly_budget)
 
     try:
-        with engine.connect() as conn:
+        with global_engine.connect() as conn:
             conn.begin()
             conn.execute(stmt)
             conn.commit()
             print("Monthly budget inserted successfully.")
     except Exception as e:
         print("Error inserting monthly budget:", e)
-    
-    engine.dispose()
 
 def update_monthly_budget(userid, budgetmonth, totalbudget):
-    engine = create_engine_instance()
     metadata = MetaData()
-    metadata.reflect(bind=engine)
-    monthly_budgets_table = Table('monthlybudgets', metadata, autoload_with=engine)
+    metadata.reflect(bind=global_engine)
+    monthly_budgets_table = Table('monthlybudgets', metadata, autoload_with=global_engine)
     
     # Create an update statement
     stmt = (
@@ -195,42 +179,36 @@ def update_monthly_budget(userid, budgetmonth, totalbudget):
     )
 
     try:
-        with engine.connect() as conn:
+        with global_engine.connect() as conn:
             conn.begin()
             conn.execute(stmt)
             conn.commit()
             print("Total budget updated successfully!")
     except Exception as e:
         print("Error updating total budget:", e)
-    
-    engine.dispose()
 
 def save_categorical_budgets(new_category_budget_row):
-    engine = create_engine_instance()
     metadata = MetaData()
-    metadata.reflect(bind=engine)
-    categorical_budgets_table = Table('categoricalbudgets', metadata, autoload_with=engine) # Load the table schema from the database
+    metadata.reflect(bind=global_engine)
+    categorical_budgets_table = Table('categoricalbudgets', metadata, autoload_with=global_engine) # Load the table schema from the database
 
     # Create an insert statement
     new_category_budget_row = convert_to_native_types(new_category_budget_row)
     stmt = categorical_budgets_table.insert().values(new_category_budget_row)
 
     try:
-        with engine.connect() as conn:
+        with global_engine.connect() as conn:
             conn.begin()
             conn.execute(stmt)
             conn.commit()
             print("Categorical budgets inserted successfully.")
     except Exception as e:
         print("Error inserting categorical budgets:", e)
-    
-    engine.dispose()
 
 def update_categorical_budget(userid, categoryname, new_category_budget):
-    engine = create_engine_instance()
     metadata = MetaData()
-    metadata.reflect(bind=engine)
-    categorical_budgets_table = Table('categoricalbudgets', metadata, autoload_with=engine)
+    metadata.reflect(bind=global_engine)
+    categorical_budgets_table = Table('categoricalbudgets', metadata, autoload_with=global_engine)
     
     # Create an update statement using SQLAlchemy's expression language
     stmt = (
@@ -243,25 +221,13 @@ def update_categorical_budget(userid, categoryname, new_category_budget):
     )
 
     try:
-        with engine.connect() as conn:
+        with global_engine.connect() as conn:
             conn.begin()
             conn.execute(stmt)
             conn.commit()
             print("Category budget updated successfully!")
     except Exception as e:
         print("Error updating category budget:", e)
-    
-    engine.dispose()
-
-def save_categories(categories_df):
-    engine = create_engine_instance()
-    categories_df.to_sql('categories', engine, if_exists='replace', index=False)
-    engine.dispose()
-
-def save_users(users_df):
-    engine = create_engine_instance()
-    users_df.to_sql('users', engine, if_exists='replace', index=False)
-    engine.dispose()
 
 # ------------------------------------------------------------------------------
 # Print the dataframes
