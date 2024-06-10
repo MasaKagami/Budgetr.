@@ -261,6 +261,7 @@ def spendings_callback(app, use_remote_db=False):
         [Input('total_budget_status', 'children'),
          Input('category_budget_status', 'children')]
     )
+    
     def trigger_update(total_budget_status, category_budget_status):
         if (total_budget_status == "Total budget updated successfully!" 
             or category_budget_status == "Category budget updated successfully!"):

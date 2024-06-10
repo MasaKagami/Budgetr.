@@ -66,6 +66,7 @@ def sidebar_callback(app, use_remote_db=False):
         Output('sidebar', 'style'),
         [Input('url', 'pathname')]
     )
+    
     def toggle_sidebar_visibility(pathname):
         if session and session['logged_in'] and pathname in ['/dashboard', '/record', '/settings', '/support', '/logout']:
             return {'display': 'flex'}  # Show sidebar in the app when logged in

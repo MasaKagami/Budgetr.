@@ -21,7 +21,7 @@ def support_page():
                     ),
                 ], className='support-user'),
                 html.H2('Message to Creators'),
-                html.Textarea(
+                dcc.Textarea(
                     id='message-input',
                     placeholder='Enter your message here'
                 ),
