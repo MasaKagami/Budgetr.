@@ -1,7 +1,6 @@
 import logging
 import pandas as pd
-from sqlalchemy import MetaData, Table, create_engine
-from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy import MetaData, Table, create_engine, update
 from datetime import datetime
 from flask import session
 import numpy as np
@@ -121,51 +120,147 @@ def save_local_users(users_df):
 # ------------------------------------------------------------------------------
 # Save data to the remote database
 
-def convert_to_native_types(transaction):
-    for key, value in transaction.items():
-        if isinstance(value, (pd.Timestamp,)):
-            transaction[key] = str(value)
+# Ensure all values are native Python types for insertion into the database
+def convert_to_native_types(data):
+    for key, value in data.items():
+        if key == 'date':
+            # Ensure date is in the correct format
+            if isinstance(value, pd.Timestamp) or isinstance(value, datetime):
+                data[key] = value.strftime('%Y-%m-%d')
+        elif key == 'amount':
+            # Ensure amount is a float with two decimal places
+            if isinstance(value, (float, np.float64, int, np.int64)):
+                data[key] = round(float(value), 2)
         elif isinstance(value, (np.integer, np.int64)):
-            transaction[key] = int(value)
-    return transaction
+            data[key] = int(value)
+        elif isinstance(value, (np.float64, float)):
+            data[key] = float(value)
+    return data
 
 def save_transactions(new_transaction):
     engine = create_engine_instance()
     metadata = MetaData()
     metadata.reflect(bind=engine)
-    transactions_table = Table('Transactions', metadata, autoload_with=engine)
+    transactions_table = Table('transactions', metadata, autoload_with=engine) # Load the table schema from the database
     
-    new_transaction = convert_to_native_types(new_transaction)
+    new_transaction = convert_to_native_types(new_transaction) # Ensure all values are native Python types
+    stmt = transactions_table.insert().values(new_transaction) # Create an insert statement
     
-    stmt = pg_insert(transactions_table).values(new_transaction)
-    upsert_stmt = stmt.on_conflict_do_update(
-        index_elements=['transactionid'],
-        set_={c.key: c for c in stmt.excluded if c.key not in ['transactionid']}
+    try:
+        with engine.connect() as conn:
+            conn.begin()
+            conn.execute(stmt)
+            conn.commit()
+            print("Transaction inserted successfully.")
+    except Exception as e:
+        print("Error inserting transaction:", e)
+    
+    engine.dispose()
+
+def save_monthly_budgets(new_monthly_budget):
+    engine = create_engine_instance()
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    monthly_budgets_table = Table('monthlybudgets', metadata, autoload_with=engine) # Load the table schema from the database
+
+    # Create an insert statement
+    new_monthly_budget = convert_to_native_types(new_monthly_budget)
+    stmt = monthly_budgets_table.insert().values(new_monthly_budget)
+
+    try:
+        with engine.connect() as conn:
+            conn.begin()
+            conn.execute(stmt)
+            conn.commit()
+            print("Monthly budget inserted successfully.")
+    except Exception as e:
+        print("Error inserting monthly budget:", e)
+    
+    engine.dispose()
+
+def update_monthly_budget(userid, budgetmonth, totalbudget):
+    engine = create_engine_instance()
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    monthly_budgets_table = Table('monthlybudgets', metadata, autoload_with=engine)
+    
+    # Create an update statement
+    stmt = (
+        update(monthly_budgets_table)
+        .where(
+            monthly_budgets_table.c.userid == userid,
+            monthly_budgets_table.c.budgetmonth == budgetmonth
+        )
+        .values(totalbudget=totalbudget)
     )
-    
-    with engine.begin() as conn:
-        conn.execute(upsert_stmt)
+
+    try:
+        with engine.connect() as conn:
+            conn.begin()
+            conn.execute(stmt)
+            conn.commit()
+            print("Total budget updated successfully!")
+    except Exception as e:
+        print("Error updating total budget:", e)
     
     engine.dispose()
 
-def save_monthly_budgets(monthly_budgets_df):
+def save_categorical_budgets(new_category_budget_row):
     engine = create_engine_instance()
-    monthly_budgets_df.to_sql('MonthlyBudgets', engine, if_exists='replace', index=False)
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    categorical_budgets_table = Table('categoricalbudgets', metadata, autoload_with=engine) # Load the table schema from the database
+
+    # Create an insert statement
+    new_category_budget_row = convert_to_native_types(new_category_budget_row)
+    stmt = categorical_budgets_table.insert().values(new_category_budget_row)
+
+    try:
+        with engine.connect() as conn:
+            conn.begin()
+            conn.execute(stmt)
+            conn.commit()
+            print("Categorical budgets inserted successfully.")
+    except Exception as e:
+        print("Error inserting categorical budgets:", e)
+    
     engine.dispose()
 
-def save_categorical_budgets(categorical_budgets_df):
+def update_categorical_budget(userid, categoryname, new_category_budget):
     engine = create_engine_instance()
-    categorical_budgets_df.to_sql('CategoricalBudgets', engine, if_exists='replace', index=False)
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    categorical_budgets_table = Table('categoricalbudgets', metadata, autoload_with=engine)
+    
+    # Create an update statement using SQLAlchemy's expression language
+    stmt = (
+        update(categorical_budgets_table)
+        .where(
+            categorical_budgets_table.c.userid == userid,
+            categorical_budgets_table.c.categoryname == categoryname
+        )
+        .values(categorybudget=new_category_budget)
+    )
+
+    try:
+        with engine.connect() as conn:
+            conn.begin()
+            conn.execute(stmt)
+            conn.commit()
+            print("Category budget updated successfully!")
+    except Exception as e:
+        print("Error updating category budget:", e)
+    
     engine.dispose()
 
 def save_categories(categories_df):
     engine = create_engine_instance()
-    categories_df.to_sql('Categories', engine, if_exists='replace', index=False)
+    categories_df.to_sql('categories', engine, if_exists='replace', index=False)
     engine.dispose()
 
 def save_users(users_df):
     engine = create_engine_instance()
-    users_df.to_sql('Users', engine, if_exists='replace', index=False)
+    users_df.to_sql('users', engine, if_exists='replace', index=False)
     engine.dispose()
 
 # ------------------------------------------------------------------------------

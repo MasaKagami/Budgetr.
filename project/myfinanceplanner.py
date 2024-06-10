@@ -32,7 +32,7 @@ server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session l
 app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
 app.title = 'Budgetr.'
 
-USE_REMOTE_DB = True # Choose database for user authentication and spending records (for testing)
+USE_REMOTE_DB = True # Choose database type (for testing)
 LOGGING = False # Logging for database records and user sessions
 
 setup_logging(server, LOGGING)
