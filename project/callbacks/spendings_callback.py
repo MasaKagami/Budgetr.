@@ -1,5 +1,4 @@
-from time import sleep
-from dash import Output, Input, State
+from dash import Output, Input, State, no_update
 import pandas as pd
 from load_data import (get_max_id, load_categories, userid, load_local_categories, load_local_transactions, load_local_monthly_budgets, 
                        load_local_categorical_budgets, load_monthly_budgets, 
@@ -107,8 +106,9 @@ def spendings_callback(app, use_remote_db=False):
         # ------------------------------------------------------------------------------
         # Budget Overview
 
-        # Display the allocated budget for each category
+        # Display the allocated budget for each category in descending order
         budget_table_data = categorical_budgets_df.to_dict('records')
+        budget_table_data = sorted(budget_table_data, key=lambda x: x['categorybudget'], reverse=True)
 
         # If no data is found, load the categories and display the budget as 0 without saving
         if categorical_budgets_df.empty:
@@ -252,11 +252,15 @@ def spendings_callback(app, use_remote_db=False):
 
     # ------------------------------------------------------------------------------
     # Force an update to the budget table when a new category budget is submitted
+
     @app.callback(
         Output('update_trigger', 'children'),
-        [Input('submit_total_budget', 'n_clicks'),
-         Input('submit_category_budget', 'n_clicks')]
+        [Input('total_budget_status', 'children'),
+         Input('category_budget_status', 'children')]
     )
-
-    def trigger_update(total_budget_clicks, category_budget_clicks):
-        return total_budget_clicks + category_budget_clicks
+    def trigger_update(total_budget_status, category_budget_status):
+        if (total_budget_status == "Total budget updated successfully!" 
+            or category_budget_status == "Category budget updated successfully!"):
+            return "Trigger Update"
+        else:
+            return no_update
