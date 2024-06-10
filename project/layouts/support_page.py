@@ -25,7 +25,7 @@ def support_page():
                     id='message-input',
                     placeholder='Enter your message here'
                 ),
-                html.Img(src="/assets/question.png", alt='question mark', className='suppport-art'),
+                html.Img(src="/assets/images/question.png", alt='question mark', className='suppport-art'),
                 html.Button('SEND', id='support-send-button', n_clicks=0),
                 html.Div(id='support-status')
             ], className='support-page-container')

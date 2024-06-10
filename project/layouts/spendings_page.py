@@ -133,7 +133,7 @@ def spendings_page(use_remote_db=False):
 
                 # Hidden div to store update triggers
                 html.Div(id='update_trigger', style={'display': 'none'}),
-                html.Img(src="/assets/pencil.png", alt='question mark', className='spendings-art'),
+                html.Img(src="/assets/images/pencil.png", alt='question mark', className='spendings-art'),
             ], className= 'spendings-container'),    
 
         ], className='spendings-page')
