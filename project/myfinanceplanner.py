@@ -1,17 +1,19 @@
 from dash import Dash, dcc, html
 from flask import Flask
 from datetime import timedelta
-
-from load_data import setup_logging
+from load_data import setup_logging, cache
 from register_callbacks import register_callbacks
 
 # Initialize Flask server
 server = Flask(__name__)
-server.secret_key = 'b5a28e9627732aec641eaddb2f9e3cb954b14748d037232c441f95b5642dc9b9' # Randomly generated secret key; Don't use os.urandom(24) since it changes on every server restart
+server.secret_key = 'b5a28e9627732aec641eaddb2f9e3cb954b14748d037232c441f95b5642dc9b9' # Randomly generated secret key; Don't use os.urandom(24) since it changes on every server restart)
 
 # Session configurations
 server.config['SESSION_PERMANENT'] = True  # Make sessions permanent
 server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session lifetime
+
+# Setup caching for the Flask server
+cache.init_app(server)
 
 # Initialize Dash app
 app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors

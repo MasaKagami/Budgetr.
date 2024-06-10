@@ -4,6 +4,11 @@ from sqlalchemy import MetaData, Table, create_engine, func, select, update
 from datetime import datetime
 from flask import session
 import numpy as np
+from flask_caching import Cache
+
+cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
+
+# ------------------------------------------------------------------------------
 
 def userid():
     return session.get('user_id')
@@ -52,21 +57,25 @@ def load_local_database():
 # ------------------------------------------------------------------------------
 # Load specific data from the remote database
 
+@cache.memoize()
 def load_transactions():
     query = f"SELECT * FROM Transactions WHERE userid = {userid()};"
     df = pd.read_sql(query, global_engine, parse_dates=['date'])
     return df
 
+@cache.memoize()
 def load_monthly_budgets():
     query = f"SELECT * FROM MonthlyBudgets WHERE userid = {userid()};"
     df = pd.read_sql(query, global_engine, parse_dates=['budgetmonth'])
     return df
 
+@cache.memoize()
 def load_categorical_budgets():
     query = f"SELECT * FROM CategoricalBudgets WHERE userid = {userid()};"
     df = pd.read_sql(query, global_engine)
     return df
 
+@cache.memoize()
 def load_categories():
     df = pd.read_sql("SELECT * FROM Categories;", global_engine)
     return df
@@ -180,6 +189,8 @@ def save_monthly_budgets(new_monthly_budget):
             conn.begin()
             conn.execute(stmt)
             conn.commit()
+
+            cache.clear()
             print("Monthly budget inserted successfully.")
     except Exception as e:
         print("Error inserting monthly budget:", e)
@@ -204,6 +215,8 @@ def update_monthly_budget(userid, budgetmonth, totalbudget):
             conn.begin()
             conn.execute(stmt)
             conn.commit()
+
+            cache.clear()
             print("Total budget updated successfully!")
     except Exception as e:
         print("Error updating total budget:", e)
@@ -222,6 +235,8 @@ def save_categorical_budgets(new_category_budget_row):
             conn.begin()
             conn.execute(stmt)
             conn.commit()
+
+            cache.clear()
             print("Categorical budgets inserted successfully.")
     except Exception as e:
         print("Error inserting categorical budgets:", e)
@@ -246,6 +261,8 @@ def update_categorical_budget(userid, categoryname, new_category_budget):
             conn.begin()
             conn.execute(stmt)
             conn.commit()
+
+            cache.clear()
             print("Category budget updated successfully!")
     except Exception as e:
         print("Error updating category budget:", e)
