@@ -1,6 +1,6 @@
 import logging
 import pandas as pd
-from sqlalchemy import MetaData, Table, create_engine, update
+from sqlalchemy import MetaData, Table, create_engine, func, select, update
 from datetime import datetime
 from flask import session
 import numpy as np
@@ -53,15 +53,18 @@ def load_local_database():
 # Load specific data from the remote database
 
 def load_transactions():
-    df = pd.read_sql("SELECT * FROM Transactions;", global_engine, parse_dates=['date'])
+    query = f"SELECT * FROM Transactions WHERE userid = {userid()};"
+    df = pd.read_sql(query, global_engine, parse_dates=['date'])
     return df
 
 def load_monthly_budgets():
-    df = pd.read_sql("SELECT * FROM MonthlyBudgets;", global_engine, parse_dates=['budgetmonth'])
+    query = f"SELECT * FROM MonthlyBudgets WHERE userid = {userid()};"
+    df = pd.read_sql(query, global_engine, parse_dates=['budgetmonth'])
     return df
 
 def load_categorical_budgets():
-    df = pd.read_sql("SELECT * FROM CategoricalBudgets;", global_engine)
+    query = f"SELECT * FROM CategoricalBudgets WHERE userid = {userid()};"
+    df = pd.read_sql(query, global_engine)
     return df
 
 def load_categories():
@@ -110,6 +113,24 @@ def save_local_users(users_df):
 
 # ------------------------------------------------------------------------------
 # Save and update data to the remote database
+
+def get_max_id(table_name, id_column):
+    metadata = MetaData()
+    metadata.reflect(bind=global_engine)
+    table = Table(table_name, metadata, autoload_with=global_engine)
+
+    stmt = select(func.max(table.c[id_column]))
+    max_id = 0
+
+    try:
+        with global_engine.connect() as conn:
+            result = conn.execute(stmt).scalar()
+            if result is not None:
+                max_id = result
+    except Exception as e:
+        print(f"Error fetching max {id_column}:", e)
+
+    return max_id
 
 # Ensure all values are native Python types for insertion into the database
 def convert_to_native_types(data):

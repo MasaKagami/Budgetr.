@@ -99,7 +99,7 @@ def display_page(pathname):
         
     elif pathname == '/record':
         if session and session['logged_in']:
-            return spendings_page()
+            return spendings_page(use_remote_db=USE_REMOTE_DB)
         else:
             return dcc.Location(href='/sign-in', id='redirect')
         

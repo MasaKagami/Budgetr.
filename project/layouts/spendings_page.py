@@ -1,9 +1,11 @@
 from dash import html, dcc, dash_table
-from load_data import current_year, monthsToInt, load_categories, load_categorical_budgets
+from load_data import current_year, monthsToInt, load_categories, load_local_categories
 
-def spendings_page():
-    categories_df = load_categories()
-    categorical_budgets_df = load_categorical_budgets()
+def spendings_page(use_remote_db=False):
+    if use_remote_db:
+        categories_df = load_categories()
+    else:
+        categories_df = load_local_categories()
 
     return html.Div(id='spendings_page', children=[
         html.Div([
@@ -114,7 +116,7 @@ def spendings_page():
                         html.H2('category'),
                         dcc.Dropdown(
                             id='budget_category_dropdown',
-                            options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
+                            options=[{'label': category, 'value': category} for category in categories_df['name']],
                             placeholder='select category'
                         ),
                     ], className='spendings-bottom-top'),
