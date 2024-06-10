@@ -1,4 +1,3 @@
-from enum import auto
 from dash import html, Input, Output
 import pandas as pd
 import plotly.express as px

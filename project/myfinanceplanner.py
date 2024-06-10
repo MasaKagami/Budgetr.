@@ -1,24 +1,9 @@
-from dash import Dash, dcc, html, Input, Output
-from flask import Flask, session
+from dash import Dash, dcc, html
+from flask import Flask
 from datetime import timedelta
 
-# Layouts
-from layouts.dashboard_page import dashboard_page
-from layouts.spendings_page import spendings_page
-from layouts.welcome_page import welcome_page
-from layouts.sign_in_page import sign_in_page
-from layouts.sign_up_page import sign_up_page
-from layouts.settings_page import settings_page
-from layouts.support_page import support_page
-
-# Callbacks
-from callbacks.dashboard_callback import dashboard_callback
-from callbacks.spendings_callback import spendings_callback
-from callbacks.sidebar_callback import sidebar_callback
-from callbacks.authentication_callback import authentication_callback
-from callbacks.settings_callback import settings_callback
-from callbacks.support_callback import support_callback
 from load_data import setup_logging
+from register_callbacks import register_callbacks
 
 # Initialize Flask server
 server = Flask(__name__)
@@ -32,7 +17,8 @@ server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session l
 app = Dash(__name__, server=server, suppress_callback_exceptions=True) # Suppress callback exceptions ensures callbacks not initially in the app layout are not raised as errors
 app.title = 'Budgetr.'
 
-USE_REMOTE_DB = True # Choose database type (for testing)
+# Flags for testing
+USE_REMOTE_DB = True # Choose database type
 LOGGING = False # Logging for database records and user sessions
 
 setup_logging(server, LOGGING)
@@ -69,82 +55,8 @@ app.layout = html.Div([
 ], className='background'),
 
 # ------------------------------------------------------------------------------
-# Callback to toggle between pages from the sidebar
-@app.callback(
-    Output('page-content', 'children'),
-    [Input('url', 'pathname')],
-)
 
-def display_page(pathname):
-    if pathname == '/':
-        return welcome_page()
-    
-    elif pathname == '/sign-in':
-        if session and session['logged_in']:
-            return dcc.Location(href='/dashboard', id='redirect')
-        else:
-            return sign_in_page()
-    
-    elif pathname == '/sign-up':
-        if session and session['logged_in']:
-            return dcc.Location(href='/dashboard', id='redirect')
-        else:
-            return sign_up_page()
-    
-    elif pathname == '/dashboard':
-        if session and session['logged_in']:
-            return dashboard_page(use_remote_db=USE_REMOTE_DB)
-        else:
-            return dcc.Location(href='/sign-in', id='redirect')
-        
-    elif pathname == '/record':
-        if session and session['logged_in']:
-            return spendings_page(use_remote_db=USE_REMOTE_DB)
-        else:
-            return dcc.Location(href='/sign-in', id='redirect')
-        
-    elif pathname == '/settings':
-        if session and session['logged_in']:
-            return settings_page()
-        else:
-            return dcc.Location(href='/sign-in', id='redirect')
-    
-    elif pathname == '/support':
-        if session and session['logged_in']:
-            return support_page()
-        else:
-            return dcc.Location(href='/sign-in', id='redirect')
-
-    elif pathname == '/logout':
-        session.clear()
-        print("User logged out")
-        return dcc.Location(href='/', id='redirect') # Redirect to the welcome page after logging out
-
-    else:
-        return "404 Page Not Found"
-    
-# ------------------------------------------------------------------------------
-# Callback for sidebar
-
-@app.callback(
-    Output('sidebar', 'style'),
-    [Input('url', 'pathname')]
-)
-def toggle_sidebar_visibility(pathname):
-    if session and session['logged_in'] and pathname in ['/dashboard', '/record', '/settings', '/support', '/logout']:
-        return {'display': 'flex'}  # Show sidebar in the app when logged in
-    else:
-        return {'display': 'none'}  # Hide sidebar when not logged in
-
-# ------------------------------------------------------------------------------
-# Callbacks for every page
-
-authentication_callback(app, use_remote_db=USE_REMOTE_DB)
-sidebar_callback(app)
-dashboard_callback(app, use_remote_db=USE_REMOTE_DB)
-spendings_callback(app, use_remote_db=USE_REMOTE_DB)
-settings_callback(app, use_remote_db=USE_REMOTE_DB)
-support_callback(app)
+register_callbacks(app, USE_REMOTE_DB)
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
