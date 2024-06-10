@@ -184,13 +184,15 @@ def spendings_callback(app, use_remote_db=False):
                     'budgetmonth': selected_date
                 }
 
+                if not use_remote_db:
+                    new_monthly_budget['budgetid'] = monthly_budgets_df['budgetid'].max() + 1
+                    monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
+
             # Save the updated data to the database
             if use_remote_db:
                 new_monthly_budget['budgetid'] = get_max_id(monthly_budgets_df) + 1
                 save_monthly_budgets(new_monthly_budget)
             else:
-                new_monthly_budget['budgetid'] = monthly_budgets_df['budgetid'].max() + 1
-                monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
                 save_local_monthly_budgets(monthly_budgets_df)
 
             return "Total budget updated successfully!"
