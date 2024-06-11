@@ -1,5 +1,5 @@
 catbudgetid,userid,categoryname,categorybudget
-1,1,Housing,1000.0
+1,1,Housing,1200.0
 2,1,Transportation,500.0
 3,1,Food,300.0
 4,1,Healthcare,200.0
@@ -10,5 +10,5 @@ catbudgetid,userid,categoryname,categorybudget
 9,1,Education,100.0
 10,1,Miscellaneous,40.0
 12,4,Transportation,200.0
-13,4,Housing,1300.0
+13,4,Housing,1425.0
 14,4,Food,375.0

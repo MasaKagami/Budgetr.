@@ -1,12 +1,7 @@
 from dash import html, dcc, dash_table
-from utils.load_data import current_year, monthsToInt, load_categories, load_local_categories
+from load_data import current_year, monthsToInt
 
-def spendings_page(use_remote_db=False):
-    if use_remote_db:
-        categories_df = load_categories()
-    else:
-        categories_df = load_local_categories()
-
+def spendings_page(categories_df, categorical_budgets_df):
     return html.Div(id='spendings_page', children=[
         html.Div([
             html.H1("Financial Management"),
@@ -98,7 +93,7 @@ def spendings_page(use_remote_db=False):
                         html.H3('category'),
                         dcc.Dropdown(
                             id='budget_category_dropdown',
-                            options=[{'label': category, 'value': category} for category in categories_df['name']],
+                            options=[{'label': category, 'value': category} for category in categorical_budgets_df['categoryname']],
                             placeholder='select category'
                         ),
                     ], className='spendings-input-container'), 
@@ -133,7 +128,7 @@ def spendings_page(use_remote_db=False):
 
                 # Hidden div to store update triggers
                 html.Div(id='update_trigger', style={'display': 'none'}),
-                html.Img(src="/assets/images/pencil.png", alt='question mark', className='spendings-art'),
+                html.Img(src="/assets/pencil.png", alt='question mark', className='spendings-art'),
             ], className= 'spendings-container'),    
 
         ], className='spendings-page')

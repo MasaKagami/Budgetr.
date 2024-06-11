@@ -45,7 +45,7 @@ def settings_page():
                         html.Button("Confirm Delete", id='confirm_delete_button')
                     ], className='settings-confirm-delete', id='confirm_delete_section', style={'display': 'none'}),
                     html.Div(id='delete_status'),
-                    html.Img(src="/assets/images/exclamation.png", alt='exclamation mark', className='settings-art')
+                    html.Img(src="/assets/exclamation.png", alt='exclamation mark', className='settings-art')
                 ], className='settings-delete')
             ],className='settings-container')
         ], className='settings')

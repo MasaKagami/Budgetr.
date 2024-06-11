@@ -1,8 +1,8 @@
 from dash import Output, Input, State
 from flask import session
 from sqlalchemy import text
-from utils.user_management import hash_password, validate_local_user, validate_remote_user, local_users_url
-from utils.load_data import global_engine, load_local_users
+from user_management import hash_password, validate_local_user, validate_remote_user, local_users_url
+from load_data import create_engine_instance, load_local_users
 
 def settings_callback(app, use_remote_db=False):
     @app.callback(
@@ -116,7 +116,8 @@ def settings_callback(app, use_remote_db=False):
         users_df.to_csv(local_users_url(), index=False)
 
     def update_remote_user_profile(userid, name, email):
-        with global_engine.begin() as conn:
+        engine = create_engine_instance()
+        with engine.begin() as conn:
             conn.execute(text('UPDATE users SET name=:name, email=:email WHERE userid=:userid'), {'name': name, 'email': email, 'userid': userid})
 
     # ------------------------------------------------------------------------------
@@ -128,7 +129,8 @@ def settings_callback(app, use_remote_db=False):
         users_df.to_csv(local_users_url(), index=False)
 
     def update_remote_user_password(userid, password):
-        with global_engine.begin() as conn:
+        engine = create_engine_instance()
+        with engine.begin() as conn:
             conn.execute(text('UPDATE users SET password=:password WHERE userid=:userid'), {'password': hash_password(password), 'userid': userid})
 
     # ------------------------------------------------------------------------------
@@ -140,5 +142,6 @@ def settings_callback(app, use_remote_db=False):
         users_df.to_csv(local_users_url(), index=False)
 
     def delete_remote_user(userid):
-        with global_engine.begin() as conn:
+        engine = create_engine_instance()
+        with engine.begin() as conn:
             conn.execute(text('DELETE FROM users WHERE userid=:userid'), {'userid': userid})

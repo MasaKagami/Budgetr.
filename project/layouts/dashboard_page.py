@@ -1,26 +1,13 @@
 from dash import html, dcc, dash_table
 import pandas as pd
-from utils.load_data import current_month, current_year, monthsToInt, load_transactions, load_local_transactions
+from load_data import current_month, current_year, monthsToInt
+from datetime import date
 
-def dashboard_page(use_remote_db=False):
-    if use_remote_db:
-        transactions_df = load_transactions()
-    else:
-        transactions_df = load_local_transactions()
-
+def dashboard_page(transactions_df):
     # Prepare the transactions data by converting the date to a datetime object
     transactions_df['date'] = pd.to_datetime(transactions_df['date'])
     transactions_df['date_display'] = transactions_df['date'].dt.strftime('%Y-%m-%d')
     transactions_df.sort_values('date', ascending=False, inplace=True)  # Sort by date descending
-
-    # Find the last transaction date to set the default year and month
-    if not transactions_df.empty:
-        last_transaction_date = transactions_df['date'].iloc[0]
-        last_transaction_year = last_transaction_date.year
-        last_transaction_month = last_transaction_date.month
-    else:
-        last_transaction_year = current_year()
-        last_transaction_month = current_month()
 
     return html.Div([
 
@@ -35,7 +22,7 @@ def dashboard_page(use_remote_db=False):
                             {'label': str(year), 'value': year} for year in range(2023 , (current_year()+1)+1)
                         ],
                         multi=False,
-                        value=last_transaction_year,
+                        value=current_year()-1, # Initial value (last year)
                         placeholder="select year",
                         className='dashboard--input',
                     ),
@@ -46,7 +33,7 @@ def dashboard_page(use_remote_db=False):
                         id="slct_month",
                         options=[{'label': key, 'value': value} for key, value in monthsToInt().items()],
                         multi=False,
-                        value=last_transaction_month,
+                        value=current_month(), # Initial value
                         placeholder="select month",
                         className='dashboard--input',
                     )

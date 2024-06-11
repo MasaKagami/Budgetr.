@@ -23,7 +23,7 @@ def sign_in_page():
         
                 html.Div([
                         html.Div([
-                                html.Img(src="/assets/images/rocket.png", className='sign-in-illustration', alt='illustration'),
+                                html.Img(src="/assets/rocket.png", className='sign-in-illustration', alt='illustration'),
                                 html.H1("Sign In", className='sign-in-title'),
                                 html.Div([
                                         dcc.Input(id='login_email', type='text', placeholder='Username'),
