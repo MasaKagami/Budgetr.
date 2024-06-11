@@ -1,8 +1,12 @@
-from dash import Output, Input, State
+from dash import Output, Input, State, no_update
 import pandas as pd
-from load_data import load_local_categories, load_local_transactions, load_local_monthly_budgets, load_local_categorical_budgets, userid
+from utils.load_data import (get_max_id, load_categories, userid, load_local_categories, load_local_transactions, load_local_monthly_budgets, 
+                       load_local_categorical_budgets, load_monthly_budgets, 
+                       load_categorical_budgets, save_transactions, save_local_transactions, 
+                       save_monthly_budgets, save_local_monthly_budgets, save_categorical_budgets, 
+                       save_local_categorical_budgets, update_categorical_budget, update_monthly_budget, cache)
 
-def spendings_callback(app):
+def spendings_callback(app, use_remote_db=False):
     # Callback for adding transactions
     @app.callback(
         Output('transaction_status', 'children'),
@@ -16,24 +20,22 @@ def spendings_callback(app):
     def add_transaction(n_clicks, date, amount, category, description):
         # If button has been clicked and all fields have been filled out
         if n_clicks > 0 and date and amount and category:
-            # Load the latest transactions DB
-            transactions_df = load_local_transactions()
-
-            # Add the new transaction to the DataFrame
             new_transaction = {
-                'transactionid': transactions_df['transactionid'].max() + 1, # Increment the transaction ID
                 'userid': userid(),
-                'date': date + ' 00:00:00',
+                'date': date,
                 'categoryname': category,
                 'amount': amount, 
                 'description': description
                 }
-            
-            # Append the new transaction to the end of the DataFrame
-            transactions_df.loc[len(transactions_df)] = new_transaction
-            
-            # Save the updated DataFrame to the CSV file
-            transactions_df.to_csv('../localdb/transactions.csv', index=False)
+   
+            if use_remote_db:
+                save_transactions(new_transaction)
+            else:
+                transactions_df = load_local_transactions() # Load the latest transactions DB
+                new_transaction.update({'transactionid': transactions_df['transactionid'].max() + 1}) # Increment the transaction ID
+                new_transaction.update({'date': date + ' 00:00:00'}) # Append timestamp to align with the database schema
+                transactions_df.loc[len(transactions_df)] = new_transaction # Append the new transaction to the DataFrame
+                save_local_transactions(transactions_df)
 
             return f"Transaction added: {date}, {amount}, {category}"
         elif n_clicks > 0:
@@ -56,19 +58,29 @@ def spendings_callback(app):
         Input('update_trigger', 'children')]
     )
 
+    @cache.memoize()
     def display_budget(selected_month, selected_year, _):
         # Load the latest budgets DB for the logged in user
-        monthly_budgets_df = load_local_monthly_budgets()
-        monthly_budgets_df = monthly_budgets_df[monthly_budgets_df['userid'] == userid()]
-        categorical_budgets_df = load_local_categorical_budgets()
-        categorical_budgets_df = categorical_budgets_df[categorical_budgets_df['userid'] == userid()]
+        if use_remote_db:
+            monthly_budgets_df = load_monthly_budgets()
+            categorical_budgets_df = load_categorical_budgets()
+        else:
+            monthly_budgets_df = load_local_monthly_budgets()
+            categorical_budgets_df = load_local_categorical_budgets()
+
+            # Filter for the logged in user
+            monthly_budgets_df = monthly_budgets_df[monthly_budgets_df['userid'] == userid()]
+            categorical_budgets_df = categorical_budgets_df[categorical_budgets_df['userid'] == userid()]
+
+        print('Monthly Budgets\n', monthly_budgets_df[-5:])
+        print('Categories Budgets\n', categorical_budgets_df[-5:])
         
         # ------------------------------------------------------------------------------
         # Monthly Budget
 
         if selected_month and selected_year:
             # Convert the selected month and year to a datetime object if valid selections
-            selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
+            selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01' + ' 00:00:00.000000')
 
             # Filter the monthly budgets for the selected date
             monthly_budget_row = monthly_budgets_df[monthly_budgets_df['budgetmonth'] == selected_date]
@@ -95,12 +107,17 @@ def spendings_callback(app):
         # ------------------------------------------------------------------------------
         # Budget Overview
 
-        # Display the allocated budget for each category
+        # Display the allocated budget for each category in descending order
         budget_table_data = categorical_budgets_df.to_dict('records')
+        budget_table_data = sorted(budget_table_data, key=lambda x: x['categorybudget'], reverse=True)
 
-        # If no data is found, load the categories and set the budget to 0
+        # If no data is found, load the categories and display the budget as 0 without saving
         if categorical_budgets_df.empty:
-            categories_df = load_local_categories()
+            if use_remote_db:
+                categories_df = load_categories()
+            else:
+                categories_df = load_local_categories()
+
             for categories in categories_df['name']:
                 budget_table_data.append({'categoryname': categories, 'categorybudget': 0})
 
@@ -141,7 +158,10 @@ def spendings_callback(app):
             selected_date = pd.to_datetime(f'{selected_year}-{selected_month:02d}-01')
 
             # Load the latest budgets DB before updating
-            monthly_budgets_df = load_local_monthly_budgets()
+            if use_remote_db:
+                monthly_budgets_df = load_monthly_budgets()
+            else:
+                monthly_budgets_df = load_local_monthly_budgets()
 
             # Filter for the current user and selected date
             user_budget_df = monthly_budgets_df[(monthly_budgets_df['userid'] == userid()) 
@@ -153,18 +173,28 @@ def spendings_callback(app):
                     monthly_budgets_df = monthly_budgets_df[monthly_budgets_df.index != user_budget_df.index[0]]
                 else:
                     # Update the total budget for the selected month
-                    monthly_budgets_df.loc[user_budget_df.index, 'totalbudget'] = total_budget
+                    if use_remote_db:
+                        update_monthly_budget(userid(), selected_date, total_budget)
+                        return "Total budget updated successfully!"
+                    else:
+                        monthly_budgets_df.loc[user_budget_df.index, 'totalbudget'] = total_budget
             else:
                 new_monthly_budget = {
-                    'budgetid': monthly_budgets_df['budgetid'].max() + 1,
                     'userid': userid(),
                     'totalbudget': total_budget,
                     'budgetmonth': selected_date
                 }
-                monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
 
-            # Save the updated data to the CSV file
-            monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
+                if not use_remote_db:
+                    new_monthly_budget['budgetid'] = monthly_budgets_df['budgetid'].max() + 1
+                    monthly_budgets_df.loc[len(monthly_budgets_df)] = new_monthly_budget
+
+            # Save the updated data to the database
+            if use_remote_db:
+                new_monthly_budget['budgetid'] = get_max_id(monthly_budgets_df) + 1
+                save_monthly_budgets(new_monthly_budget)
+            else:
+                save_local_monthly_budgets(monthly_budgets_df)
 
             return "Total budget updated successfully!"
         return ""
@@ -181,8 +211,10 @@ def spendings_callback(app):
     def update_category_budget(n_clicks, selected_category, new_category_budget):
         if n_clicks > 0:
             if selected_category and new_category_budget is not None:
-                # Load the latest categorical budgets DB before updating
-                categorical_budgets_df = load_local_categorical_budgets()
+                if use_remote_db:
+                    categorical_budgets_df = load_categorical_budgets()
+                else:
+                    categorical_budgets_df = load_local_categorical_budgets()
 
                 # Filter for the user and selected category
                 user_category_df = categorical_budgets_df[(categorical_budgets_df['userid'] == userid()) 
@@ -190,18 +222,29 @@ def spendings_callback(app):
 
                 # Update the selected category's budget for the logged in user
                 if not user_category_df.empty:
-                    categorical_budgets_df.loc[user_category_df.index, 'categorybudget'] = new_category_budget
+                    if use_remote_db:
+                        update_categorical_budget(userid(), selected_category, new_category_budget)
+                        return "Category budget updated successfully!"
+                    else:
+                        categorical_budgets_df.loc[user_category_df.index, 'categorybudget'] = new_category_budget
+
                 else:
                     new_category_budget_row = {
-                        'catbudgetid': categorical_budgets_df['catbudgetid'].max() + 1,
                         'userid': userid(),
                         'categoryname': selected_category,
                         'categorybudget': new_category_budget
                     }
-                    categorical_budgets_df.loc[len(categorical_budgets_df)] = new_category_budget_row
 
-                # Save the updated data to the CSV file
-                categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
+                    if not use_remote_db:
+                        new_category_budget_row['catbudgetid'] = categorical_budgets_df['catbudgetid'].max() + 1
+                        categorical_budgets_df.loc[len(categorical_budgets_df)] = new_category_budget_row
+
+                # Save the updated data to the database
+                if use_remote_db:
+                    new_category_budget_row['catbudgetid'] = get_max_id('categoricalbudgets', 'catbudgetid') + 1
+                    save_categorical_budgets(new_category_budget_row)
+                else:
+                    save_local_categorical_budgets(categorical_budgets_df)
 
                 return "Category budget updated successfully!"
             elif not selected_category:
@@ -212,11 +255,16 @@ def spendings_callback(app):
 
     # ------------------------------------------------------------------------------
     # Force an update to the budget table when a new category budget is submitted
+
     @app.callback(
         Output('update_trigger', 'children'),
-        [Input('submit_total_budget', 'n_clicks'),
-         Input('submit_category_budget', 'n_clicks')]
+        [Input('total_budget_status', 'children'),
+         Input('category_budget_status', 'children')]
     )
-
-    def trigger_update(total_budget_clicks, category_budget_clicks):
-        return total_budget_clicks + category_budget_clicks
+    
+    def trigger_update(total_budget_status, category_budget_status):
+        if (total_budget_status == "Total budget updated successfully!" 
+            or category_budget_status == "Category budget updated successfully!"):
+            return "Trigger Update"
+        else:
+            return no_update

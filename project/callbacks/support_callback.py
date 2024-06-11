@@ -15,8 +15,7 @@ def support_callback(app):
 
     def send_email(n_clicks, name, email, message):
         if n_clicks > 0:
-            if not (name or email or message): # Switch these to AND when message 'None' fixed
-                print(f"Received: n_clicks={n_clicks}, name={name}, email={email}, message='{message}'")
+            if not (name and email and message):
                 return 'Please fill out all fields'
 
             myEmail = 'help.masakagami@gmail.com'
