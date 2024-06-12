@@ -27,12 +27,15 @@ def welcome_page():
         ], className='welcome-content-background'),
 
         html.Div([
-            html.H1("How it works"),
+            # html.Div(className='wavy-line-2'),
             html.Div([
-                html.Img(),
-                html.P('blah blah blah')
-            ], className='welcome-instruction-content')
-        ], className='welcome-instruction'),
+                html.Div([
+                    html.H1("How it works"),
+                    html.P('blah blah blah')
+                ], className='instruction-text'),
+
+            ], className='welcome-content')
+        ], className='welcome-instruction-background'),
 
         html.Div([
             html.Div([
