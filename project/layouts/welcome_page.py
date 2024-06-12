@@ -26,43 +26,82 @@ def welcome_page():
             ], className= "welcome-content")
         ], className='welcome-content-background'),
 
-        html.Div([
-            # html.Div(className='wavy-line-2'),
+        html.Div([  
             html.Div([
+                html.Img(src='/assets/images/display.png', className='welcome-display-image'),
                 html.Div([
-                    html.H1("How it works"),
-                    html.P('blah blah blah')
-                ], className='instruction-text'),
+                    html.H1("How Budgetr. works"),
+                    html.Div([
+                        html.Img(src='/assets/images/rocket.png'),
+                        html.Div([
+                            html.H2('Get Started Easily'),
+                            html.P('Sign up quickly with no credit card required and start managing your finances immediately.')
+                        ], className= 'instruction-text-container')
+                    ], className='instruction-text-list'),
+                    html.Div([
+                        html.Img(src='/assets/pencil.png'),
+                        html.Div([
+                            html.H2('Monitor Your Spending'),
+                            html.P('Enter your expenses and view an updated dashboard to help plan and save effectively.')
+                        ], className= 'instruction-text-container')
+                    ], className='instruction-text-list'),
+                    html.Div([
+                        html.Img(src='/assets/images/heart.png'),
+                        html.Div([
+                            html.H2('Achieve Financial Peace'),
+                            html.P('Stay informed with real-time updates and visual data, reducing stress and boosting confidence.')
+                        ], className= 'instruction-text-container')
+                    ], className='instruction-text-list'),
 
-            ], className='welcome-content')
+                ], className='instruction-text')
+            ], className='welcome-content'),
+            html.Div(className='wavy-line-2')
         ], className='welcome-instruction-background'),
 
         html.Div([
+            html.Div(className='wavy-line-5'),
             html.Div([
                 html.H2("About The Creators"),
-                html.P("After meeting in Software Engineering Practice, a pivotal course at McGill University, Masa and Shyam quickly discovered their shared passion for technology and innovation. This connection sparked not only a dynamic classroom collaboration but also inspired them to tackle summer projects together, blending their skills to create impactful solutions."),
+                # html.P("After meeting in Software Engineering Practice, a pivotal course at McGill University, Masa and Shyam quickly discovered their shared passion for technology and innovation. This connection sparked not only a dynamic classroom collaboration but also inspired them to tackle summer projects together, blending their skills to create impactful solutions."),
                 html.Div([
+                    html.Img(src='/assets/images/masa-border.png', alt='masa picture', className='welcome-creator-image'),
+                    
                     html.Div([
-                        html.Img(src='assets/images/masa.png', className='creator-image'),
                         html.H3('Nagamasa (Masa) Kagami'),
                         html.P('Electrical Engineering Student @ McGill University'),
                         html.Div([
-                            dcc.Link('LinkedIn', href='https://www.linkedin.com/in/nagamasa', className='social-link'),
-                            dcc.Link('Personal Website', href='https://www.masakagami.com', className='social-link')
+                            dcc.Link('LinkedIn', href='https://www.linkedin.com/in/nagamasa', className='social-link', target='_blank'),
+                            dcc.Link('Personal Website', href='https://www.masakagami.com', className='social-link', target='_blank')
                         ], className='links-container')
                     ], className='creator-profile'),
+                ], className='creators-container'),
+                
+                html.Div([
                     html.Div([
-                        html.Img(src='assets/images/shyam.png', className='creator-image'),
                         html.H3('Shyam Desai'),
                         html.P('Software Engineering Student @ McGill University'),
                         html.Div([
-                            dcc.Link('LinkedIn', href='https://www.linkedin.com/in/shyamddesai/', className='social-link'),
-                            dcc.Link('Personal Website', href='https://github.com/shyamdesai03/', className='social-link')
-                        ])
-                    ], className='creator-profile')
-                ], className='creators-container')
-            ], className='welcome-about')  
-        ], className='welcome-about-background')
+                            dcc.Link('LinkedIn', href='https://www.linkedin.com/in/shyamddesai/', className='social-link', target='_blank'),
+                            dcc.Link('Personal Website', href='https://github.com/shyamdesai03/', className='social-link', target='_blank')
+                        ], className='links-container')
+                    ], className='creator-profile'),
 
+                    html.Img(src='/assets/images/shyam-border.png', alt='masa picture', className='welcome-creator-image'),
+                ], className='creators-container'),
+            ], className='welcome-about'),  
+            html.Div(className='wavy-line-3'),
+            html.Div(className='wavy-line-4'),
+        ], className='welcome-about-background'),
 
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.H1('Budgetr.'),
+                    html.H2('Copyright © 2024, Budgetr. All Rights Reserved.')
+                ]),
+                html.Div([
+                    html.P('Masa & Shyam')
+                ])
+            ], className='welcome-footer')
+        ], className='welcome-footer-container')
     ],className='welcome')
