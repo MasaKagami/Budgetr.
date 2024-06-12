@@ -217,7 +217,8 @@
 }
 #transactions_table{
     height: 18rem;
-    overflow: auto;
+    overflow-x:none;
+    overflow-y: scroll;
     width: 100%;
     color:white;
 }
@@ -234,6 +235,24 @@
     background-color: #1e2130;
     padding: 5px;
 }
+
+/* Assuming your DataTable has a unique ID or class you can target */
+#transactions_table th:nth-of-type(1) { /* targeting the first column, usually 'Date' */
+    width: 15% !important;
+}
+
+#transactions_table th:nth-of-type(2) { /* targeting the second column, usually 'Category Name' */
+    width: 25% !important;
+}
+
+#transactions_table th:nth-of-type(3) { /* targeting the third column, usually 'Amount' */
+    width: 15% !important;
+}
+
+#transactions_table th:nth-of-type(4) { /* targeting the fourth column, usually 'Description' */
+    width: 45% !important;
+}
+
 
 .dashboard-left-bottom, .dashboard-left-top {
     /* flex: 1; */
