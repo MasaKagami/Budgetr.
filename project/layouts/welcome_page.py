@@ -14,6 +14,8 @@ def welcome_page():
         
         html.Div([
             html.Div(className='welcome-circle'),
+
+            html.Div(className='wavy-line'),
             html.Div([
                 html.Div([
                     html.H1("Visualize Your Finances"),
