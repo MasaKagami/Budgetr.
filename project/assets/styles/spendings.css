@@ -1,5 +1,5 @@
 .spendings{
-    width: calc(100vw-260px);
+    width: calc(100vw - 260px);
     height: 100vh;
     overflow: hidden;
     display: flex;

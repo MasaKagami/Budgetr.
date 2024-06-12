@@ -1,0 +1,233 @@
+
+/* -----------------------------------WELCOME PAGE----------------------------------- */
+
+
+.welcome{
+    width: auto;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-nav-background{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #151a28;
+}
+
+.welcome-nav{
+    height: 5rem;
+    width: 100%;
+    max-width: 66vw;
+    display: flex;
+    justify-content: space-between;   
+    align-items: center;
+}
+
+.welcome-logo{
+    width:100%;
+    color: white;
+    margin: 0;
+    margin: 20px 0px;
+}
+
+.navbar-tabs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* --------------------MAIN CONTENT SECTION-------------------- */
+
+.welcome-content-background{
+    background-color: #1e2130;
+    width: 100vw;
+    height: calc(100vh - 5rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.welcome-content{
+    height: auto;
+    width: 100%;
+    max-width: 66vw;
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+.welcome-circle {
+    display: block;
+    position: absolute;
+    width: 50vh;
+    height: 50vh;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    right: 40%;
+    top: 50%;
+    transform: translateY(-50%) translateX(50%);
+    z-index: 0;  /* Temporarily bring this in front of all other content */
+}
+
+
+
+.welcome-text{
+    flex: 1;
+    padding: 280px 0px;
+    margin-right: 20px;
+    color: white;
+}
+
+.welcome-text H1{
+    font-size: 54px;
+    font-weight: 600;
+}
+
+.welcome-text P{
+    font-size: 20px;
+    font-weight: 350;
+    font-style: italic;
+}
+
+.sign-up-btn-big{
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 11px 8px;
+    font-size: 15px;
+    color: #151a28;
+    background-color: rgb(9, 180, 9);
+    border: 2px solid rgb(9, 180, 9);
+    width: 14rem;
+    box-shadow: 
+    rgba(0, 128, 128, 0.4) 5px 5px, 
+    rgba(0, 128, 128, 0.3) 10px 10px, 
+    rgba(0, 128, 128, 0.2) 15px 15px, 
+    rgba(0, 128, 128, 0.1) 20px 20px, 
+    rgba(0, 128, 128, 0.05) 25px 25px;
+}
+.welcome-image{
+    flex: 1;
+    height: auto;
+    width: 200px;
+}
+
+/* --------------------INSTRUCTION SECTION-------------------- */
+
+.welcome-instruction{
+    width: 100%;
+    height: auto;
+    padding: 2rem;
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --------------------ABOUT SECTION-------------------- */
+
+
+.welcome-about-background {
+    background-color: #f8f9fa;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-about {
+    width: 100%;
+    max-width: 66vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 80px 0;
+    text-align: center;
+}
+
+.welcome-about h2{
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.welcome-about p{
+    max-width: 60rem;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.creators-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 70%;
+}
+
+.creator-profile {
+    width: 40%; 
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 10px;
+    text-align: center; 
+}
+
+.creator-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; 
+    margin-bottom: 10px;
+}
+
+.social-link {
+    font-weight: 500;
+    font-size: 13px;
+    color: #007bff;
+    text-decoration: none; 
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.links-container {
+    display: flex; 
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.sign-in-btn, .sign-up-btn {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 11px 8px;
+    font-size: 15px;
+}
+
+.sign-up-btn {
+    color: #151a28;
+    background-color: #09b409;
+    border: 2px solid rgb(9, 180, 9);
+    width: 10rem;
+    font-weight: 600;
+}
+
+.sign-in-btn {
+    color: white;
+    border: 2px solid white;
+    width: 5rem;
+    margin-right: 10px;
+    font-weight: 600;
+}
+

@@ -3,7 +3,7 @@
     flex-direction: column;
     overflow: hidden;
     box-sizing: border-box;
-    width: calc(100vw-260px);
+    width: calc(100vw - 260px);
     justify-content: center;
     align-items: center;
     height: 100vh;

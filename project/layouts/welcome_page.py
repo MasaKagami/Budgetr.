@@ -11,11 +11,13 @@ def welcome_page():
                 ], className='navbar-tabs')
             ], className= 'welcome-nav')
         ], className= 'welcome-nav-background'),
+        
         html.Div([
+            html.Div(className='welcome-circle'),
             html.Div([
                 html.Div([
-                    html.H1("Visualize Your Finances", className='welcome-slogan'),
-                    html.P("Gain control over your expenses. Discover clear, visual insights into your spending to help you budget smarter and save more.", className='welcome-paragraph'),
+                    html.H1("Visualize Your Finances"),
+                    html.P("Gain control over your expenses. Discover clear, visual insights into your spending to help you budget smarter and save more."),
                     dcc.Link("Start Today", href='/sign-up', className='sign-up-btn-big')                          
                 ], className='welcome-text'),
                 html.Img(src= '/assets/images/lightbulb.png', className='welcome-image')
