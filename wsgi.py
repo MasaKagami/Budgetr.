@@ -1,4 +1,4 @@
-from myfinanceplanner import application
+from project.myfinanceplanner import application
 
 if __name__ == "__main__":
     application.run()
