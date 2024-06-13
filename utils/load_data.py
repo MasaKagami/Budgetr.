@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import logging
 import pandas as pd
 from sqlalchemy import MetaData, Table, create_engine, func, select, update
@@ -5,6 +7,9 @@ from datetime import datetime
 from flask import session
 import numpy as np
 from flask_caching import Cache
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up caching for the Flask server
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
@@ -19,7 +24,7 @@ def userid():
 
 # Path to the remote database
 def database_url():
-    return "postgresql://postgresql_finance_user:Xda6CRIftQmupM1vnXit1fnbKIfcfLhc@dpg-cp1p0hud3nmc73b8v0qg-a.ohio-postgres.render.com:5432/postgresql_finance"
+    return os.getenv('DATABASE_URL')
 
 # Path to the local database
 def local_users_url():

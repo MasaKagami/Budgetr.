@@ -1,4 +1,6 @@
 myfinanceplanner
+budgetr
 .DS_Store
 __pycache__
 .idea
+.env

@@ -1,7 +1,12 @@
 from dash import Output, Input, State
-import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+import os
+import smtplib
+
+# Load environment variables from .env file
+load_dotenv()
 
 def support_callback(app):
         
@@ -18,8 +23,8 @@ def support_callback(app):
             if not (name and email and message):
                 return 'Please fill out all fields'
 
-            myEmail = 'help.masakagami@gmail.com'
-            myPassword = 'wdobatbvhemlxjuj'
+            myEmail = os.getenv('MYEMAIL')
+            myPassword = os.getenv('MYPASSWORD')
             smtp_server = 'smtp.gmail.com'
             smtp_port = 587
 
