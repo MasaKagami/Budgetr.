@@ -23,8 +23,8 @@ def support_callback(app):
             if not (name and email and message):
                 return 'Please fill out all fields'
 
-            myEmail = os.getenv('EMAIL')
-            myPassword = os.getenv('EMAIL_PASSWORD')
+            myEmail = os.getenv('MYEMAIL')
+            myPassword = os.getenv('MYPASSWORD')
             smtp_server = 'smtp.gmail.com'
             smtp_port = 587
 
