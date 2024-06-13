@@ -1,14 +1,17 @@
+import os
 from dash import Dash, dcc, html
 from flask import Flask
 from datetime import timedelta
+from dotenv import load_dotenv
 from utils.load_data import setup_logging, cache
 from utils.register_callbacks import register_callbacks
 
-# Initialize Flask server
-server = Flask(__name__)
-server.secret_key = 'b5a28e9627732aec641eaddb2f9e3cb954b14748d037232c441f95b5642dc9b9' # Randomly generated secret key; Don't use os.urandom(24) since it changes on every server restart)
+# Load environment variables from .env file
+load_dotenv()
 
-# Session configurations
+# Initialize Flask server and set session configurations
+server = Flask(__name__)
+server.secret_key = os.getenv('SECRET_KEY')
 server.config['SESSION_PERMANENT'] = True  # Make sessions permanent
 server.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session lifetime
 
