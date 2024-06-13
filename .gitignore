@@ -2,3 +2,4 @@ myfinanceplanner
 .DS_Store
 __pycache__
 .idea
+.vercel
