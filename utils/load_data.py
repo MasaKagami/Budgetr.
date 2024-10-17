@@ -28,7 +28,7 @@ def database_url():
 
 # Path to the local database
 def local_users_url():
-    return '../localdb/users.csv'
+    return './localdb/users.csv'
 
 # ------------------------------------------------------------------------------
 # Create a global engine instance
@@ -94,37 +94,37 @@ def load_users():
 # Load specific data from the local database
 
 def load_local_transactions():
-    return pd.read_csv('../localdb/transactions.csv', parse_dates=['date'])
+    return pd.read_csv('./localdb/transactions.csv', parse_dates=['date'])
 
 def load_local_monthly_budgets():
-    return pd.read_csv('../localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
+    return pd.read_csv('./localdb/monthlybudgets.csv', parse_dates=['budgetmonth'])
 
 def load_local_categorical_budgets():
-    return pd.read_csv('../localdb/categoricalbudgets.csv')
+    return pd.read_csv('./localdb/categoricalbudgets.csv')
 
 def load_local_categories():
-    return pd.read_csv('../localdb/categories.csv')
+    return pd.read_csv('./localdb/categories.csv')
 
 def load_local_users():
-    return pd.read_csv('../localdb/users.csv')
+    return pd.read_csv('./localdb/users.csv')
 
 # ------------------------------------------------------------------------------
 # Save data to the local database
 
 def save_local_transactions(transactions_df):
-    transactions_df.to_csv('../localdb/transactions.csv', index=False)
+    transactions_df.to_csv('./localdb/transactions.csv', index=False)
 
 def save_local_monthly_budgets(monthly_budgets_df):
-    monthly_budgets_df.to_csv('../localdb/monthlybudgets.csv', index=False)
+    monthly_budgets_df.to_csv('./localdb/monthlybudgets.csv', index=False)
 
 def save_local_categorical_budgets(categorical_budgets_df):
-    categorical_budgets_df.to_csv('../localdb/categoricalbudgets.csv', index=False)
+    categorical_budgets_df.to_csv('./localdb/categoricalbudgets.csv', index=False)
 
 def save_local_categories(categories_df):
-    categories_df.to_csv('../localdb/categories.csv', index=False)
+    categories_df.to_csv('./localdb/categories.csv', index=False)
 
 def save_local_users(users_df):
-    users_df.to_csv('../localdb/users.csv', index=False)
+    users_df.to_csv('./localdb/users.csv', index=False)
 
 # ------------------------------------------------------------------------------
 # Save and update data to the remote database
