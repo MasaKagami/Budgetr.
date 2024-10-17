@@ -25,24 +25,22 @@ The Budgetr interface provides several key sections that help users manage and t
 
 1. **Dashboard**:
    The main dashboard offers an overview of financial metrics, including monthly spending trends, budget vs. spending by category, and recent transactions.
+   ![Budgetr Dashboard](https://github.com/user-attachments/assets/aa23d2d1-d747-43fc-9857-7bf48cd348fa)
 
-   ![Dashboard](assets/images/Budgetr_Dashboard.PNG)
 
 2. **Manage Finance**:
    Users can add transactions, set monthly budgets, and customize their category budgets. This section allows users to input specific details, such as date, category, amount, and description, making it easy to keep track of expenses.
-
-   ![Financial Management](assets/images/Budgetr_Financial_Management.PNG)
+   ![Budgetr Financial Management](https://github.com/user-attachments/assets/623a3b3c-0296-4185-87a2-8336978c56d5)
 
 
 3. **Support**:
    The support page allows users to reach out for assistance or provide feedback. This feature ensures that users can communicate any issues or inquiries directly through the platform.
+   ![Budgetr Support](https://github.com/user-attachments/assets/b99ff550-2eb0-42c7-be9b-75eebd3272e0)
+   
 
-  ![Support](assets/images/Budgetr_Support.PNG)
-
-4. **Performance Alerts**:
+5. **Performance Alerts**:
    The dashboard visually indicates financial performance, with clear indicators (e.g., "CRITICAL" status) to help users understand their current financial status.
-
-   ![Dashboard - Critical](assets/images/Budgetr_Dashboard_Critical.PNG)
+   ![Budgetr Dashboard - Critical](https://github.com/user-attachments/assets/5c5a1208-a730-46f9-9749-adf2bd3d052d)
 
 ---
 
