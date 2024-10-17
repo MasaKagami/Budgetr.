@@ -18,6 +18,34 @@ Budgetr is a personal finance dashboard designed to empower users in managing bu
 - **Secure Data Handling**: Provides secure user authentication and data encryption to protect sensitive financial data.
 - **Deployment and Availability**: Hosted on Render with Gunicorn for 24/7 availability and seamless backend performance.
 
+---
+
+## User Interface
+The Budgetr interface provides several key sections that help users manage and track their finances:
+
+1. **Dashboard**:
+   The main dashboard offers an overview of financial metrics, including monthly spending trends, budget vs. spending by category, and recent transactions.
+
+   ![Dashboard](assets/images/Budgetr_Dashboard.PNG)
+
+2. **Manage Finance**:
+   Users can add transactions, set monthly budgets, and customize their category budgets. This section allows users to input specific details, such as date, category, amount, and description, making it easy to keep track of expenses.
+
+   ![Financial Management](assets/images/Budgetr_Financial_Management.PNG)
+
+
+3. **Support**:
+   The support page allows users to reach out for assistance or provide feedback. This feature ensures that users can communicate any issues or inquiries directly through the platform.
+
+  ![Support](assets/images/Budgetr_Support.PNG)
+
+4. **Performance Alerts**:
+   The dashboard visually indicates financial performance, with clear indicators (e.g., "CRITICAL" status) to help users understand their current financial status.
+
+   ![Dashboard - Critical](assets/images/Budgetr_Dashboard_Critical.PNG)
+
+---
+
 ## Architecture
 1. **Data Visualization**:
    - Plotly is used to render a variety of interactive graphs and charts, such as line, bar, and pie charts, to track expenses and budget utilization across categories.
