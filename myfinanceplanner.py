@@ -26,7 +26,7 @@ app.title = 'Budgetr.'
 application = app.server
 
 # Flags for testing
-USE_REMOTE_DB = True # Choose database type
+USE_REMOTE_DB = False # Choose database type
 LOGGING = False # Logging for database records and user sessions
 
 setup_logging(server, LOGGING)
